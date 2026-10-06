@@ -1,0 +1,277 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mama Dogs -- Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: Incondicional
+
+"Los atardeceres hacen la diferencia"
+
+**Celeste -- Dueña de Malcolm**
+Me encantaban sus ojos, eran azules, me recordaban aquella vez en el mar... Malcolm es... no sé, aquello que necesitaba en mi vida, y no soy la única que piensa eso.
+
+Malcolm se detuvo en el medio de la plaza y miró el atardecer fijo, sin moverse. Lo miraba como si hubiera algo ahí que valiera la pena entender.
+
+Terry se le acercó despacio, se paró a su lado y también lo miró, sin decir nada al principio.
+
+Terry: ... ¿número?
+Malcolm: no lo sé, quizás 304 atardeceres
+Terry: calculale eso y 50 más
+Malcolm: ¿354 atardeceres?
+Terry: tienes suerte
+Malcolm: ...
+
+Celeste le enganchó la correa a Malcolm y tiró suave para llevárselo. Él fue sin resistir, aunque miró una vez más hacia el horizonte antes de darle la espalda.
+
+**Malcolm -- Grisli 034**
+(mira el piso) ...
+
+Al llegar a casa, Malcolm se sentó derecho en el sillón, con la espalda recta y las manos sobre las rodillas. Celeste le desenganchó la correa, la colgó en su lugar, se sentó a su lado y empezó a acariciarlo con calma.
+
+Celeste: primera regla, si lo ves, cierra las cortinas, regla dos, si no lo ves, no te acerques a la ventana, regla tres, no intentes salir, regla cuatro... no uses tu imaginación
+Malcolm: ...
+Celeste: ¿entendiste?
+Malcolm: ...
+Celeste: lo tomaré como un "sí".
+
+Celeste se levantó y se fue a su habitación. Afuera, la luna iluminaba la calle y hacía que todo pareciera quieto y un poco falso.
+
+Malcolm se quedó sentado mirando la nada, sin razón aparente, hasta que empezó a escuchar algo del otro lado de la pared. No era el viento ni un auto ni nada fácil de nombrar.
+
+Giró la cabeza hacia una de las ventanas y se quedó mirando fijo. Entonces, sobre el vidrio, se apoyó una mano con tres dedos demasiado largos (la piel estirada sobre huesos). Malcolm se levantó, caminó despacio hasta la ventana y cerró las cortinas.
+
+**Leslie -- Diseñadora**
+A ellas les encantan mis atuendos, ¡y sí! Cualquiera se desmaya al verlos. No es por ser presumida, pero... creo que soy la mejor en mi trabajo.
+
+El lugar estaba decorado con cuidado en cada rincón, nada fuera de lugar, nada sin intención. Celeste entró caminando derecho hacia su camerino, sin saludar a nadie en particular, y cuando se paró frente al espejo sonrió, no para alguien, sino para ella misma.
+
+Leslie llegó poco después con todo lo necesario y empezó con los masajes antes de tocar el maquillaje.
+
+Leslie: bueno, ya sabes cómo va esto... relájate, cierra tus ojos y no pienses en nada.
+
+Leslie empezó a maquillarla con movimientos precisos y Celeste cerró los ojos. Todo se puso oscuro. Cuando los abrió, habían pasado horas que se sintieron como segundos, y la cara que le devolvió el espejo era la de siempre en esos momentos: pálida, reconocible, lista.
+
+Vestía un catsuit de látex negro, ajustado y brillante de arriba abajo, con guantes del mismo material y un cierre frontal que corría por el centro del cuerpo.
+
+Todo en ella era rígido, pulido, casi inhumano. La llevaron a la sala principal, donde las cámaras ya estaban encendidas y varias chicas filmaban sin parar junto a otras estrellas. Una de ellas gritó "¡un, dos, tres, acción!" y el lugar se ordenó solo.
+
+Celeste se movió despacio, calculada, deslizando la fusta por su propio cuerpo sin ninguna expresión en la cara. Seducía. Cada gesto era preciso y frío, y había algo en eso que resultaba extrañamente incómodo de mirar.
+
+Fue entonces que dos chicas vestidas completamente de blanco, con vestimenta igual de trabajada, entraron llevando en correa a dos Grislis: Donald y Fred. Los dos se quedaron quietos apoyados en cuatro patas, como perros, con trajes ajustados igual que el de ella.
+
+Celeste pasó la fusta despacio por el rostro de ambos, mirándolos de arriba abajo, sosteniéndoles la mirada hasta que ellos la bajaron. Después gritó, aguda e irritante, y lo que siguió fueron solo sonidos de azotes.
+
+## Capítulo 2: Reales
+
+**Malcolm -- Grisli 034**
+No siempre tenía permitido hablar. Solo podía hablar con mis pensamientos.
+
+La rutina de Malcolm era siempre la misma y él lo sabía mejor que nadie. Celeste lo llevaba al parque a la misma hora, por el mismo camino, y él caminaba a su lado sin tirar de la correa ni desviarse.
+
+En el parque siempre terminaba parado en el mismo punto, mirando el atardecer, como si hubiera algo ahí que todavía no había terminado de ver.
+
+De vuelta a casa, se cruzaban con el mismo Grisli de siempre. Caminaba en la misma dirección y jamás lo miraba. No era que lo ignorara con intención, era peor: Malcolm simplemente no existía en ese momento para él, como si fuera parte del paisaje, como un poste.
+
+Malcolm tampoco le hablaba. Solo caminaban paralelos un tramo y después cada uno seguía su camino.
+
+Al llegar, Malcolm se sentaba derecho en el sofá y Celeste le traía el sobre de siempre: comida líquida, densa, sin olor particular, que él tomaba sin comentarios.
+
+Después ella se iba a su cuarto. O eso era lo que hacía: entrar y cerrar la puerta, pero desde adentro, todas las noches sin excepción, empezaban los gemidos.
+
+No eran fuertes, pero tampoco eran discretos, y Malcolm los escuchaba sentado en el sofá mirando la pared de enfrente, con esa incomodidad específica de quien oye algo que no le corresponde, pero tampoco puede dejar de oír.
+
+**Celeste -- Dueña de Malcolm**
+Sí... (sonríe pícara) era muy relajante, no pueden culparte, siempre estoy solita.
+
+Al día siguiente fue igual, pero... con una particularidad. Caminaban por el local cuando una de las televisiones detrás de la vitrina se encendió sola. Celeste se detuvo a mirarla y Malcolm también.
+
+En la pantalla apareció el programa de ella, y debajo del título un cartel que lo catalogaba como el más visto y el más excitante de toda la grilla. Celeste pegó un grito agudo, empezó a saltar sin parar con los brazos levantados.
+
+Malcolm se quedó mirando la pantalla sin moverse. Ahí estaba Celeste, con el catsuit negro, pasando la fusta por la cara de Donald y Fred mientras los dos estaban en cuatro patas mirando el piso. Después el grito, y los sonidos que siguieron.
+
+Malcolm apartó los ojos de la pantalla cuando Celeste ya estaba con los últimos gritos de felicidad.
+
+Esa noche fue igual a todas: el sobre, la comida líquida, la puerta cerrada, los gemidos desde adentro. Malcolm se recostó en el sofá con los ojos abiertos.
+
+Después empezaron los sonidos del otro lado de la pared, ese ruido que no era nada nombrable, y él giró la cabeza hacia la ventana antes de que pasara cualquier otra cosa. La mano apareció sobre el vidrio igual que la vez anterior, los tres dedos largos apoyados.
+
+Malcolm se levantó y caminó hasta ahí despacio, igual que siempre. Levantó la mano hacia las cortinas, listo para cerrarlas, pero... ¿por qué no las cerraba de una vez?
+
+La dejó ahí, suspendida, y después la apoyó contra el vidrio, del otro lado de esos dedos, como si quisiera ver qué pasaba si los tocaba aunque hubiera un vidrio de por medio.
+
+**Malcolm -- Grisli 034**
+No había roto una regla, sino dos. Había usado incluso... mi imaginación. (Sonríe) se sentía bien, es como si por fin sintiera eso que no sentía hace tiempo, mucho tiempo. ¿Cómo se llama esto? (Mira al suelo) ¿qué hice? (Te mira a los ojos fijamente).
+
+## Capítulo 3: Una Carcajada y a Seguir
+
+**Terry -- Grisli 019**
+¿Puedo hablar?... okey, bueno... es algo malo, muy malo. Porque... ¿qué le queda después? ¿Qué le traerá de bueno sentirse así? Yo creo que nada, nada.
+
+La casa estaba completamente oscura cuando Malcolm encendió el televisor. No había ninguna luz prendida, ninguna lámpara, nada, solo la pantalla iluminando la sala.
+
+Era una regla del hogar, no escrita, no dicha en voz alta, pero existente: la televisión no era para él. Malcolm lo sabía y la encendió igual.
+
+En la pantalla estaba Celeste. En vivo. Vestía un corsé rojo oscuro con hombreras negras que terminaban en punta, el cabello recogido hacia arriba de forma brutal, sin un solo mechón suelto.
+
+El set detrás de ella estaba construido para parecer el infierno, o al menos la versión cara de eso: rojo, humo bajo, piedra falsa por todos lados y una iluminación que hacía que todo pareciera arder sin fuego real. Celeste estaba sentada en un trono en el centro, con una pierna cruzada sobre la otra y una expresión que no era de actuación, sino de alguien que realmente disfrutaba estar ahí.
+
+Un Grisli se acercó con un plato de uvas y se las ofreció con la cabeza baja. Otro llegó desde el costado y empezó a abanicarla con unas hojas grandes, lento y constante. Miles de espectadores en pantalla. Malcolm miraba todo desde el sillón en la oscuridad.
+
+Entonces la imagen se cortó un segundo. Solo un segundo, como un parpadeo, y cuando volvió algo había cambiado detrás del trono. No se veía bien todavía, era solo una sombra que no estaba antes, algo que se movía despacio desde atrás como si hubiera estado esperando ahí todo el tiempo.
+
+Las cámaras no lo enfocaban directo, pero tampoco podían evitarlo del todo. Los dos Grisli lo vieron primero. El que abanicaba bajó las hojas despacio, miró hacia atrás y, sin decir nada, salió corriendo del set.
+
+El otro tiró el plato y fue detrás. Celeste giró la cabeza hacia donde habían estado y la expresión que tenía se rompió por primera vez, no de miedo, sino de furia pura porque eso no estaba en el guion y ella lo sabía. Abrió la boca para decir algo, pero no llegó a nada porque el brazo ya estaba ahí.
+
+Era enorme. Salió de detrás del trono despacio, un brazo que no tenía proporción con ningún cuerpo conocido, era esa mano de tres dedos.
+
+Se cerró alrededor del cuello de Celeste con mucha calma. La cabeza de ella apenas ocupaba la mitad de esa mano. Las luces del estudio empezaron a encenderse y apagarse sin ritmo, y las cámaras seguían grabando porque nadie en el control sabía qué hacer.
+
+Celeste movió los brazos un momento, los dedos abiertos, buscando algo donde agarrarse, y después dejó de moverse. La mano esperó un poco más antes de soltarla y después se retiró despacio por donde había salido, detrás del trono.
+
+Celeste quedó sentada en el mismo lugar, con la misma postura de antes, pero sin expresión, sin tensión, sin nada. Las luces dejaron de parpadear. El programa seguía en vivo.
+
+Malcolm seguía mirando la pantalla. Tomó el control remoto del sillón y lo lanzó directo contra el televisor, que parpadeó y se apagó. Fue así que corrió hacia la puerta.
+
+La abrió de un tirón y salió a la calle, y ahí mismo se sacó todo: la ropa, la correa, todo tirado en la vereda, y siguió corriendo sin nada encima por las calles, los pies contra el asfalto, sin dirección fija.
+
+Otros Grisli lo vieron desde la vereda, caminando junto a sus dueñas. Algunos lo miraron de reojo, otros directo, y lo que Malcolm leyó en todas esas caras fue lo mismo: asco.
+
+No confusión, no sorpresa, asco concreto, como si lo que estaba haciendo fuera algo sucio o vergonzoso. Malcolm frenó en seco y los miró sin entender.
+
+Malcolm: ... dejen de mirarme así, ¡rían! ¡sonrían! (Suspira agitado) ... ¿por qué no se sienten como yo?
+
+Los Grisli miraron hacia adelante y siguieron caminando detrás de sus dueñas. El mundo entero seguía su ritmo normal. Nadie se detuvo, nadie gritó, nadie hizo nada con su libertad. Simplemente lo ignoraron y siguieron.
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Mama Dogs';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))) items.push({t:'dlg',n:m[1],s:m[2]});
+    else items.push({t:'p',s:l});
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function next(){
+    if(busy||finished) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
