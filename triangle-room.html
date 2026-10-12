@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Triangle Room — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+Dann estaba en su habitación, sentado frente a su computadora, trabajando en el desarrollo de su página web de criptomonedas. Tenía varias pestañas abiertas, gráficos, textos y diseños que cambiaba todo el tiempo, sin terminar de decidirse por ninguno. A veces se quedaba mirando la pantalla sin escribir nada, pensando si todo eso realmente iba a servir para algo. La puerta se abrió sin aviso y su madre entró.
+
+-salgo
+Dann: bien, ¿necesitas dinero de mi parte o algo así?
+-no quieres nada?
+Dann: pues no
+-... me acuerdo cuando siempre me pedías que te trajera de esas... qué mierda eran esas cosas? Nunca las entendí
+Dann: resortes
+-claro! Eso, los de chocolate cierto?
+Dann: sí
+-claro... entonces no quieres nada?
+Dann: estoy bastante ocupado ahora, así que... (suspira) bueno sí, tráeme una gaseosa, me gusta tomar algo mientras trabajo
+-bien
+
+Cuando se fue, Dann respiró hondo, se acomodó en la silla y volvió a concentrarse. Apenas habían pasado unos minutos cuando escuchó pasos rápidos en el pasillo: eran sus hermanas pequeñas. Entraron corriendo, riéndose, empujándose entre ellas. Una se acercó al escritorio y miró la pantalla con curiosidad. La otra empezó a mover la silla.
+
+Dann: ... ¿por qué no acompañan a mamá?
+Riana: no queremos! Ya nos dijo que nos traerá...
+Dann: bueno, pero ya saben cómo es... les traerá algo que quizás no es lo que querían, así que... lo mejor sería que la acompañen
+Heidi: no, pero lo tendremos en cuenta en otro momento (mantenía una sonrisa)
+Dann: estoy ocupado, váyanse
+Riana: siempre estás ocupado!
+Dann: porque no pierdo tiempo jugando, eso no traerá nada
+Heidi: y crees que esa...
+Dann: página web
+Heidi: esa página web te traerá algo? Qué pasa si nadie te ve?
+Dann: qué?
+Heidi: y si nadie entra ahí?
+Dann: ... si van a participar, habrán muchos
+Riana: cómo estás seguro de eso?
+Dann: ... pues... no importa! Solamente déjenme trabajar ¿sí?
+
+Dann intentó seguir trabajando, pero ya estaba incómodo. De repente, una de ellas bajó la pantalla con fuerza. No alcanzó a sacar los dedos y se los aplastó contra el teclado.
+
+Dann: ¡mierda! (sacudía sus manos)
+
+Las dos se rieron como si fuera un juego. Dann abrió la computadora otra vez, frotándose la mano, molesto. La otra hermana se acercó desde el otro lado y volvió a cerrarla, aunque esta vez logró sacar los dedos justo a tiempo. La abrió de nuevo. Entonces empezó una especie de competencia absurda: una la cerraba, él la abría, la otra la bajaba, él la levantaba. Hasta que Dann se cansó. Cerró la laptop antes que ellas, la tomó contra su pecho y salió de la habitación.
+
+Se fue a la sala y se sentó en uno de los sillones, tratando de terminar lo que había empezado. Apoyó la computadora en la mesa y siguió trabajando, convencido de que ahí estaría más tranquilo.
+
+SPOILER: No lo estuvo.
+
+Su padre prendió la televisión en un canal de política. Los debates eran puro grito, interrupciones y discusiones sin sentido. Encima, subió el volumen.
+
+Dann: (suspira)
+
+Dann apretó los dientes, pero siguió mirando la pantalla. Entonces tocaron la puerta. Su padre fue a abrir y se encontró con un hombre serio, con una carpeta en la mano.
+
+-si?
+Miro: usted es...
+-perdone pero... no digo mi nombre a cualquier persona
+Miro: claro, ¿y en esta casa vive Dann?
+-Dann? Qué quiere con él?
+
+Dann se asomó desde el sillón. El hombre lo miró y sonrió apenas.
+
+Miro: ahí está...
+-(volteó a ver a Dann) qué sucede con mi hijo?
+Miro: solamente vengo a hablar
+Dann: Miro? Qué hace aquí?
+Miro: pues... digamos que vengo por ti... bueno, eso sonó bastante mal
+
+Lo invitaron a pasar. Se sentaron los tres en la sala, alrededor de la mesa, y el televisor quedó en silencio.
+
+-ahora sí, puede explicar qué está sucediendo?
+Miro: primero que nada, preguntarle, ¿qué tal su día?
+-vayamos al grano mejor
+Miro: bien. Mire, mi hija junto a su amiga van a independizarse
+-okey? Lo felicito
+Miro: gracias, y sí, es algo que me enorgullece, mi hija siempre quiso eso, su madre no la entiende mucho pero...
+-...
+Dann: ...
+Miro: pero... no importa. Al grano ¿verdad?, lo que quiero es que, ya que mi hija, Alice, se lleva muy bien con Dann pues... podrían vivir juntos
+-... he?
+Dann: yo? Solo con ella?
+Miro: bueno, también está Marie
+Dann: no me cae muy bien Marie
+Miro: toda cosa buena tiene un precio no crees?
+Dann: (sonríe)
+-espere! Quizás lo mejor no era ir al grano... pero... no, Dann está bien aquí, tiene todo
+Dann: sí bueno, papá... ya sabes, no estoy tranquilo, mis hermanas me molestan y... ustedes, la verdad, hacen mucho ruido
+-... bueno perdón
+Dann: está bien, lo entiendo, pero... con esta oportunidad no crees que... puedo avanzar? Digo, tú también me decías que debía independizarme
+-... bueno...
+Dann: y cada que mamá se iba de viaje con sus hermanos te preparaba el café, la comida, incluso te servía el agua
+-... está bien, sí, el problema no es que vas a independizarte, el hecho es... son dos chicas, ¿sabes los problemas que podemos llegar a tener si haces algo malo, por más mínimo que sea? Incluso por error?
+Dann: entonces no confías en mí?
+-... yo solo quiero que sepas las consecuencias
+Dann: ... escucha, esto es una gran oportunidad, parece que cayó del cielo, podría trabajar en lo que más deseo, y... si funciona, ganar mucho, me llevo bien con Alice, con su padre, su madre... bueno, apenas la conozco pero... no deja de ser una buena oportunidad
+-... Miro!
+Miro: sí?
+-por qué? Esto es bastante inusual, ¿por qué a mi hijo?
+Miro: porque lo conozco, un chico con un lugar adecuado, significa una buena oportunidad para crecer. Además, el hecho de que esté trabajando en una página web de criptomonedas ya me interesa, puedo ayudarlo, y si lo ayudo, podría crecer, y ganar su propio dinero, y pagar casi toda la casa!
+-estás manipulando sus sueños para pagar la casa?!
+Miro: ... bueno... si lo dice así, claramente suena malo
+-sabe que... mejor váyase
+Miro: ... su hijo necesita un espacio, solo quiero que sepa eso, ustedes no se van a alejar de él, ustedes van a estar ahí
+-...
+Dann: padre... por favor
+-... (suspira) todavía debemos discutirlo con tu madre
+Miro: mire, sé que no me tiene confianza, pero ahora le pregunto, si estuviese trabajando en su proyecto más deseado... ¿no quisiera tener su propio lugar?
+-... ya cumplí mis sueños
+Miro: en serio? Y dígame, ¿cuál era su sueño?
+-... bien, sí, tiene razón, quisiera mi propio lugar, pero no voy a permitir que use a mi hijo
+Miro: bien, entonces... cuente conmigo para apoyarlo en todo, todas las decisiones serán de él
+-... bien
+Miro: bien
+Dann: ...
+
+## Capítulo 1: Un Nuevo Respiro
+
+Dann se despertó con esa sensación rara de no haber descansado nada, como si hubiese dormido ocho horas pero en modo ahorro de energía. Se quedó mirando el techo unos segundos, pensando en absolutamente nada, hasta que se acordó de que tenía cosas que hacer y una vida que sostener, aunque sea a medias. Se levantó, agarró un par de ropa casi sin mirar qué era y se fue directo al baño. Caminaba medio dormido, arrastrando un poco los pies, todavía procesando que ya era de día otra vez. Cerró la puerta, apoyó las manos en el lavamanos y levantó la cabeza para mirarse al espejo.
+
+Se observó en silencio unos segundos, con cara de recién levantado (literalmente), los ojos cansados, el pelo desordenado, la remera arrugada. Murmuró: “Cada día peor”.
+
+Sin pensarlo demasiado, se sacó toda la ropa y entró a la ducha. Abrió el agua y dejó que le cayera encima, primero fría, después tibia, después caliente, hasta encontrar ese punto exacto que no quema pero tampoco molesta. Cerró los ojos y se quedó ahí, quieto, como si el agua le estuviera borrando la cabeza por unos minutos.
+
+De repente (de una forma que hizo que el tiempo se parara por completo), la puerta del baño se abrió de golpe. Marie entró sin pedir permiso (no se percató ni de la sombra de Dann), estaba hablando por celular, con cara de furia (parecía pelada incluso) y caminando de un lado al otro como si el baño fuera suyo. Tenía el ceño fruncido (jajaja, un puto clásico ¿no?).
+Dann abrió los ojos, sorprendido, sin entender nada. Se dedicó a escuchar solamente.
+
+Marie: ¡no! ¡no! Ya te dije que no! No lo vas a invitar! Y si lo haces a mis espaldas o te mato o se cancela la puta fiesta
+-bien! No lo voy a invitar, solo te hice una pregunta sin ser ofensivo, puta madre!
+Marie: sí! Lo sé! Pero... (suspira) ese tipo me desespera, es como si... no sé, me ve con esa cara de... que quisiera violarme, ¿sabes?
+-es gay, Marie
+Marie: ¿es gay? ¿En serio?
+-...
+Marie: ¿y para qué quieres invitar a un gay a la fiesta?
+-anima la fiesta
+Marie: oh... perdón por gritarte e insultarte
+-¿entonces?
+Marie: bueno, invítalo, pero... no cobra nada ¿verdad?
+-pues... el precio es escucharlo
+Marie: soy buena en eso, bien, invítalo, da igual.
+
+Después de unos minutos, Marie cortó la llamada, guardó el celular en el bolsillo y salió del baño. Dann se quedó quieto, con el agua cayéndole en la cara, tratando de procesar lo que acababa de pasar.
+
+• Parpadeó un par de veces
+• No dijo nada
+• Siguió bañándose
+
+Cuando terminó, cerró la ducha, agarró la toalla y se secó rápido, todavía con esa sensación de confusión dando vueltas. Se puso la ropa ahí mismo, frente al espejo, acomodándose la remera y pasando la mano por el pelo como si eso fuera a arreglar algo.
+
+Spoiler: sí lo arregló (no algo que digan así que bruto, que buen cabello).
+
+Nuevamente, volvió a mirarse. Esta vez, sonrió apenas diciéndose: “Cada día mejor” (sí, parece un personaje arrogante, ¡les juro que no!). Salió del baño, caminó por el pasillo y subió las escaleras rumbo a su escritorio.
+
+• Un escritorio sagrado
+• Nadie lo usaba
+• Nadie lo tocaba
+• Nadie dejaba cosas ahí
+
+Así lo había dictado Miro, y Dann lo respetaba como si fuera una ley universal. Se sentó, acomodó la silla, prendió la computadora y abrió directamente su página web de cripto. Tenía varias pestañas abiertas, gráficos, estadísticas, notas, ideas sueltas. Empezó a trabajar sin distraerse, con una concentración bastante decente para alguien que había sido interrumpido en la ducha. Al rato, tocaron la puerta.
+
+Dann: ¡Pase!
+
+La puerta se abrió y apareció Alice con una taza de café en la mano. Sonreía, caminando con cuidado para no derramar nada.
+
+Dann: Alice! Ven, quiero que veas
+Alice: siempre necesitas la autorización de un adulto?
+Dann: no digas eso... mucho menos tú, eres una enana
+Alice: huy sí! Lo dice el que se moja primero cuando llueve
+Dann: mira de una vez
+Alice: ... (observó la pantalla) está bien, quizás... necesita un cambio
+Dann: ¿cuál?
+Alice: un cambio de... creador, no eres bueno para esto
+Dann: jódete, mejor no te muestro nada
+Alice: (sonrió) es broma, déjame ver de nuevo
+Dann: ... ¿sin bromas esta vez?
+Alice: te lo prometo
+Dann: ...
+Alice: (volvió a analizar)... ¿crees que esa paleta de colores sea adecuada para una página de criptomonedas?
+Dann: lo quería hacer más colorido... diferente
+Alice: pues... no pinta nada bien
+Dann: sí, bueno... no soy diseñador gráfico
+Alice: sí, me doy cuenta.
+
+De repente, sin ningún tipo de lógica, Alice inclinó la taza y el café cayó directamente sobre la computadora. No fue un simple accidente. El líquido pareció moverse lento, casi flotando en el aire antes de estrellarse contra el teclado, como si el tiempo se hubiera puesto raro solo para arruinarle el día a Dann.
+
+El cuarto cambió. Se transformó en una selva (sí, una selva, ¡fíjate, fíjate, fíjate!). Monos gritaban, y una tribu cantaba su mejor canción, moviendo sus bocas para generar sonidos extraños, igual de raros que los de los monos. Mientras el líquido del café caía en cámara lenta, la canción de la tribu sonaba más y más, ¡MUCHO MÁS! intensa.
+
+La pantalla parpadeó, hizo un sonido extraño y quedó negra.
+
+Dann: ¡¿QUÉ MIERDA HICISTE?!
+
+Alice salió corriendo del cuarto riéndose, bajando las escaleras a toda velocidad, como si acabara de cometer el crimen perfecto. Dann se quedó sentado, mirando su computadora muerta, sin entender si lo que había pasado era real o si seguía medio dormido.
+
+Después reaccionó levantándose de golpe, intentó prenderla, apretó el botón varias veces, hasta que sintió una pequeña descarga en los dedos: “¡Mierda!”. Sin pensarlo más, salió corriendo detrás de Alice. Bajó las escaleras casi saltando escalones, con bronca, con nervios, con ganas de entender qué demonios (rayos y centellas) acababa de pasar. Al llegar abajo, la vio parada en la puerta, como si nada, mirándolo con cara inocente.
+
+Alice: qué sucedió? Una chica linda te jodió la vida? Jajaja!
+Dann: ...
+
+De repente, los dos empezaron a correr. Pero no era una carrera normal. Alice parecía moverse como si conociera el camino de memoria, girando sin dudar, doblando esquinas que Dann juraba no haber visto nunca.
+
+(¿Has dicho una carrera? Ah! Lo dije yo... bueno, lo escribí) Los edificios desaparecieron, convirtiéndose en cenizas. Ahora sí estamos en una carrera profesional. Son las ligas mayores. El público gritaba de entusiasmo. Dann tomaba la delantera, mientras que Alice, manteniendo una sonrisa como si fuese una Barbie estática (ya de por sí son estáticas), volvía a tomar el puesto uno. Entonces... entonces... ¡sonaron los tambores! Alice llegó a la meta, había ganado.
+
+Dann la seguía, gritando su nombre, pero su voz sonaba lejana, como si estuviera hablando dentro de un túnel. Corrían y corrían, sin cansarse, sin frenar, hasta que, de golpe, todo se acomodó. Estaban frente a una tienda de tecnología. Alice entró mientras que Dann, agitado, se detuvo unos segundos afuera, respirando fuerte, con las manos en las rodillas, antes de seguirla. Adentro, el aire estaba frío, lleno de luces blancas y estanterías con cajas apiladas.
+
+Dann: ... (respiraba sin parar)
+Alice: qué pasa? Te superó una niña?
+Dann: mira... nunca en mi vida corrí tanto como hoy, ¡y todo por tu puta culpa!
+Detrás del mostrador estaba Torio, el tío de Alice. Estaba revisando unas facturas, tranquilo, como si no acabara de presenciar una persecución digna de una película rara. Dann lo saludó sin ganas. Torio levantó la vista, sonrió apenas, caminó hasta una estantería, tomó una caja de computadora nueva y se la dio a Alice. Alice la sostuvo y, sin decir mucho, se la entregó a Dann.
+Dann: ... qué haces?
+Alice: tú sabes que no te haría correr a propósito, esto es para ti
+Dann: ... (la tomó e inspeccionó) no tiene una bomba ¿verdad?
+Alice: ... (sonrió) perdón por lo de tu computadora, aunque bueno, la culpa fue mía
+Dann: da igual, tengo algo mejor, pero... ¿por qué?
+Alice: un regalo de bienvenida
+Dann: ¿en serio?
+Alice: no, pero... es como si fuese uno
+Dann: gracias... gracias
+Alice: por primera vez escucho dos gracias de otra persona! Pero... de nada... de nada.
+
+Los dos volvieron caminando a la casa, esta vez sin correr, en silencio, como si todo el caos anterior hubiera sido parte de otro día. Subieron las escaleras, entraron al cuarto y Alice lo ayudó a conectar todo, enchufar cables, configurar lo básico, instalar programas, explicarle cosas que Dann fingía entender. Cuando terminaron, se quedaron sentados unos segundos mirando la pantalla. Alice se despidió rápido y salió del cuarto. Dann quedó solo.
+
+La computadora por fin encendió y, por un momento, la pantalla pareció expandirse, como si fuera una ventana a otro lugar. Dann apoyó las piernas sobre el escritorio y empezó a configurar su cuenta. Escribió su usuario, su contraseña, revisó sus archivos. Entonces notó algo raro: había otra cuenta registrada: torioejample@gmail.com (no intentes buscar este Gmail, por favor). Cerró esa ventana y volvió a concentrarse en su proyecto. Minutos después apareció una notificación. Era un email nuevo, cuyo remitente se llamaba Ronald. Dann lo miró fijo. El único Ronald que conocía era el que iba a tercer año de secundaria, pero nunca hablaron, y ahora recién se daba cuenta de que no lo volvió a ver otra vez. Dann pasó a cuarto año y no supo más nada de la existencia de aquel Ronald. Igualmente, no sospechaba de él. No parecía un chico nerd (tampoco Dann, ni siquiera el puto escritor de esta historia, ¡ya! ¡Dejen de decirlo!).
+
+Dann se quedó mirando la pantalla, leyendo el mensaje una y otra vez, como si en algún momento fuera a cambiar: “¿En serio le va a regalar una computadora? ¿Quién se cree?”. Parpadeaba repetidas veces y volvía a leerlo sin sentido. Incluso lo llegó a leer tanto que confundía las palabras. Se apoyó contra el respaldo de la silla y soltó una pequeña risa sin humor. No porque le pareciera gracioso, sino porque era tan directo que resultaba incómodo. No era un spam, no era publicidad, mucho menos un error. Dann no se contuvo, dejó su cabeza firme contra la pantalla, como si estuviese por entrar al mundo digital. Aun así, se resignó. No iba a decirle nada, al menos no de lo que tenía guardado adentro.
+
+CHAT
+Dann (en este caso, se hacía pasar por el tío de Alice, así que... ¡Vamos de nuevo!)
+
+CHAT
+Torio: de qué hablas?
+
+(Esperaba una respuesta...)
+...
+
+(Mejor omitamos esto, ¿no? Es realista, pero aburrido)
+
+Ronald: lo estuvimos hablando anoche, Torio. Hablo de ese... ¿sabes cuál es el nombre? ¿Alice no te dijo nada?
+Torio: ... creo que se llama... Dann, o algo así
+Ronald: Dann? Lo conozco, iba a cuarto... era del otro salón, una vez nos saludamos y ya, no nos conocíamos casi para nada, pero nunca lo vi hablando con Alice
+Torio: siempre habló con Alice pero en el salón de clases
+Ronald: he? Cómo que le hablabas a Alice?
+Torio: o sea... me equivoqué, que él, el tipo, le hablaba a Alice en el salón de clases
+Ronald: vaya, de repente sabes todo de tu sobrina. Me hiciste caso al parecer, investigaste todo
+Torio: bueno, quizás siempre lo supe pero no le diría a cualquier idiota... (inmediatamente de escribirlo, Dann lo borró) a cualquier extraño
+Ronald: nos conocemos hace bastante, cuánto hacemos este año? Estamos en enero, por lo tanto... bueno, solo hacemos un año, pero igual es bastante
+Torio: estoy bastante cansado, ya es tarde y no quiero desvelarme otra vez
+Ronald: bien, mañana hablamos. Si sabes algo más no dudes en decirme.
+
+CHAT TERMINADO
+Decidió eliminar el Gmail de Torio y cerró la laptop.
+
+Dann: ... qué mierda quieres con Alice?
+
+## Capítulo 2: Un Regalo Se Consigue Caro
+
+Marie entró al cuarto del escritorio sin hacer ruido. Dann estaba sentado frente a la computadora, revisando unas cosas sin mucho interés. Ella se acercó al escritorio y dejó un papel doblado sobre una de las esquinas, sin decir nada.
+
+Dann levantó la vista, miró el papel y lo tomó con cuidado. Lo abrió lentamente. Era una lista de compras, escrita con letra clara y ordenada.
+
+Dann: ¿y esto?
+Marie: la lista de compras
+Dann: ¿compras? ¿Yo ir a comprar?
+Marie: pensé que el mensaje era claro
+Dann: mira... estoy ocupado, Marie
+Marie: (suspira) lo entiendo, pero... no vives aquí de gratis
+Dann: ...
+Marie: ni siquiera gastas nada, el dinero te lo doy yo
+Dann: bien, pero... ¿por qué tantas cosas? ¿Y Alice no puede ir?
+Marie: Alice ya salió de compras, y yo también voy a salir
+Dann: ¿en serio? Pero... o sea, ¿por qué tanto?
+Marie: habrá una fiesta
+Dann: no me jodas
+Marie: sí, lamento que no te guste, pero es así. Además, a las dos nos gustan las fiestas y...
+Dann: a Alice no le gustan las fiestas
+Marie: ... ¿en serio?
+Dann: ¿hace cuánto son amigas?
+Marie: hace siete años
+Dann: ¿y no sabías que a ella...?
+Marie: no viene al caso, ¿sí? ¿Vas a ir a comprar?
+Dann: sí, sí.
+Marie se dio vuelta y caminó hacia la puerta. Ya estaba por salir cuando se detuvo. Se quedó quieta unos segundos, como si dudara, y luego volvió a mirar a Dann por encima del hombro.
+Marie: Dann...
+Dann: ¿ahora qué?
+Marie: lo siento por lo de... bueno, ya sabes, de entrar ayer al baño mientras te estabas bañando
+Dann: espera... ¿sabías que yo estaba ahí?
+Marie: sí... pero no, o sea, me concentré mucho en esa llamada y... sí, vi una silueta, pero no le di importancia (muy... creepypasta esa frase ¿no?)
+Dann: hija de... no respetas nada
+Marie: ¿respetar qué? ¿Tu privacidad? Por favor, no tienes mucho que... "mostrar"
+Dann: hagamos algo, una... una tregua
+Marie: te escucho
+Dann: yo hice un cartel
+Marie: Alice hizo un cartel... continúa
+Dann: sabías que lo hizo ella
+Marie: ¡sí! A ti las cosas no te salen prolijas
+Dann: bueno, da igual. Ese cartel lo voy a poner en la puerta para que no molesten, o sea, no pueden invadir mi privacidad aquí, en este lugar sagrado para mi trabajo
+Marie: bien, pero... a cambio de que yo tenga dos horas más en el baño
+Dann: ¿qué? ¡¿Estás loca?! ¡Ya de por sí tardas!
+Marie: esa es la tregua, esa es mi oferta, a no ser que quieras que venga a hablar por teléfono aquí y... note tu silueta y me valga mierda
+Dann: ... ¿dos horas? ¿Y qué tal si yo... ya sabes?
+Marie: pues te aguantas
+Dann: (suspira) bien
+Marie: bien
+Dann: ¡bien!
+Marie: ¡muy bien!
+
+Después de eso, salió del cuarto sin agregar nada más. Dann se quedó solo. Apoyó los codos en el escritorio y volvió a mirar la lista. Su pierna empezó a moverse sin control, subiendo y bajando rápidamente contra el piso. Respiró hondo, se levantó de golpe y agarró el papel con más fuerza de la necesaria.
+
+Salió del cuarto, bajó las escaleras casi sin mirar los escalones y fue directo al mueble donde guardaban el dinero. Abrió el cajón, tomó algunos billetes y los guardó en el bolsillo. Salió de la casa y comenzó a caminar por la vereda. El aire estaba tranquilo, pero él no. A cada rato sacaba el papel, revisaba los productos y lo volvía a guardar.
+
+Cuando llegó a la tienda, entró sin saludar. Recorrió los pasillos despacio, tomando cada cosa según la lista. A veces se detenía, releía el papel y comparaba con lo que tenía en la mano. Cambiaba un producto por otro, dudaba, volvía atrás y seguía avanzando. Cuando terminó, llevó todo al mostrador y apoyó las cosas una por una.
+
+—¿Algo más?
+Dann: no, ¿cuánto es?
+—... diez...
+Dann: ¿tan barato?
+—diez mil
+Dann: ... aquí tienes
+—gracias por su com... espera, ¿tú no eres Dann?
+Dann: ... ¿sí?
+—el chico que vive en esa casa de dos pisos
+Dann: sí
+—con esas dos chicas, dime... ¿te las coges?
+Dann: ... ¿qué?
+—¡esas chicas!
+Dann: ¿mis compañeras de departamento?
+—¡sí! ¿Cómo no? Cuenta, ten confianza, ¿cómo son sus movimientos? La más enana parece que es ágil, ¿cierto?
+Dann: ...
+
+(¿Pisaste un Lego? O ¿te diste el pie contra una silla o la mesa? Si te pasó, seguro te enojaste, ¿cierto? Pues ese mismo enojo aplica aquí para Dann).
+
+Dann tomó la bolsa con molestia. La agarró con fuerza, giró sin despedirse y salió. La puerta de vidrio se cerró detrás de él con un golpe seco. Mientras caminaba por la vereda, con la bolsa colgando de su mano, su mente empezó a irse por otro lado.
+
+Cámara lenta. El suelo era pegajoso. Cada pisada de Dann significaba hacer una fuerza comparable a la de levantar una motocicleta. Una manzana gigante cayó del cielo. Impactó contra la calle, retumbando el suelo. Una Coca-Cola también cayó, la típica (y mejor) botella de vidrio. Y entonces, Dann levantó la mirada y... una alita de pollo cayó sobre él.
+
+Después de unos minutos, llegó a la casa. Abrió la puerta, entró y gritó: ¿Alguien? No hubo respuesta. Dejó la bolsa sobre la mesa y se pasó una mano por la cara. En ese momento, la puerta se abrió. Marie entró con paso tranquilo.
+
+Marie: ¿compraste todo? ¿Sin falta?
+Dann: supongo que está todo
+Marie: más te vale
+Dann: bueno, en fin, si me disculpas voy a seguir con... (tilín, tilín... ¡¿Qué?! Es mi mejor interpretación del sonido de un teléfono)
+El celular de Dann vibró en su bolsillo. Lo sacó rápido y atendió.
+Alice: ¿Dann?
+Dann: ¿qué pasa?
+Alice: ¿vienes a ayudarme?
+Dann: ... repito lo mismo, ¿qué pasó?
+Alice: la bolsa de mierda se rompió
+Dann: puta madre, Alice, eres una inútil
+Alice: no tienes derecho a decir eso
+Dann: ¿ah, no?
+Alice: no... fuiste igual de inútil cuando intentabas atraparme ayer y no lograbas alcanzarme, perdiste la carrera, jajaja (Simbólicamente, y literalmente si)
+Dann: ¿dónde estás?
+Alice: no muy lejos, dobla a la izquierda, y cuando veas el semáforo doblas para la derecha
+Dann: bien.
+
+Caminó hasta la cocina. Tomó unas bolsas que estaban sueltas sobre una silla, las acomodó como pudo y salió apurado, sin explicar demasiado. Marie se quedó sola en la casa. Miró hacia la puerta por donde se había ido Dann, suspiró y sacó su celular. Marcó un número con cuidado y llevó el teléfono a su oído.
+
+Dann caminaba por una calle cercana al centro. A lo lejos vio a Alice agachada en el suelo, juntando cosas. Aceleró el paso. La bolsa que ella llevaba se había roto y varios productos estaban desparramados. Dann se acercó sin decir nada, se agachó y empezó a ayudarla. Abrió una de las bolsas que había traído y, entre los dos, fueron acomodando todo. Cuando terminaron, Alice se levantó primero. Dann hizo lo mismo y le alcanzó la bolsa.
+
+Dann: ¿no podías llamar a Marie?
+Alice: nunca contesta, y tú siempre, al parecer estás loco por mí
+Dann: ja-ja-ja (claramente se está riendo, claramente no es sarcasmo... bueno, sí)
+Alice: listo, eso era lo último
+Dann: ¿y eso?
+Alice: un juego que se rompió, pero... da igual, Marie no se va a dar cuenta.
+
+Luego comenzaron a caminar juntos, alejándose lentamente, rumbo a la casa, mientras la calle seguía con su movimiento normal, como si nada importante estuviera pasando.
+
+Alice: así que Marie te mandó a comprar... quién lo diría
+Dann: ...
+Alice: (lo mira al rostro)
+Dann: (mirando el camino de frente)
+Alice: bueno... a Marie le faltó algo importante, ¿no crees?
+Dann: ¿qué cosa? ¿Que compré papel higiénico?
+Alice: no... decirte por favor
+Dann: (baja la mirada)
+Alice: pero... ya sabes cómo es ella
+Dann: ¿por qué es tu amiga?
+Alice: ¿eh?
+Dann: ella dijo que te gustaban las fiestas, cuando no te gustan
+Alice: es capaz de decir muchas cosas con tal de...
+Dann: sí, ya sé... de tener lo que quiere
+Alice: no. De sentirse algo
+Dann: no me jodas con eso, Alice. Sabes, mira... no te lo tomes mal, pero si las cosas salen mal será por ella
+Alice: ¿y sabes qué hago si ella ocasiona problemas?
+Dann: ¿qué?
+Alice: (sonríe) primero, dejo de ver a las personas con cara de... recién levantado
+Dann: perdón
+Alice: y segundo... comienza la batalla
+Dann: ¿a qué te refieres con eso?
+Alice: una batalla, ella ataca y tú contraatacas, como si fuesen Batman y el Joker
+Dann: eso es pelea infantil
+Alice: ¡por eso mismo! Cuando lo haces, te diviertes y dejas de ver a esa persona como rival, sino... como tu rival
+Dann: eso no tiene sentido
+Alice: sí, bueno... dije cosas peores
+Dann: eso sí es cierto. Por cierto...
+Alice: ¿sí?
+Dann: ¿conoces a un tal Rona...?
+—¡hola!
+
+Una anciana se cruzó con ellos.
+
+Alice: hola, usted es...
+—Soy Garilda, vivo cerca de ustedes. Tú te llamas Alice y tú, joven, Dann, ¿no es así?
+Alice: sí, es correcto (mantenía una sonrisa como si fuese obligatoria)
+Garilda: me encanta ver a parejas tan unidas como ustedes
+Alice: ... ¿ah, sí?
+Dann: ¡señora! Nosotros no somos...
+
+Alice le da un codazo en el estómago a Dann. (Puta madre... qué agresiva. Creo que me estoy enamorando de mi propio personaje). Dann dijo en voz baja: "mierda", con un tono que se le desconfiguro la respiración.
+
+Alice: sí, somos pareja
+Garilda: ¡qué lindos! Todo el barrio dice que ustedes tres hacen una pareja muy bonita
+Alice: ... ¿tres?
+Garilda: sí, ustedes y la otra chica. Oigan, tranquilos, yo no juzgo
+Alice: (su sonrisa se desvaneció) pase, antes de que el semáforo se ponga en verde
+Garilda: sí, tienes razón, querida. Gusto en conocerlos
+
+Se fue, con pasos lentos.
+
+Dann: ¿por qué me golpeaste? ¿Y por qué le mentiste?
+Alice: ... (veía el suelo, en estado inmóvil)
+Dann: ... ¿Alice?
+Alice: ...
+Dann: ¡Alice!
+Alice: ¿qué?
+Dann: ¿qué te pasa?
+Alice: ... no, nada
+Dann: ¿por qué le mentiste?
+Alice: no sé... no quería que se sintiera incómoda
+Dann: a todos los haces poner incómodos
+Alice: ¿en serio?
+Dann: ¡sí! Nadie sabe si vas a golpear a alguien sin razón
+Alice: perdón por eso... igual no seas maricón, no fue tan fuerte
+Dann: obvio que no, ¡¿pero en el estómago?!
+Alice: ¿estás bien?
+Dann: sí, sí
+Alice: y... no vas a invitar a nadie a la fiesta
+Dann: no, no veo a mis amigos hace meses... ¡hey! No los veo hace... meses
+Alice: si quieres podemos visitarlos
+Dann: ... no, da igual
+Alice: ... ¿puedo preguntarte algo que desde ayer tengo atragantado?
+Dann: ...
+Alice: ¿desde cuándo mi padre te aprecia tanto?
+Dann: ni yo lo sé
+Alice: perdón por lo del golpe
+Dann: da igual, ya te lo dije
+Alice: bueno... ¿en qué estábamos hablando antes de ella?
+Dann: ... me quitaste la memoria con el golpe
+Alice: me dices que da igual y lo sigues alimentando de más
+Dann: pero no entiendes que...
+
+(¡Ya! Pasaremos a otra escena. ¿Ya entendimos todo en esta, verdad? Buenísimo. ¡Vamos!)
+
+Dann y Alice llegaron a la casa caminando en silencio. La puerta estaba apenas entornada. Dann la empujó con cuidado y entraron. Lo primero que vieron fue a Marie en medio del living, besándose con un hombre. No era un beso rápido ni casual. Estaban completamente metidos en lo suyo, sin notar que alguien había llegado.
+
+Dann se quedó quieto, con la bolsa todavía en la mano. Su cuerpo se tensó de inmediato. Alice frenó a su lado, abrió un poco los ojos y bajó la mirada casi por reflejo, sin saber muy bien dónde ponerse.
+
+Durante unos segundos, nadie dijo nada.
+Marie fue la primera en darse cuenta. Se separó lentamente. El hombre giró la cabeza, vio a Dann y a Alice, y su expresión cambió por completo. Se acomodó la campera con torpeza, murmuró algo que no se entendió y caminó rápido hacia la puerta. Antes de salir, bajó la cabeza, claramente incómodo. La puerta se cerró. Marie no explicó nada ni los miró directamente a ninguno de los dos. Simplemente se acercó, tomó las bolsas que traían y caminó hacia la cocina, como si nada raro hubiera pasado.
+
+Dann: ¿conocías a ese?
+Alice: no, ¿en qué momento lo habrá llamado? Bueno, en fin, da igual
+Dann: ...
+
+Alice no dijo nada más. Tomó aire, giró sobre sus talones y fue directo a su cuarto. Cerró la puerta con cuidado, sin hacer ruido. Dann se quedó en el living unos segundos más. Luego empezó a subir las escaleras. Avanzó despacio, apoyando una mano en la baranda. Cuando estaba a pocos pasos del segundo piso, se detuvo. Se quedó inmóvil. Respiró hondo, bajó la mirada y cambió de dirección. Dio media vuelta y fue hacia la cocina.
+
+Allí, Marie estaba acomodando las cosas sobre la mesada. Dann fue hasta la cafetera, tomó una taza y empezó a preparar café sin decir nada al principio. Movía las cosas con cierta rigidez, como si estuviera concentrado en no pensar.
+
+Marie: ¿y? ¿Te pareció mucho ir a comprar?
+Dann: no, cuesta volver
+Marie: eso es lo más fácil, ¿o qué? ¿Me vas a decir que te cayó una botella de Coca-Cola en la cabeza?
+Dann: ... bueno... ¿cómo te explico?
+Marie: ... ¿eh?
+Dann: no importa. ¿Quién era ese?
+Marie: ... un amigo
+Dann: sí, seguramente. ¿Y los besos también son de amistad?
+Marie: yo no me meto en tus cosas, así que... no te metas en las mías
+Dann: claro... ese tipo... ¿no era el que te hizo tropezar en la formación una vez?
+Marie: ¡no!... ¿o sí? No, no, no, obvio no... ¿cierto?
+Dann: me parece que sí
+Marie: ... puta madre... y yo le di el gusto
+Dann: bueno, "gusto", yo le diría mal gusto, pero... cada quien
+Marie: jodete
+Dann: por supuesto, pero antes deja que termine con mi café
+Marie: ...
+Dann: por cierto... lo de la tregua, bueno, mejor olvídalo
+Marie: ¿lo dices en serio? O sea... entonces no te molesta que interrumpa en tu zona de trabajo, al igual que lo hacían tus hermanas, ¿verdad?
+Dann: no, aunque no lo creas, mis hermanas me entrenaron muy bien para aguantar a cualquier persona jodida
+Marie: ¿como yo?
+Dann: sí
+Marie: (sonríe) jajaja. Esa estuvo buena, te la dejo pasar
+Dann: ... (sonríe levemente).
+
+Mientras, en el cuarto, Alice se cambió de ropa con movimientos lentos. Se puso un buzo ancho y se sentó frente al escritorio. Encendió la computadora y abrió el programa de videollamada. En el momento en el que sintió sus nalgas plácidamente cómodas en la silla, fueron apareciendo las caras de sus compañeros. Luego, la del profesor.
+
+—Good afternoon, everyone. Can you hear me?
+
+Respondieron casi todos: "Yes, teacher." En ese momento, Alice acomodó su cámara.
+
+Alice: Yes… I can hear… you
+—Very good, Alice. Today we will practice simple conversations.
+
+La clase empezó con preguntas básicas.
+
+—Alice, how are you today?
+Alice: I am… fine. And you is… are… you? And you are?
+—Excellent correction, very good.
+—Alice, where do you live?
+Alice: Eh… I live in… I'm sorry, I can't answer that.
+—Okay, no problem.
+
+Unos minutos después, el profesor cambió de ejercicio.
+
+—Now, let’s imagine a situation. You are in a café. I am the waiter.
+
+Se acomodó frente a la cámara.
+
+—Hello, welcome to the café. What would you like?
+
+Alice tragó saliva.
+
+Alice: hello… I want… a medialuna and a… and a…
+
+Se quedó en silencio.
+
+Imagínate una cámara de cine haciendo zoom a la cabeza de Alice. Alegría intentaba tranquilizar a Furia, quien gritaba destruyendo esas putas bolas de cristal. Temor tomó un matafuego y esparció mucho... muchísimo de ese líquido blanco para apagar las llamas que estaba causando Furia. Sin querer, manchó la ropa de Desagrado, que empezó a llorar descontroladamente. Mientras que Tristeza estaba harta de estar triste, solamente se quedó contemplando el caos. Sin embargo, Alegría gritó: "¡miren!" Y todo se detuvo.
+
+En ese momento, la puerta de su cuarto se abrió despacio. Dann asomó la cabeza. Alice levantó la mirada y lo vio.
+
+Dann: a coffee?
+
+Alice volteó rápido a ver la pantalla de la computadora y dijo:
+
+Alice: medialuna and a coffee!
+—Very good, Alice!
+Alice respiró hondo. Dann entró y le dejó el café sobre el escritorio.
+Alice: ... gracias
+Dann: (sonrió y se fue).
+
+Dann caminó por el pasillo hasta su cuarto de trabajo. Iba mirando el piso, pensando en mil cosas al mismo tiempo. Cuando llegó a la puerta, se detuvo. Marie estaba ahí, apoyada contra la pared, con los brazos cruzados. Se miraron unos segundos sin decir nada.
+
+Dann: ¿qué pasa?
+Marie: ¿podemos hablar?
+
+Marie abrió la puerta, entró primero y Dann la siguió. El cuarto estaba casi igual que siempre: papeles sobre el escritorio, la computadora encendida, cuadernos abiertos, cables enredados. Dann cerró la puerta detrás de él. Se sentaron, uno frente al otro, sin acomodarse demasiado.
+
+Dann: ¿y bien?
+Marie: (suspira) ¿qué tan bueno eres guardando secretos?
+Dann: pues... la verdad, no soy muy bueno en eso
+Marie: puta madre... bueno, da igual. Lo que quería decirte es... bueno, a Alice no le agradan nada estas cosas de sexo e interacciones así subidas de tono, ¿sabes?
+Dann: okey, ¿y?
+Marie: y... en la fiesta, yo... quizás deje pasar a bastantes hombres a mi cuarto para... bueno, no hace falta decirlo, ¿no?
+Dann: ve al grano mejor
+Marie: distrae a Alice. Si ella ve algo así... no pienso aguantarme sus sermones
+Dann: ... bien
+Marie: ¿en serio? No pensé que sería tan fácil convencerte
+Dann: yo tampoco
+Marie: bueno, nos vemos hasta la fiesta
+Dann: ...
+
+Marie se levantó sin hacer ruido y salió del cuarto. Dann se quedó solo. Se pasó una mano por el pelo, respiró hondo y volvió a sentarse frente a la computadora. Abrió su proyecto, revisó archivos, corrigió detalles, borró cosas y las volvió a escribir. Poco a poco, fue entrando otra vez en su mundo.
+Las horas pasaron sin que se diera cuenta.
+
+Primero empezaron a llegar algunos amigos. Luego, más. Después, música más fuerte, risas, botellas sobre la mesa, gente entrando y saliendo de los cuartos. En algún punto, la casa ya no era una casa tranquila. Era una fiesta. Dann salió de su cuarto y fue al living. Allí encontró a Alice sentada en un sillón, con un vaso en la mano. Se sentó a su lado y tomó otro.
+
+Se quedaron así, mirando alrededor, observando a la gente bailar, hablar, gritarse para escucharse. En un momento, Dann levantó la vista y la vio. Marie estaba subiendo las escaleras con un hombre. Se reían, caminaban muy juntos y desaparecieron en uno de los cuartos. Alice notó que Dann se había quedado quieto. Ella estaba por mirar, pero Dann levantó su vaso: "¿Brindis?", dijo rápido. Entonces chocaron los vasos.
+
+Alice: (suspira) ¿brindis... por qué?
+Dann: porque... no sé
+Alice: sí, tiene mucho sentido (bebió). Bueno... voy al baño, ya vuelvo
+
+Alice tomó un sorbo y se levantó. Se alejó entre la gente.
+
+Mientras, Dann siguió tomando: uno, dos, tres tragos más. Ya no estaba prestando mucha atención a la música. Entonces lo vio: un chico, apoyado cerca de la pared, miraba fijamente a Alice mientras ella caminaba hacia el pasillo. No disimulaba para nada. Cuando ella dobló, él empezó a seguirla. Dann dejó el vaso sobre la mesa y se levantó. Fue por detrás.
+
+El pasillo estaba más silencioso. Se escuchaba la música lejana y algunas voces apagadas. Char caminaba despacio, sin apuro. Llegó hasta la puerta del baño y estiró la mano para agarrar la manija. Antes de que pudiera girarla, Dann apareció detrás y dijo en voz alta: "¿qué mierda haces?". Char se dio vuelta.
+
+Char: ... ¡hola! Solo quería usar el baño
+Dann: ¿ah, sí? Pues... no sé si ves la luz encendida, está ocupado
+Char: ... sí, sí, sí, tienes razón, no me... he... ¿cómo se dice?... no me di cuenta
+Dann: ¿no te diste cuenta? Hasta aquí se ve la luz que sobresale
+Char: bueno, pues... muchos tragos y... estoy algo mareado, cualquiera no se da cuenta
+Dann: yo también tomé muchos tragos y sí, estoy algo mareado, pero... no soy tan idiota para no ver una puta luz. Vete y espera o vas al patio a mear, y si quieres hacer lo segundo, pues... vete a tu casa entonces, eso sería lo mejor
+Char: ... voy a esperar
+Dann: ... bien, pero no aquí
+
+Char lo miró unos segundos, incómodo. Se fue por el otro lado del pasillo. Dann se quedó frente a la puerta. Un segundo después, se abrió. Alice salió.
+
+Alice: ¿quién era ese tipo?
+Dann: ¿escuchaste todo?
+Alice: pues sí
+Dann: ... no, no lo conozco
+Alice: sabes, casi vomito. ¿No quieres ir al patio? Necesito algo de aire fresco
+Dann: sí, vamos
+
+Caminaron hasta el patio. El aire era una bofetada de alivio. La música apenas se escuchaba; con unos minutos más, dejaría de ser el centro. El pasto estaba un poco húmedo. Se tiraron en el suelo, mirando hacia arriba. El cielo estaba lleno de estrellas. Se quedaron en silencio un rato (solo un rato), respirando tranquilos.
+Alice: con mi hermano jugábamos a encontrarle formas a las estrellas
+
+Dann: ¿en serio?
+Alice: no, claro que no, eso solo sucede en Yanki Landia. Pero ya que lo menciono... esas estrellas forman la letra "C"
+Dann: es verdad... una "C" de... criptomonedas
+Alice: sí, bueno... iba a decir de "Compañía", pero... también vale
+Dann: (suspira) ¿puedo preguntarte algo que de a rato tengo atragantado?
+Alice: ¿sí?
+Dann: ¿conocías a Ronald?
+Alice: ... (se levantó del suelo)
+Dann también se levantó rápido. Alice había cambiado su rostro significativamente. Dann no se quedó callado.
+Dann: ... ¿sí lo conocías? ¿Fueron amigos?
+Alice: ... (volteó a ver a Dann).
+
+## Capítulo 3: Amarte Es Fácil
+
+Dann: ¿entonces? ¿Fueron amigos?
+Alice: bueno... la idea era ser más que amigos, esa era mi idea
+Dann: ¿y qué pasó?
+Alice: ... (suspira)
+
+**Un año atrás**
+
+Alice y Ronald entraron a la casa sin apuro. Ella cerró la puerta detrás de él mientras dejaba las llaves sobre una mesa pequeña. El lugar estaba en silencio, con ese tipo de calma que no termina de ser cómoda. Ronald miró alrededor, tratando de ubicarse, mientras Alice avanzaba unos pasos más.
+
+Alice: bienvenido
+Ronald: es linda la casa
+Alice: dile eso a mi madre, ella es la genia
+Ronald: (sonríe)
+
+Desde la cocina aparecieron Miro y Sheila. Venían hablando entre ellos, pero se detuvieron al verlos. Saludaron a Ronald con naturalidad, como si todo estuviera en orden. Él respondió con una sonrisa breve, forzada, y dejó su mochila en el suelo. Se sentó en una de las sillas del comedor. Apenas apoyó la espalda, escuchó cómo los tres se metían en la cocina. Sus voces bajaron un poco, pero no lo suficiente como para desaparecer. Ronald simplemente se dedicó a escuchar:
+
+Sheila: y cuenta, Alice, ese chico es... digamos, ¿tu novio?
+Alice: ¡no!
+Miro: pero te gusta
+Alice: ... no, o sea... ¿en serio debo responderte?
+Miro: oye, Sheila, creo que nuestra hija está enamorada
+Sheila: sí, ya me di cuenta
+Alice: (suspira y sonríe a la vez)
+Sheila: ¿te brillan los ojos cuando lo ves?
+Alice: basta, ¡no lo hagan poner incómodo, eso sí!
+Miro: no me puedes pedir eso, Alice, esa es mi especialidad, deja que me divierta un poco al menos
+Alice: ¡no!
+Sheila: Alice tiene razón, no lo molestes, mucho menos tú
+Miro: es como quitarle un dulce a un niño
+Alice: sí, siempre serás un niño, ¿no?
+
+Ronald se quedó quieto, mirando un punto fijo en la pared, sin querer escuchar, pero sin poder evitarlo tampoco. Todo el tiempo mantuvo una sonrisa. Movía un pie despacio, casi sin darse cuenta, marcando un ritmo nervioso. Al poco tiempo, Alice volvió con una taza de café en la mano. Se la extendió con cuidado, como si fuera algo importante.
+
+Alice: ¿y bien? ¿Te aburriste un poco?
+Ronald: da igual, siempre me aburro, hasta que estoy con amigos
+Alice: pues... según dicen, eres de pocos amigos
+Ronald: ¿ah, sí? ¿Y quiénes lo dicen? (Levantó un poco la voz)
+Alice: ... no, o sea, mi intención no era que te enojes
+Ronald: ... perdón
+Alice: ...
+Ronald: (miró de reojo a Alice) ¿hiciste tú el café?
+Alice: sí, lo único que sé hacer
+Ronald: pues... está rico
+Alice: obvio que no, simplemente lo hice porque no sabía qué hacer
+Ronald: y... ¿qué tal tu familia? Al parecer tienes un padre que quiere joderme
+Alice: sí, bueno, él es así, no es nada personal, solo que le gusta divertirse
+Ronald: ¿soy un juguete acaso? (Tomó un sorbo)
+Alice: ... no, bueno, da igual, simplemente no le des importancia
+Ronald: ¿y qué hay de tu hermano? Me hablaste de él, pero... nunca puedo conocerlo
+Alice: él ahora está... (suspira) está lejos
+Ronald: ¿lo extrañas?
+Alice: no se fue hace mucho, pero el hogar sí se siente vacío. Él es de esas personas que, a donde vayan, le dan una energía única a la situación
+Ronald: eso mismo le decía mi madre a mi padre. Mi padre es de esos papás buena onda, los cuales hacen chistes, pero no los hacen para agradar, los hace porque, según él, lo merece... aunque... sin invitados es... el mismo padre que veo hace años
+Alice: entiendo, mi padre es otro... otra clasificación, digamos
+Ronald: ¿y cómo? ¿Molesta para joder o porque está aburrido?
+Alice: ... al parecer ya te llevas mal con mi papá y eso que apenas se conocen
+Ronald: simplemente no me agradan los jodidos, solo eso
+Alice: claro... ¿mi padre te molesta? (Lo miró fijo)
+Ronald: ... voy al baño.
+
+Se levantó despacio, empujando la silla sin hacer ruido, y comenzó a caminar por el pasillo. Avanzó sin apurarse, observando las paredes, las puertas cerradas, los objetos acomodados con demasiado orden.
+
+En un punto se detuvo. Frente a él había un cuadro: un retrato familiar. Miro, Sheila y Alice sonriendo, abrazados, iluminados por una luz suave. Todo parecía perfecto, como si en esa imagen no existieran dudas, discusiones ni silencios incómodos. Ronald lo miró unos segundos de más. Tragó saliva y siguió caminando.
+
+Entró al baño y cerró la puerta. Se apoyó en el lavamanos, abrió la canilla y se echó agua en la cara varias veces. Respiró hondo. Cuando levantó la cabeza, se encontró con su reflejo. Al principio era normal, pero eso cambió.
+
+Las paredes parecieron alejarse; el espejo se deformó, la luz se volvió extraña. Ronald cerró los ojos por un segundo, tratando de recomponerse. Cuando los abrió, ya no estaba en el baño. Se encontraba dentro de una habitación cúbica. Las paredes, el techo y el piso estaban cubiertos por el mismo retrato familiar. El mismo rostro de Alice, la misma sonrisa de Miro, la misma expresión tranquila de Sheila, repetidos una y otra vez. Ronald dio un paso atrás, estornudó y su respiración se aceleró. Entonces escuchó los altavoces. La voz de Sheila llenó el espacio: "Alice, ya te dije que no pienses esas cosas". Luego, la de Miro: "Hija, tu madre tiene razón, eres brillante". Después, la voz de Alice: "Tienen razón, los quiero". Nuevamente Sheila: "¿Un abrazo?". Las frases se repetían como si no hubiese un mañana. No había silencio, ni mucho menos pausa. Ronald se tapó los oídos, apretando fuerte, como si pudiera apagar todo con las manos. Cerró los ojos, apretó los dientes, sintiendo cómo la presión crecía en el pecho. De repente, gritó y se lanzó contra uno de los cuadros y lo golpeó con todas sus fuerzas. El vidrio se quebró. Giró rápido, corrió unos pasos, vio a otro cuadro frente a él y golpeó... la realidad volvió de golpe.
+
+La puerta del baño se abrió y Ronald salió descontrolado, con el brazo todavía en movimiento. Golpeó a Sheila sin querer, con más fuerza que el primer golpe. Ella cayó al suelo, sorprendida, sin entender qué había pasado. Miro, al ver eso, corrió de inmediato a ayudar a Sheila a levantarse.
+
+Pero no solo Sheila se levantó, también la mirada de Miro. Vio a Ronald parado, pálido, temblando. Alice estaba inmóvil en la puerta (nadie hablaba). Alice tenía los ojos abiertos, sin parpadear, como si la escena no fuera real. Ronald bajó lentamente el brazo y abrió la boca para decir algo, pero Alice movió su cabeza: "no", y Ronald quedó callado. Miro no esperó. Lo tomó del brazo con fuerza y lo arrastró hasta la puerta principal. La abrió de golpe y lo empujó hacia afuera: "¡VETE!".
+
+Alice: ¡papá!
+Miro: ¡no, Alice! ¡Vete a tu puto cuarto! ¡Y elige bien la próxima vez! ¡¡Deja de hacerte coger con cualquier idiota!!
+Alice: ...
+
+Ronald cayó al suelo. Se apoyó con las manos, se levantó despacio y miró una última vez hacia adentro. Alice seguía parada, sin moverse. Sheila estaba sentada, sostenida por Miro. La puerta se cerró con un golpe seco.
+
+Ronald quedó solo en la vereda. Respiró hondo, acomodó su ropa y empezó a caminar. Sin mirar atrás, caminó sin rumbo claro, con la cabeza llena de ruido, rumbo a su casa, o a cualquier lugar donde pudiera dejar de pensar, aunque fuera por unos minutos...
+
+... (qué intenso, ¿no? Lamentablemente no podía interrumpir esas escenas, ustedes debían sí o sí sumergirse en ellas... pero... para la alegría de todos, ¡volví! Aunque... me siento... da igual, ¡sigamos!)
+
+**Actualidad**
+
+Dann: pero... ¿qué pasó? ¿Por qué la golpeó?
+Alice: nunca logramos discutirlo, simplemente... dejó de existir
+Dann: ... ¿te refieres a cuando dejó de ir al colegio?
+Alice: sí, luego de lo sucedido, hablamos un poco cuando nos encontramos otra vez, pero Ronald ya no tenía ganas de hablar. Bueno, eso es lo que yo digo
+Dann: hasta que dejó de ir
+Alice: sí, aún no entiendo... qué fue lo que pasó, ni por qué desaparecer como si nada
+Dann: existen varias razones, no te congeles en las preguntas
+Alice: ... a todo esto, ¿por qué te interesa Ronald?
+Dann: en la computadora que me regalaste había un correo electrónico, el de tu tío, y... me saltó un mensaje de Ronald. Él... parece estar interesado por ti, ya que se habla con tu tío para saber de ti
+Alice: ... mi padre y mi tío se pelearon hace unos meses, simplemente mi madre lo va a ver
+Dann: ... ¿y no dirás nada? Te dije algo muy... muy de película como para que no digas nada
+Alice: quizás sea mejor volver a la fiesta
+Dann: (suspira) yo me quedo aquí
+Alice: bien.
+
+Alice se marchó. Dann simplemente se sentó en el suelo, sin hablar, sin moverse de más, sin nada.
+
+## Capítulo 4: Días De Apego
+
+Marie entró a la casa junto a Char sin soltarse de él, besándose desde la puerta, caminando casi a ciegas, más pendientes del otro que del camino. Avanzaron así hasta la cocina, chocando apenas con una silla en el trayecto, sin darle importancia. Al llegar a la mesada, Marie se sentó sobre ella sin dejar de besarlo, acomodándose con torpeza mientras Char se acercaba más, apoyando las manos en su cuerpo y dándole unas palmadas suaves en las nalgas, como parte natural del juego entre ellos.
+
+Después de unos segundos, volvieron a moverse, todavía unidos, dejando la cocina atrás y caminando hacia el baño. En el pasillo, Marie se tropezó con una alfombra mal acomodada y soltó un sonido involuntario.
+
+Marie: ¡uy!
+Char: ten cuidado
+Marie: ... sí (sonríe de forma pícara).
+
+Se sostuvo de Char para no caerse y siguieron avanzando, riéndose bajo y sin detenerse. Al llegar al baño, Marie se sentó en el suelo, apoyando la espalda contra la pared fría, mientras Char se inclinaba sobre ella. Continuaron besándose, con pausas cortas, respirando agitados, sin preocuparse por el espacio reducido ni por el ruido que podían estar haciendo.
+
+Al poco tiempo, se pusieron de pie otra vez, acomodándose la ropa a medias, y caminaron hasta el cuarto. Entraron sin hablar, cerraron la puerta detrás de ellos y el resto de la casa quedó en silencio, salvo por los sonidos que empezaron a salir desde esa habitación.
+
+En otro sector de la casa, Alice estaba sentada en su cama con la computadora en sus piernas cuando comenzó a escuchar los resortes del colchón de Marie y algunos gemidos apagados. Intentó ignorarlos al principio, colocando sus audífonos y subir el volumen de la música, pero los ruidos seguían filtrándose. Se movió incómoda, cambió de posición varias veces y terminó dejando la laptop a un lado, molesta, sin saber bien qué hacer con esa incomodidad.
+
+Dann, en su cuarto de trabajo, tenía varios papeles abiertos sobre el escritorio y la computadora encendida, pero no lograba concentrarse. Cada vez que intentaba leer o escribir algo, los sonidos del otro cuarto lo distraían. Cerró los ojos un momento, respiró hondo, volvió a mirar la pantalla y escribió dos líneas sin sentido. Las borró enseguida. Apoyó los codos en la mesa, frustrado, sabiendo que esa noche no iba a avanzar en nada mientras ese ruido siguiera ahí (se imaginan que eso les suceda? Imaginate que yo estuviese escribiendo, o me pego un tiro o les pego dos tiros a los sexólogos esos).
+
+Alice terminó cerrando la computadora con un movimiento lento, como si no tuviera apuro por nada. La dejó a un costado de la cama y se recostó mirando fijo el techo, siguiendo con la vista una pequeña mancha en la pintura que ya conocía de memoria. Los ruidos seguían ahí, constantes, imposibles de ignorar. Al principio intentó resistirse, pero después cerró los ojos y dejó que su mente se fuera sola. En su imaginación, todo se volvía vacío.
+
+No había paredes, ni techo, ni piso. Solo un espacio oscuro lleno de estrellas pequeñas y brillantes, flotando a su alrededor. Ella estaba ahí, sin ropa, aunque no se sentía desnuda. Su cuerpo era liso, sin detalles, como una muñeca de plástico a la que le quitan la ropa pero no tiene nada explícito, solo una forma simple, casi irreal. Dann estaba igual, frente a ella, con el mismo aspecto limpio y neutro. Se tomaban de las manos sin decir nada. Al principio flotaban quietos, apenas moviéndose, hasta que poco a poco empezaron a elevarse, como si una fuerza invisible los levantara. No había peso. Giraban despacio, se alejaban y se volvían a acercar, estirando los brazos, soltándose por segundos y volviendo a encontrarse. Sus movimientos parecían ensayados, como una coreografía sin música, hecha de impulsos suaves, giros lentos y cambios de dirección inesperados. A veces ella giraba sola, dando una vuelta completa, y él la esperaba, extendiendo la mano para volver a atraparla. Otras veces era Dann quien se alejaba, flotando hacia atrás, hasta que Alice lo alcanzaba con un pequeño empujón y lo hacía girar. Se movían así, sin rumbo fijo, creando figuras en el aire, cruzándose, rodeándose, como si estuvieran dibujando líneas invisibles entre las estrellas. No había apuro, no había ruido, no había interrupciones.
+
+De golpe, todo se desvaneció. Alice volvió a su cuarto, al sonido de los resortes, al murmullo lejano, al techo de siempre. Seguía con los ojos cerrados, pero ahora tenía una pequeña sonrisa en los labios, casi sin darse cuenta, soltaba aire en todo momento, cada segundo exhalaba (¿por qué hace eso? ¿No?). Su mano izquierda se encontraba por dentro de su short de verano, moviendo la suavemente (oh... claro, eso explica todo).
+
+Mientras tanto, en el cuarto de Dann. El se encontraba sentado en la silla con los ojos cerrados, las piernas apoyadas sobre el escritorio, el cuerpo inclinado hacia atrás.
+
+Se había quedado en esa posición demasiado tiempo, sin moverse, hasta que una pierna resbaló. La silla se inclinó de golpe y terminó cayendo al suelo con un ruido seco. Se incorporó enseguida, completamente despierto, miró alrededor como si no entendiera dónde estaba, y volvió a sentarse acomodándose la ropa.
+
+Encendió la computadora, abrió el correo y buscó el nombre de Alice. Escribió sin pensar: “escuchas esos ruidos?”. Se quedó mirando la pantalla dos segundos y lo borró. Probó de nuevo: “estas ocupada?” Lo eliminó también. Apoyó los dedos sobre el teclado, respiró hondo y empezó otra frase: “cada día que te veo creo que estás más lin…” Se detuvo. Frunció apenas los labios y lo borró automáticamente. Se pasó una mano por la cara, cansado, y luego escribió algo distinto, casi como un chiste para sí mismo, sonriendo apenas:
+“desde el día que me regalaste esta misma computadora, siento que... no puedo pensar en otra cosa que no sea en ese día, fuiste tan odiable, pero tan querible que fue desde ese entonces, que siento algo más”
+
+Leyó el mensaje completo. Soltó una risa baja, negando con la cabeza, como si estuviera hablando solo: "no... ni loco", murmuró. Movió el mouse decidido y apretó “Delete”. O eso creyó. En realidad, hizo click en “Send”. La pantalla confirmó el envío en menos de un segundo.
+Dann abrió los ojos de golpe: "¡Mierda!". Buscó desesperado alguna opción para cancelarlo, pero el internet funcionaba demasiado bien. El mensaje ya había salido. Se levantó de un salto y salió corriendo hacia el cuarto de Alice. Golpeó la puerta varias veces, sin medir la fuerza.
+
+Dann: ¿se puede entrar, Alice?
+Alice: ... (no contestaba, solo se escuchaba ruido)
+
+(Mucho ruido y... creo que se cayó, da igual, que estupida)
+
+Dann: Alice?
+Alice: espera!
+
+Alice abrió, todavía medio distraída, y antes de poder reaccionar, Dann entró apurado y fue directo hacia la computadora.
+
+Alice: ¿qué haces?
+Dann: ¡será rápido! ¿Okey? Ya vuelvo
+Alice: ¡hey! No puedes llevarte algo mío así como si nada
+Dann: es que debo confirmar algo de mi web y necesito dos computadoras sí o sí
+Alice: ... pues... si supiera eso no te hubiera derramado el café en tu laptop vieja
+Dann: sí, bueno... da igual, ya vuelvo
+Alice: espera! También escuchas los ruidos ¿cierto?
+Dann: sí... y yo como tonto pensaba que en esta casa tendría paz
+Alice: no te quiero decir esto pero... quizás tengas que acostumbrarte
+Dann: ... no me jodas
+Alice: y... ya conoces a Marie
+Dann: (suspira) en fin, ya vuelvo
+Alice: espera!
+Dann: ¡¿qué?!
+Alice: ... al final no te agradecí lo de ayer a la noche
+Dann: ¿qué cosa?
+Alice: lo de ese chico que casi entra al baño
+Dann: no importa, no lo hice para que me agradezcas
+Alice: sí, lo sé, pero sería muy mierda de mi parte no... no abrazarte.
+
+Alice se abalanza con cuidado, ambos se abrazaron. Dann sonrió mientras extendía sus brazos. Sin embargo, sintió un olor desagradable.
+
+Dann: ¿qué es ese olor de mierda?
+Alice: ¡¿eh?! ¿Mi habitación?
+Dann: no, no, no, tu... tú mano
+Alice: ... (se olió la mano, de inmediato cambió sus expresiones a una de asco)
+Dann: ¿qué tocaste? ¿La comida de Marie?
+Alice: pues... es que... estaba, o sea, ¡no! ¡No estaba haciendo nada! ¡nada!
+Dann: okey, ¡sí!
+Alice: solo que... acaricié un perro hace rato
+Dann: pero si no saliste en todo el día
+Alice: ¡no! No era un perro, un gato perdón, se apoyó en el marco de la ventana
+Dann: ... bien, pues... lávate porque es espantoso el olor
+Alice: sí, ahora empieza mi horario para bañarme
+Dann: si, es desagradable
+Alice: ... si, lo sé
+Dann: es tan horrible que creo... que jamás en mi vida olí algo tan mierda como hoy
+Alice: ¡si! ¡ya entendí!
+Dann: ... bueno, está bien, no te enojes. En fin, ya vuelvo.
+
+Salio casi corriendo de la habitación. Volvió a su cuarto, lo apoyó sobre el escritorio y lo encendió con manos temblorosas. La pantalla pidió contraseña.
+Probó primero con su cumpleaños. Incorrecta. Suspiró. Pensó un segundo y escribió su nombre: “Dann”. Incorrecta.
+
+Dann: Mierda (Dijo en voz baja)
+
+El corazón empezó a latirle más rápido. Dudó unos segundos antes de escribir: “Ronald”. Se quedó mirando la pantalla sin atreverse a presionar enter. Cuando lo hizo, contuvo la respiración. Era incorrecta.
+Soltó el aire de golpe, aliviado. Se pasó la mano por el pelo, miró la computadora unos segundos, se sentó lentamente en la silla y respiró hondo. Entonces escribió el nombre de su madre y el de su padre, uno detrás del otro. Esta vez, la computadora se desbloqueó. Entró rápido al correo, buscó el mensaje entre los enviados, lo abrió sin releerlo y lo borró de inmediato.
+
+Se quedó quieto frente a la pantalla, con los hombros caídos, intentando que su respiración volviera a la normalidad, como si acabara de esquivar algo mucho más grande de lo que estaba dispuesto a admitir.
+
+Marie abrió los ojos lentamente. La luz entraba apenas por la ventana y le molestaba un poco. Estaba acostada boca arriba, con el cuerpo pesado, como si no hubiera dormido del todo. Giró la cabeza y vio a Char durmiendo a su lado, con el brazo caído fuera de la cama y el pelo desordenado. Lo observó unos segundos, sin pensar nada en particular, y después volvió a mirar el techo. Se quedó ahí, inmóvil, hasta que los recuerdos empezaron a aparecer solos:
+
+**Un Año Atras, Febrero.**
+
+Marie estaba en la puerta despidiéndose de sus padres, que se iban a un cumpleaños. La ventanilla del auto se abrió y su madre estiró la cabeza:
+
+-¡cierra con llave!
+
+Marie levanto su pulgar. Se encerró en la casa pero sin colocar llave, caminó hacia la sala y se sentó en el sillón, tomó el celular y llamó a un amigo. No pasó mucho tiempo hasta que escuchó el timbre. Fue a abrir.
+
+Se abrazaron apenas se vieron. Después, casi sin transición, empezaron a besarse, torpes al principio, apurados después. Caminaron juntos hacia el cuarto, chocando con una silla en el camino, sin prestarle atención.
+
+**Abril**
+
+Marie entró a una tienda pequeña, casi vacía. Detrás del mostrador había un chico de su edad, acomodando unos productos. La miró y sonrió.
+
+-¿quiere algo más?
+Marie: no... ¿cuánto es?
+-... pues... son 10 mil, pero para una chica linda como tú... son 5 mil
+Marie: ¿ah si? Pues... gracias.
+
+Ella se apoyó en el mostrador, se inclinó un poco hacia adelante y lo besó sin avisar. Él dudó apenas, miró hacia la puerta, caminó hasta cerrarla con llave y volvió junto a ella, sin decir nada.
+
+**Junio**
+
+Era el recreo en el colegio. Marie estaba sentada con Alice, compartiendo una bebida.
+
+Marie: ¡ella no me lo quería prestar! Es una hija de pu...
+Alice: ¿pero por qué no?
+Marie: según ella porque la última vez le perdí el borrador, pero no se lo perdí, alguien más lo agarró y se lo quedó.
+
+Un chico se acercó con una barra de chocolate en la mano. Se la ofreció con una sonrisa nerviosa.
+
+-hace tiempo que tengo pensado hacerte este regalo
+Marie: ... pues... si hablamos de hacer, no hiciste nada, pero lo agradezco
+-bueno, sí, tienes razón, simplemente lo compré
+Marie: no importa
+-¿quieres pasar el rato?
+Marie: ... claro, ya vengo Alice, no tardamos... bueno, ya veremos eso
+Alice: ... claro.
+
+Marie la tomó, se levantó casi enseguida y miró a Alice solo un segundo antes de irse. Caminó junto al chico hasta el baño de hombres, dejando a su amiga sola en el banco.
+
+Los recuerdos se apagaron. Marie rrspiró hondo, como si recién ahora se diera cuenta de que estaba despierta. Char se movió a su lado, giró un poco y abrió los ojos.
+
+Char: ¿qué haces despierta?
+Marie: ... quiero que te vayas
+Char: claro...
+Marie: lo digo en serio, vete
+Char: ... ¿de qué hablas?
+Marie: ¡vete! ¡¿Es tan difícil de entender?!
+Char: ... pero...
+Marie: ¡vete! Puta madre, ¡¡vete!!
+Char: ...
+
+Char se sentó en la cama, buscó su ropa, se la puso sin apuro y terminó yéndose. Cerrando la puerta sin hacer ruido. Marie siguió sentada en la cama, sin acomodar las sábanas.
+
+Un rato después, escuchó pasos en el pasillo. La puerta se abrió despacio y Alice asomó la cabeza.
+
+Alice: ¿ahora qué?
+Marie: ...
+
+Marie se incorporó del todo, se sentó en el borde de la cama y se tapó la cara con las manos. Empezó a repetir en voz baja, una y otra vez, sin levantar la mirada.
+
+Marie: otra vez… otra vez caí… otra vez…
+
+Alice se acercó sin decir nada, se sentó a su lado y la rodeó con los brazos. Marie apoyó la cabeza en su hombro, todavía temblando un poco, mientras su voz se apagaba lentamente. Alice la sostuvo en silencio, como si supiera que en ese momento no había nada más útil que quedarse ahí.
+
+## Capítulo 5: Sigamos Así
+
+Dann caminaba de una punta a la otra de la habitación con el celular en alto, sosteniendo la videollamada frente a su rostro. A veces se detenía, miraba la pantalla con atención, asentía, y volvía a moverse sin quedarse quieto. Hablaba con su socio, el diseñador y programador del sitio de criptomonedas, revisando detalles, tiempos, ajustes y errores que todavía no estaban resueltos.
+
+Dann: ¡es que no entiendes! Pensé que iba a tener tranquilidad y es más ruidoso que estando con mi familia.
+—... sí, sí que entiendo.
+Dann: ¿me puedes repetir en qué estamos?
+—(suspira) en la optimización del motor de...
+Dann: ¡de emparejamiento! ¡Puta madre!
+—¿Puedes... no sé, respirar?
+Dann: ¡no! No tengo respiro... bueno... quizás sí.
+—Bien, te escucho.
+Dann: ... Miro...
+—¿Miro? ¿Quién es Miro?
+Dann: ¿me dejas hablar?
+—Perdón, sí, habla.
+Dann: es el padre de Alice, creo que... bueno, él podría ayudarme, es quien me trajo a esta casa y quien podría... quien podría sacarme.
+—¿Hablas de irte?
+Dann: no, más bien de tomar un puto respiro de todo, a un lugar donde esté cien por ciento enfocado en la plataforma.
+—Entiendo, bueno... sí es una buena idea.
+Dann: déjame esta parte a mí, ¿quieres? Tú... sigue en el diseño, siento que no parece profesional, la idea es que esto no se vea amateur.
+—Te pregunto ahora, ¿qué dices de Coinbase?
+Dann: ¿qué de qué?
+—Del diseño, de cómo se manejan, hace tiempo que quiero usarlo de inspiración.
+Dann: ok, ok, úsalo, ya da igual, hay que terminar, si las vacaciones se terminan... ya no habrá nada de tiempo.
+—Escucha, Dann... tengo dos cosas que decirte. La buena noticia es que... nos vamos a juntar, el grupo vuelve a juntarse, es para la despedida de Mozaret.
+Dann: ¿en serio? ¿Y van todos?
+—Sí, si es que no faltas tú.
+Dann: claro que no, cuenten conmigo.
+—Bien, y la mala noticia... pues, en vez de ser noticia es un golpe de realidad. Quizás no dé frutos, ¿sabes lo difícil que es mantener una plataforma así? Y... no siento que estemos usando las cosas legales. Nunca me dices nada de dónde mierda sacas los servidores, no pagamos por ellos y me preocupa.
+Dann: ¡escucha! Encárgate de tu trabajo y yo del mío, ¿bien?
+—...
+Dann: nos vemos esta noche.
+
+Cuando la llamada terminó, Dann bajó el teléfono, respiró hondo y se sentó frente al escritorio. Cerró la computadora con un gesto cansado y apoyó los codos sobre la mesa. En ese momento, tocaron la puerta, Dann gritó: "¡Pase!". Marie entró sin dudar, cerrando detrás de ella con cuidado. Lo miró un segundo, como midiendo su estado de ánimo, y se acercó.
+
+Marie: hola, Dann.
+Dann: ... siéntate.
+Marie: está bien así, vine para... bueno, disculparme por, quizás, no tratarte de la mejor manera.
+Dann: ve al grano.
+Marie: ... ¿eh?
+Dann: ¿qué mierda quieres?
+Marie: ... que me acompañes.
+Dann: ... puta madre (dijo en voz baja, agachando la cabeza) ¿y a dónde?
+Marie: no tan lejos de aquí.
+Dann: (suspira) bien.
+
+Minutos después, ambos salieron del lugar. En el pasillo, Alice los vio pasar juntos. Sonrió sin decir nada y se dirigió a la cocina. Allí abrió un cajón, sacó un sobre de café (para la curiosidad de nadie, estoy escribiendo este capítulo tomando café).
+
+Dann y Marie caminaron varias cuadras hasta entrar en una tienda de joyas. El lugar era pequeño, con vitrinas limpias y luces blancas que hacían brillar todo.
+
+Dann se quedó cerca de una de las vitrinas, observando anillos sin entender demasiado lo que estaba viendo. Miraba los precios, las formas, los reflejos, sin tomar ninguna decisión.
+
+Marie, en cambio, levantó la vista. Observó con atención el techo y detectó un par de cámaras. Luego miró la puerta, calculó la distancia y volvió hacia Dann.
+
+Marie: hey, Dann.
+Dann: ...
+Marie: esa puerta... ¿es difícil de abrir?
+Dann: sí, sin duda, tuve que usar las dos manos.
+Marie: claro...
+
+Antes de responder, una chica se acercó desde el fondo del local, con una sonrisa automática y una carpeta en la mano.
+
+—¿Qué desean?
+Marie: busco un par de anillos.
+—¿Un par? ¿Y cuál es tu tipo?
+Marie: pues... brillantes, quizás.
+—Tengo los indicados.
+
+La chica abrió una vitrina y les mostró varios anillos, acomodándolos sobre un paño oscuro. Marie los miró por unos segundos, fingiendo interés, hasta que señaló hacia una repisa del fondo: "¿Puede enseñarme ese collar de atrás?".
+
+La chica se dio vuelta sin sospechar nada. En ese instante, Marie se acercó a Dann, apoyó su boca junto a su oído y susurró: "Corre".
+
+Tomó un anillo con rapidez, lo apretó con fuerza en la mano, empujó la puerta de vidrio con las dos manos y salió corriendo a la calle. La campanita de la entrada sonó con fuerza.
+
+La chica se dio vuelta justo a tiempo para ver a Dann todavía dentro. Su mirada se clavó en él. Desde una puerta trasera salieron dos chicos, alertados por el ruido, y también lo observaron sin parpadear. Dann reaccionó tarde, pero reaccionó. Giró sobre sus talones y salió disparado hacia la calle.
+
+Corrió sin mirar atrás. Sus pasos resonaban en la vereda mientras los dos chicos lo seguían de cerca. Escuchaba su respiración, sus zapatillas golpeando el suelo, sus voces mezcladas con el ruido de los autos. En una esquina, escuchó a Marie: "¡Aquí!". Dann giró sin pensar y fue directo hacia ella. Se encontraron en medio del cruce y siguieron corriendo juntos, esquivando gente, puestos y bicicletas.
+
+De pronto, todo cambió. El ruido de la ciudad se transformó en motores. El suelo se volvió asfalto perfecto. Dann ya no corría: estaba dentro de un auto de carreras, con casco, guantes y un volante firme entre las manos. A su lado, Marie manejaba otro auto, concentrada, sin apartar la vista del camino. Detrás, los dos chicos también conducían, forzando sus máquinas al límite. Una voz grave y entusiasta llenó el aire:
+
+Tornello: ¡El público no puede creer lo que está viendo!. Una carrera totalmente inesperada, cuatro pilotos lanzados a toda velocidad por el circuito. Marie toma la delantera desde el inicio, con una maniobra limpia en la primera curva. Dann, en cambio, se mantiene cerca, no la pierde de vista, sabe que todavía hay margen.
+
+Los autos tomaban curvas cerradas, rozaban los bordes, levantaban chispas.
+
+Tornello: ¡Atención, atención! uno de los perseguidores intenta adelantar por el costado derecho, pero se abre demasiado. Error grave. ¡Pierde estabilidad! pierde el contr... ¡Mierda!.
+
+Uno de los autos de los chicos giró sobre sí mismo, chocó contra una barrera y quedó detenido entre humo y restos de metal.
+
+Tornello: ¡impacto fuerte! El piloto queda fuera de competencia. El otro intenta recuperar terreno, aunque... si, ya es tarde.
+
+Marie aceleró en la recta final.
+
+Tornello: Últimos metros. Marie lidera con autoridad. Dann viene segundo, firme, sin arriesgar de más. Y esto se termina damas y caballeros!!
+
+La meta apareció. Marie cruzó primera. Dann llegó segundos después.
+
+Todo se desvaneció. De pronto, estaban otra vez en la calle, mezclados entre una multitud que caminaba sin notar nada extraño. Se movieron junto a la gente, bajaron la cabeza, cambiaron de dirección varias veces. Miraron hacia atrás. Solo uno de los chicos seguía buscándolos, observando a todos con nerviosismo.
+
+Dann y Marie aprovecharon el momento. Giraron en una esquina, atravesaron una plaza y se perdieron entre los árboles y los puestos de comida. Finalmente, se detuvieron frente a un banco. Se sentaron al mismo tiempo, con el pecho subiendo y bajando, tratando de recuperar el aire. Dann se pasó una mano por el rostro. Marie apoyó los codos sobre las rodillas y miró al suelo.
+
+Dann: (mira atento a Marie)
+Marie: ... ¿qué?
+Dann: no sé... quizás a que me digas por qué mierda robaste ese anillo.
+Marie: baja el puto tono...
+Dann: bien (suspira), responde, ¿por qué?
+Marie: ... ¿te puedo hacer una pregunta primero?
+Dann: ¿qué?
+Marie: ¿estás enamorado de Alice?
+Dann: ...
+Marie: ¿ves? Justo así me siento cada que me preguntas el porqué robé el anillo.
+Dann: ¿alguna pista?
+Marie: ... ¿sabes lo que significa la palabra “castidad”?
+Dann: no.
+Marie: bien, entonces jamás vas a descubrir de qué trata la pista.
+Dann: ...
+Marie: simplemente pasó, ok? Déjalo en eso.
+Dann: ...
+Marie: además, ¡tú nunca robaste algo?
+Dann: sí, pero no algo de tanto valor.
+Marie: bien, te escucho.
+Dann: ... pues... fueron varias cosas, pero... de la que siempre me acuerdo es cuando, junto a mis hermanitas, robamos un par de jueguitos, esos de cajitas pequeñas. Simplemente me salió. Teníamos dinero, pero... decidimos que era mejor gastarlo en el helado.
+Marie: ¿y?
+Dann: y... luego nos castigaron. Nuestros padres se enteraron, los de la tienda nunca. Cuando entramos los vimos, los tomé y nos fuimos rápido antes de que alguien nos viera. No fue tanta acción como hoy, pero la adrenalina aun así se sentía.
+Marie: bueno, al menos lo hiciste por ellas.
+Dann: ... siempre se acuerdan. Hoy en día mis padres hablan de esto como anecdótico, y... ellas... cuando nos castigaron, se culparon a sí mismas. Dijeron que yo no era culpable de nada. Obvio, mi padre no les creyó, pero... se... ¿cómo es la palabra?
+Marie: ¿sacrificio?
+Dann: sí, algo así.
+Marie: ... eso es lindo. No diste un buen ejemplo, pero... fue bonito después de todo.
+Dann: (sonríe apenas)
+Marie: ¿no las extrañas?
+Dann: ... a veces pienso que me van a cerrar la computadora en la cara, pero no están, ya no están.
+Marie: ...
+Dann: ...
+Marie: bueno... ya debo irme, tengo un amigo que me espera.
+Dann: claro.
+Marie: si Alice pregunta, simplemente dile que yo... pasaré la noche con mis padres.
+Dann: bien.
+Marie: y... perdón por hacerte vivir esto, pero no quería sentirme sola.
+Dann: pues... te diría que no es nada, pero sí es mucho.
+Marie: lo siento.
+Dann: ... nos vemos.
+Marie: chau.
+
+Marie se levantó despacio y empezó a alejarse sin decir nada. En una esquina, a lo lejos, vio a otro chico. Caminó hacia él y, apenas estuvieron cerca, se abrazaron sin hablar.
+
+Dann los vio desde lejos, entendió que no tenía sentido quedarse ahí, y tomó el camino de regreso a casa.
+
+Entró, cerró con cuidado y subió las escaleras sin hacer ruido. Fue directo a su cuarto de trabajo. Al abrir la puerta, encontró sobre el escritorio un plato con tostadas untadas con mermelada y una taza de café todavía humeante. Se quedó mirándolo unos segundos, como si no esperara encontrar eso.
+
+Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió. Sonrió...
+
+(Perdonen, mi gato se subió al teclado)
+
+Se sentó, apoyó las manos en la mesa y respiró profundo. Luego abrió la computadora y volvió a concentrarse en su plataforma. Empezó a escribir código, a mover archivos, a llevar una idea desde el punto A hasta el punto B sin distraerse. Cada tanto, mordía una tostada o tomaba un sorbo largo de café, sin dejar de mirar la pantalla.
+Las horas pasaron así, sin interrupciones. Trabajo, desayuno, más trabajo. El plato quedó vacío. La taza, casi seca. Finalmente, presionó “Enter”. Observó la pantalla en silencio. Su sonrisa se fue abriendo de a poco, hasta ocuparle toda la cara. Se recostó en la silla, estiró los brazos, hizo girar el cuello, acomodó la espalda con un par de movimientos torpes. Tomó el último sorbo de café, dejó la taza sobre el escritorio y se levantó.
+
+Directo a su habitación. Agarró un par de prendas del placard y las dejó prolijamente sobre la cama. Después entró al baño, se desnudó y se metió en la ducha. El agua le cayó sobre la cabeza y los hombros, ayudándolo a soltar la tensión acumulada.
+Cuando terminó, volvió al cuarto, se secó y empezó a vestirse. En ese momento, sonó el teléfono.
+
+Milenian: ¡hey! ¿Qué mierda pasa que no llegas?
+Dann: ¿tan tarde se me hizo?
+Milenian: no, pero ya casi estamos todos, así que apurate.
+Dann: bien, bien.
+
+Colgó, apoyó el celular sobre la cama y apenas tuvo tiempo de acomodarse cuando tocaron la puerta: "¡Pase!". Alice entró sin avisar, con una expresión tranquila.
+
+Alice: ¿te gustó el pequeño gesto?
+Dann: creo que por primera vez estuve... ¿cómo decirlo? Tranquilo, yo y mi proyecto, nada más.
+Alice: ... qué gusto que te vuelvas a ver con tus amigos, ¿no?
+Dann: (suspira) perdón por dejarte sola.
+Alice: no, no, no. No lo dije enojada, era literalmente una pregunta amigable.
+Dann: ... pues, sí, es lo que quería, todos lo querían.
+Alice: sí...
+Dann: ¿y tú qué harás?
+
+Se acercó a él, tomó los botones de la camisa y empezó a abrocharlos con cuidado, uno por uno.
+
+Alice: simplemente dormir. Mañana tengo otra clase de Inglés, es a las ocho, y no suelo levantarme a esa hora.
+Dann: ...
+Alice: ¿y? ¿Qué tal?
+Dann: (se miró al espejo) bien, está bien.
+Alice: sí, bueno, solo era abrochar botones, nada del otro mundo.
+Dann: ... ¡mierda!
+
+Dann miró la hora en su celular, abrió los ojos un poco más de lo normal y reaccionó. Agarro sus cosas, pasó por la cocina y miró el escritorio.
+
+Dann: ¡gracias por el desayuno! ¡Nos vemos luego!
+
+Y salió corriendo de la casa. Cruzó varias cuadras sin frenar hasta llegar a la casa de un amigo. Tocó el timbre con insistencia. A los pocos segundos, salieron dos chicos.
+
+Norman: Nologan Dann Mitz... ¿quién lo diría, no? Después de tanto tiempo.
+Shei: ¡Dann! ¡Hermano! (Lo abrazó sin pedir permiso).
+Dann: (no lo tocó, miraba a Norman con cara de...)
+
+(Cara de... ¿cómo mierda lo digo?, ah si. Con cara de ¡por favor sacamelo de encima!).
+
+Entraron juntos y fueron directo al quincho. Allí estaba el resto del grupo, sentados alrededor de una mesa, jugando al póker, con cartas desparramadas y vasos apoyados en cualquier lado. Dann saludó a todos con la mano, se dejó caer en uno de los puffs y respiró aliviado.
+
+Norman: ¿te siguen gustando mis asados, Dann? ¿O te acostumbraste a los de tu suegro?
+Dann: ¿suegro?
+Claren: ¡no te hagas! ¿Qué hay entre tú y Alice?
+Dann: pues, nada, solo es una amistad.
+Darío: ¡todos empiezan diciendo eso, Dann! ¡Todos!... Ella también lo decía, ¡hija de puta!
+Shei: ¡ya empezó! Alguien que lo saque al baño.
+Darío: preferiría que me sacaran a bailar.
+Norman: ¿es en serio, Darío? ¿Bailar? ¿Quién putas les gusta bailar?
+Shei: a mí me gusta bailar.
+Norman: ¿ah, sí? Jodete tú y Darío entonces.
+Claren: ¿ella te sacaba a bailar, Darío?
+Darío: sí, con la luz de la luna.
+Dann: necesitaban la luz de la luna para que le vieran la cara.
+(Todos rieron).
+Darío: claro, como estoy en un lugar lleno de blancos.
+Norman: ¿eh? ¡No te olvides, Meet, no te olvides!
+Meet: ¿olvidarme de qué?
+Norman: puta madre, ya te lo olvidaste.
+Dann: (sonreía).
+Meet: ¿de qué?
+Norman: cara de póker, amigo. Somos... haz una cara de... ¡olvídalo! El negro ya te ganó.
+Darío: ¡sí! ¡Nueva ronda para el perdedor!
+Meet: ¿sabes lo que pasa, Darío? Compras las cartas.
+Darío: sí, claro que sí, los negros no temen comprar. ¡Fuck! ¡A robar! ¡JA-JA-JA!
+Norman: déjense de mierdas y saquen las cartas, voy a pasar.
+
+Norman apareció con una fuente llena de carne. La apoyó en el centro y repartió pan apenas tostado. Empezaron a armar sándwiches sin orden, cortando, pasando platos, empujándose un poco.
+
+Norman: oigan... extrañaba esto.
+Darío: Norman, cállate.
+Norman: ¿ves? Tú fuiste el único al que lo extrañaba. Esa actitud de mierda que tienes es... una mierda.
+Claren: repetirte dos veces lo mismo.
+Norman: sí, doble cagada para Darío.
+Darío: ¿sabes qué pasa, Norman? Yo ya estoy cagado, soy negro, excremento viviente, perra.
+Shei: ¡hey! ¿No les enseñaron a hacer silencio?
+Darío: ya que lo preguntas... sí, y me golpeaban contra la pared si estornudaba en la mesa.
+Norman: a mí una vez casi me sacan el ojo.
+(Todos se callaron).
+Norman: ... ¿qué? ¿Por qué me miran así?
+Darío: ¿casi te sacan el ojo?
+Norman: fue menos horrible de lo que piensan.
+Claren: a mí se me salen los ojos siempre cada vez que veo chicas con minifaldas.
+Darío: ¡no! No, no y no, Claren... las minifaldas no.
+Shei: Darío, por favor, no lo digas.
+Norman: lo va a decir.
+Shei: no, claro que no lo diga.
+Darío: el pantalón largo es mejor.
+Norman: ¡y lo dijo!
+Shei: ¡hijo de puta! ¡No! No se ven bien, o sea, sí, pero... ya da igual.
+Claren: coincidió con el gay de Shei.
+Shei: ¡gracias!... ¡espera! ¿Qué?
+Darío: ¡lo admitió!
+Dann: quién lo diría, ahora salen del clóset a los quince.
+Claren: eso es verdad, pero hablando en serio, algunos ya se enamoran a los ocho y sus cabezas están re confundidas. No sé cómo funciona, pero es algo extraño.
+Norman: yo solo pensaba en jugar con ese juguete de mierda para hacer plastilina.
+Darío: ¡Norman y sus recuerdos! Por favor, cambiemos de tema antes de que me duerma.
+
+Cuando terminaron de comer, el tiempo empezó a pasar sin que nadie lo notara. Algunos seguían jugando, otros discutían, otros miraban el celular.
+
+Dann se alejó un poco y fue hasta el patio. Se sentó mirando el cielo, apoyando la espalda contra una pared. Escuchaba las risas y el ruido de fondo, pero desde ahí todo sonaba más lejano.
+
+Se quedó así, en silencio. Claren apareció a los pocos minutos. Caminó hasta él y se sentó a su lado, sin apurarse.
+
+Claren: ¿y? ¿Qué tal la nueva vida en la casa?
+Dann: pues... a veces me siento raro, otras siento que no pertenezco y hoy me sentí querido.
+Claren: mejor no sigo con eso.
+Dann: ...
+Claren: oye... ninguno de los chicos lo dijo, pero... Darío lo iba a decir. Al final llegamos a una tregua para que se cierre la boca, pero... aquí don “no le importa” te lo va a decir.
+Dann: ... ¿qué?
+Claren: ... hay mucha gente que habla de ti. Dicen muchas cosas sobre que mantienes algo con Alice y... la otra, que no me acuerdo el nombre.
+Dann: ¿quién lo dice?
+Claren: no parece que me estés creyendo.
+Dann: ...
+Claren: mira... tú solo ve una mañana a la plaza, siéntate y... vas a escuchar de todo.
+Dann: ...
+
+## Capítulo 6: El Concierto De Bullicios
+
+Dann entró a la casa sin saludar a nadie, dejó las llaves en cualquier lado y fue directo a su cuarto. No se cambió, no se sentó primero, no pensó nada. Se tiró en la cama con las zapatillas puestas, boca arriba, mirando el techo sin enfocarlo realmente. Cerró los ojos sin proponérselo.
+
+Cuando despertó, lo primero que notó fue el peso de la frazada sobre el cuerpo. Parpadeó un par de veces, confundido. No recordaba haberse tapado. Bajó la vista y recién ahí vio que tampoco tenía las zapatillas. Estaban ordenadas al lado de la cama. Se incorporó lento, se pasó una mano por la cara y fue directo al baño.
+
+Mientras tanto, Marie entró en la casa sin hacer ruido. Caminó hasta la cocina, dejó su bolso sobre la mesa y se quedó quieta unos segundos. Se miró el anillo, lo giró con el pulgar, se lo sacó con cuidado y lo sostuvo en la palma. Caminó hasta el tacho, lo dejó caer adentro y lo empujó un poco con una servilleta. Después tomó su bolso otra vez y se fue sin mirar atrás.
+
+Dann salió del baño secándose las manos en la remera. Caminó por el pasillo sin apuro. Al pasar por el cuarto de Alice, notó que la puerta estaba abierta. Se asomó apenas. Ella estaba sentada frente a la computadora, con auriculares puestos, tomando apuntes en una clase de inglés por Zoom. Dann sonrió sin darse cuenta y siguió de largo.
+
+Bajó a la cocina, agarró un sobre de café y puso la tostadora en marcha. En ese momento, la radio se encendió sola con una canción que le recordó de inmediato a la escena de Matilda, cuando la niña empieza a descubrir sus poderes.
+
+("Little Bitty Pretty One", de nada)
+
+Dann se quedó escuchando, empezó a mover la cintura sin vergüenza, como si nadie pudiera verlo. Mientras tanto, calentaba el agua, sacaba la manteca, buscaba un cuchillo. Untó el pan con cuidado, probó un pedacito, sonrió satisfecho. Tarareó, giró sobre sí mismo una vez, acomodó el plato y la taza como si estuviera armando algo importante.
+
+Con todo listo, subió las escaleras y fue directo al cuarto de Alice. Golpeó suave y entró.
+
+Alice: ¿qué es esto?
+Dann: un “gracias” estaba bien
+Alice: (sonríe) gracias
+Dann: ...
+
+Cuando salió, cerró la puerta con cuidado, sin hacer ruido. Bajó otra vez y se dejó caer en el sofá. La radio seguía sonando.
+
+Se quedó escuchando unos segundos, suspiró, se levantó de golpe y le dio un manotazo al aparato. La música se cortó.
+
+Prendió la televisión. No llegó a ver nada. Alguien tocó la puerta.
+
+Dann se quedó quieto un segundo, apretó los labios, se pasó una mano por el pelo y fue hasta la entrada con pasos pesados. Y....................... Abrió.
+
+Dann: ¿sí?
+Ría: ¿hola?
+Dann: hola, ¿qué sucede?
+Ría: ¿quién es usted? ¿Dónde está la propietaria?
+Dann: yo también vivo aquí
+Ría: ... ¿no tiene un poco de azúcar?
+Dann: lamentablemente, no
+Ría: ¿podría ir a ver?
+Dann: le aseguro que no tenemos
+Ría: bien.
+
+(Por si no quedo claro, era una anciana)
+
+Cerró la puerta con más fuerza de la necesaria. Al darse vuelta, se encontró con Alice parada en el pasillo.
+
+Alice: ¿es en serio?
+Dann: ¿qué?
+Alice: no fuiste muy… no sé, ¿malo?
+Dann: no tenemos azúcar
+Alice: sí tenemos
+Dann: es muy poco
+Alice: puedo ir a comprar. Ese poco que quedaba podrías haberlo dado
+Dann: ...
+Alice: ¿vas a necesitar algo?
+Dann: no, creo que no
+Alice: muy bien.
+
+Alice agarró algo de dinero de la mesa y salió sin decir más. Dann se quedó solo en la casa. Miró alrededor, se sentó otra vez, pensó un segundo y sacó el celular. Marcó un número.
+
+Miró: ¿sí? ¿Dann?
+Dann: ¿cómo estás?
+Miró: ve al grano, ¿qué quieres?
+Dann: (suspira) tranquilidad, quiero tranquilidad
+Miró: bien, te escucho
+Dann: estoy muy contento y agradecido de vivir aquí, pero estoy muy atrasado con la plataforma, así que… te pregunto si podría conseguir otro lugar, solo yo, nadie más
+Miró: ... ¿es una broma?
+Dann: no te estoy pidiendo una casa
+Miró: ¡okey! Hubieras empezado por ahí… sí, quizás conozca un lugar
+Dann: ¿dónde?
+Miró: es un pequeño campo, supongo que es lo necesario
+Dann: si hay internet, me sirve mucho
+Miró: pues sí, lo tiene
+Dann: entonces, me viene bárbaro
+Miró: ¡listo! Mañana a las seis.
+
+Colgó. Apoyó el teléfono y se quedó mirando la pantalla apagada.
+
+(¿Ustedes no hacen eso después de llamar?.... ¿no?, bueno, empiecen el debate de cuán raro soy)
+
+Alice caminaba por el supermercado empujando el carrito sin prisa. Miraba los estantes, comparaba precios, agarraba productos y los devolvía a su lugar. Sin contenerse, agarró de inmediato unos M&M'S (confites de chocolates para los no familiarizados)
+
+¡AHORA! Anuncio Publicitario, ¡Muchas Gracias M&M'S!... es broma, ¿okey?
+Ya quisiera un patrocinador como M&M'S.
+
+Avanzaba despacio, como si no tuviera ningún apuro. Cuando llegó a la caja, notó que dos mujeres detrás suyo la miraban demasiado. Bajó la mirada, acomodó las cosas sobre la cinta. Entonces escuchó sus voces bajas:
+
+“Esa es la chica que vive con un chico.”
+
+“Nunca dejaría a mi hija con sus supuestos amigos.”
+
+“¿Soy yo o tiene un chupón?”
+
+Alice respiró hondo, acomodó su campera sobre el cuello y pagó rápido. Metió todo en las bolsas sin cuidado, en eso, sus M&M'S se cayeron, lo levantó rápido, se los guardó en el bolsillo y salió sin mirar atrás.
+
+Al volver a la casa, dejó las compras en su lugar, guardó lo frío primero y acomodó el resto después. Cuando vio a Dann en la cocina, se acercó.
+
+Alice: Dann…
+Dann: ¿qué?
+Alice: … ¿tengo un chupón?
+Dann: pues… ¿recién te percatas de eso?
+Alice: ¡no me jodas!
+Dann: ¡jajaja! Es broma, no tienes nada. ¿Por qué la pregunta?
+Alice: … nada.
+Dann: por cierto, solo dijiste “de nada”, ¿eso es lo único que vas a decir? ¿Sabes lo anormal que es para mí hacer el desayuno y no estar trabajando en las cripto?
+Alice: uy, sí, discúlpame, futuro empresario (lo decía mientras comía los M&M’S).
+Dann: …
+
+Dann caminó hacia el fregadero. Apoyó las manos en el borde y, sin aviso, empujó con fuerza. El material cedió. El caño se soltó y un chorro de agua salió disparado directo a la cara de Alice. Ella gritó: “¡Te voy a matar!”
+
+Dann se largó a reír y salió corriendo escaleras arriba. Alice lo siguió sin pensarlo. Dann se metió en su cuarto y cerró la puerta. Alice frenó, miró alrededor y entró al cuarto de Marie. Abrió un cajón, sacó uno de los tantos preservativos que había ahí, buscó cinta, tijeras y un hilo grueso. Cortó, midió, improvisó.
+
+Puso un banquito frente a la puerta de Dann. Con cinta pegó el hilo al techo y en la punta ató el preservativo (con aquel líquido espeso). Bajó el banquito, lo escondió y gritó: “¡Hey, Dann! Estoy haciendo café. Yo que vos cuido la computadora.”
+
+La puerta se abrió de golpe. Dann salió corriendo sin mirar arriba. El preservativo le pegó en la cara y quedó colgando, pegado a su frente y a su nariz. Alice estalló en una risa aguda, descontrolada, casi como un chillido de un cerdo.
+
+Dann se tambaleaba, manoteando el aire, tratando de sacárselo. Cuando por fin lo logró, lo miró un segundo, hizo una mueca y lo tiró sin pensar. El preservativo cayó directo en el pelo de Alice.
+
+Ella dejó de reírse. Se quedó completamente quieta.
+
+Dann: ¿y? ¿Ahora ya no ríes?
+Alice: ¡ya! ¡Sácalo! ¡Se acabó el juego, sácalo, puta madre!
+
+Dann se acercó despacio, lo tomó con dos dedos, como si fuera algo tóxico, lo levantó, abrió la ventana de su cuarto y lo lanzó afuera.
+
+En la vereda, dos chicos caminaban hablando. Algo cayó frente a ellos. Se acercaron, lo miraron, levantaron la vista hacia la casa, sacaron una foto, rieron y salieron corriendo.
+
+Dann y Alice estaban en la cama, cada uno en un extremo, con los pies casi tocándose. No había incomodidad, tampoco cercanía buscada. Era una quietud compartida, de esas que no se explican.
+
+Dann: hey, Alice… nunca te lo pregunté, ¿de qué quieres trabajar? ¿Cuál es tu sueño?
+Alice: (sonríe microscópicamente) pensé en ir a vivir a Estados Unidos y allí comenzar mi profesión como diseñadora de vestuarios. Sabes… me imagino estando en una producción y que me encarguen hacerles las vestimentas a cada actor… bueno, soñar es gratis, ¿no?
+Dann: …
+Alice: ¿y tú? ¿Te enfocarás de lleno en las cripto?
+Dann: … no, no es mi mundo.
+Alice: ¿y?
+Dann: y… no lo tengo claro.
+Alice: podríamos descubrirlo.
+Dann: no, da igual. Que la vida me lleve a donde me tenga que llevar.
+Alice: … ¿y qué tan bien suena eso?
+Dann: (suspira) sabes, no me pongo a pensar en eso. Quizás… no soy bueno pensando.
+Alice: …
+
+El golpe seco en la puerta cortó el momento. Dann se incorporó, apoyó los pies en el piso y caminó hacia la salida con calma medida, como si no quisiera pensar demasiado en lo que iba a encontrar del otro lado. Antes de llegar, todo cambió.
+
+La casa desapareció. La luz se fue de golpe y quedó un suelo iluminado, liso, extendiéndose en un pasillo que no parecía terminar nunca. A ambos lados había puertas. Se abrían solas, una tras otra, y de cada una salían corazones rojos, simples, flotando sin orden, como si no pesaran nada. Dann siguió caminando, sin mirar demasiado, con la vista fija al frente.
+
+¡Y entonces apareció!
+
+Un corazón enorme bajó desde arriba, ocupando casi todo el pasillo. Tenía una boca abierta de más, dientes desparejos y largos, saliva cayendo sin pausa. Avanzaba rápido, demasiado. Abría y cerraba la boca como si ya lo estuviera probando. Dann dio media vuelta y corrió, pero el sonido detrás de él no se alejaba. Al contrario. El corazón era más veloz, más insistente.
+
+Tropezó. Cayó de rodillas. Sintió el tirón en la pierna, el aire cuando lo levantaron del suelo, y luego nada ordenado. El corazón lo atrapó, lo cerró dentro, y no hubo tiempo para entender. Todo se rompió ahí.
+
+Dann parpadeó.
+
+(Porque hago esto ¿no?, osea, escribir algo tan minúsculo separado de los bloques grandes... hay preguntas, pero no respuestas).
+
+Estaba otra vez frente a la puerta. Su mano quedó suspendida en el aire, a centímetros del picaporte. Pensó en abrir. Pensó en quedarse. No hizo ninguna de las dos cosas. Se dio vuelta y salió corriendo hacia su cuarto. Subió las escaleras apurado, abrió la puerta casi sin frenar y se encontró con Alice parada justo del otro lado. Se quedaron mirándose un segundo. Después se acercaron al mismo tiempo.
+
+Le tomó la cara con ambas manos, como si hubiera decidido algo tarde pero sin vuelta atrás. Alice no dijo nada. Cerraron los ojos casi al mismo tiempo y el beso llegó firme, sostenido. Dann apretó un poco de más, Alice tuvo que acomodar la cabeza, y aun así no se separaron.
+
+La puerta del cuarto de Alice se abrió. De ahí salieron tres hombres en fila, vestidos con uniformes de gala militar, impecables, brillantes, fuera de lugar. El primero cargaba un bombo enorme que golpeaba con ritmo seco, el segundo avanzaba marcando notas largas con un trombón de varas, y el tercero acompañaba con un clarinete agudo, preciso. No miraron a Dann ni a Alice. No reaccionaron a nada. Cruzaron el pasillo tocando una marcha solemne, exagerada, como si desfilaran frente a un público invisible.
+
+Dann y Alice siguieron besándose. Dann respiró hondo sin separarse. Alice ajustó la mano en su muñeca. El sonido metálico y grave pasó a su alrededor, llenó el aire, y siguió de largo, sin interrumpirlos, sin pedir permiso.
+
+Se separaron sin decir nada. Algo vibraba.
+
+Alice: perdón, debo contestar.
+Dann: …
+Alice: ¿sí? ¿mamá?
+Sheila: ¿cómo estás, hija?
+Alice: pues… estoy muy…
+Sheila: ¡escucha! Ven a casa ahora mismo.
+Alice: pero…
+Sheila: ¡nada de peros! Ven ahora o voy yo.
+
+La llamada se corta abruptamente. Alice volvió a su cuarto, tomó algunas cosas sin demasiado orden, revisó el celular otra vez y tomó el bolso. No explicó más de lo necesario. Salió de la casa y fue directo a lo de su familia, sin mirar atrás.
+
+Siguió caminando sin apurarse, con el bolso colgado y el teléfono guardado, con el trayecto que ya conocía de memoria.
+
+Al llegar a la casa de sus padres tocó el timbre una sola vez. La puerta se abrió casi de inmediato. Miró apareció del otro lado, la miró apenas, le hizo un gesto corto con la cabeza y se hizo a un lado para que pasara. Alice entró. Miró no dijo nada más. Caminó hacia el fondo de la casa y desapareció de la escena.
+
+Sheila ya estaba ahí. De pie, con los brazos cruzados: "Siéntate". Alice obedeció. Se sentó frente a su madre, recta, sin cruzar las piernas, con los codos apoyadas sobre la mesa. Sheila no se sentó. Sacó el celular con calma, desbloqueó la pantalla y lo apoyó sobre la mesa, girándolo para que Alice pudiera ver.
+
+Era una foto de un condón. (Si se preguntan si el escritor tiene algún fetiche con los condones desde ya les aseguro que no lo sé... espera, yo soy el escritor. Recién me doy cuenta... continuemos por favor)
+
+Alice: … ¿qué es esto? ¿Qué mierda?
+Sheila: ¡Sí! Justo eso, ¡qué mierda! ¡Es un puto condón usado!
+Alice: … pues, no parece usado.
+Sheila: ¡Mira!
+
+Deslizó el dedo hacia un costado, sin apuro, y apareció otra imagen. Era la casa donde vivían Marie, Dann y Alice. La fachada completa, tomada desde la vereda, clara, reconocible.
+
+Alice: … no entiendo.
+Sheila: obvio que no… un par de chicos vinieron a mostrarme estas fotos y yo le saqué fotos a las fotos que ellos tomaron.
+Alice: … okey. ¿Y qué?
+Sheila: (suspira) no soy tonta, Alice. Ese condón lo usaste tú. No sabría responder con quién, pero sí sé responder quién. Lo usaste con Dann.
+Alice: ¿qué? ¿De qué mierda hablas? Y primero, ¿quiénes eran esos chicos?
+Sheila: dos amigos, conocidos aquí del barrio. ¡No cambies de tema! Esto es asqueroso.
+Alice: … espera, ya entendí. Y no, no es lo que piensas.
+Sheila: ¿y entonces qué es?
+Alice: pues… a ver, no es lo que es, pero sigue siendo algo… difícil, mejor dicho, absurdo de explicar.
+Sheila: te escucho.
+Alice: Dann y yo jugamos con el condón.
+Sheila: ¡No! ¡No quiero escucharlo! Hijos de pu…
+Alice: ¡No! Pero… (suspira) literalmente jugamos con el condón.
+Sheila: ¿eh? ¿Quién juega con un puto condón?
+Alice: pues… no sé, ¿a quién le gustan las bromas?
+Sheila: … ¿qué estás diciendo, Alice?
+Alice: solo digo que nunca tuve nada con nadie, ¿okey?
+Sheila: Alice… todo el barrio… a veces camino por la calle, las señoras me saludan, charlamos un poco, todo normal hasta que… me preguntan por ti. Antes sabía qué responder, ahora ya no te reconozco. ¿Qué mierda te pasó?
+Alice: ¿de qué hablas, mamá?
+Sheila: de todo lo que dicen, los rumores que rondan. ¿Qué hay entre tú, Dann y Marie? ¿Tienen sexo todos los días?
+Alice: ¡mamá! ¡Basta! Mira… no pienso escuchar más de ti, ¿bien? Sé lo que piensas, que por cómo reacciono pensarás que es cierto. Déjame decirte que… lo que digan las “dispara veneno” no tiene nada que ver con la realidad. Dann es un buen chico, pasa horas trabajando en su proyecto, sin molestar a nadie, y ayuda en la casa.
+Sheila: ¿y Marie? ¿Ella qué? ¿Todo lo que dicen de ella no es cierto? Y no lo digas porque tú la conoces más que nadie.
+Alice: …
+Sheila: ¡responde! ¿Qué es ella? ¿Es cierto lo que dicen?
+
+Alice se levantó bruscamente, volteó y se fue cerrando la puerta con fuerza. Mientras veía el suelo, escucho pequeñas risas, al ver en frente: dos chicos viéndola desde lejos, ambos, al notar su mirada floja, se fueron corriendo. Y Alice, también corrió de aquel lugar.
+
+Dann caminó hasta la plaza del centro sin rumbo claro. Cuando llegó eligió una banca apartada, se sentó y apoyó los codos en las piernas. Miró a su alrededor sin fijarse en nadie en particular. La gente cruzaba la plaza como cualquier otro día, conversaciones sueltas, pasos constantes, nada que lo incluyera.
+
+Una madre y su hijo se sentaron en la misma banca, dejando un espacio prudente entre ellos y Dann. El niño sostenía una botella de vidrio con un sorbete largo y transparente. Bebía sin pausa, haciendo pequeños ruidos al final de cada sorbo. Dann los observó de reojo, sin intención clara, solo para ocupar la vista.
+
+En un momento el niño giró la cabeza rápido, todavía con el sorbete en la boca, y lo miró directo. Sostuvo la mirada más de lo normal para alguien de su edad. Luego volvió hacia su madre y tiró de su ropa.
+
+—Mamá, ¿ese no es el que ustedes decían?
+—¿Eh? ¿Qué dices?
+—El…
+—…
+
+La madre levantó la vista hacia Dann, después miró a su hijo y dijo apenas: "Shhh".
+
+El niño no obedeció del todo. Volvió a mirar a Dann, esta vez sin disimulo.
+Desde el otro extremo de la plaza llegó una chica joven. Se acercó a la banca y saludó con naturalidad.
+
+Se inclinaron y se dieron un beso breve. Cuando la chica se enderezó, sus ojos se cruzaron con los del niño. Él levantó el dedo y señaló a Dann. La chica siguió la dirección del gesto y lo miró también. Después se inclinó hacia el oído de su madre y le susurró algo que Dann no alcanzó a escuchar. No necesitó hacerlo. Las miradas eran suficientes.
+
+Dann se movió incómodo, cambió la postura, pero la sensación no desapareció. Se puso de pie de golpe y, en el movimiento, chocó con un chico que pasaba justo allí.
+
+—¡Mierda! ¡Ten cuidado!
+Dann: lo siento.
+—… ¿Dann?
+Dann: sí.
+—(sonríe) eres el de… (ríe) ¿cómo están las chicas, eh?
+
+Sin esperar respuesta completa, Dann siguió caminando rápido, cruzó la plaza y se perdió entre la gente sin mirar atrás.
+
+## Capítulo 7: Mientras Las Gotas Caen
+
+Alice entró a la casa y cerró la puerta con más fuerza de la necesaria. El ruido quedó flotando unos segundos en el pasillo. Sin saludar, dejó el bolso caer contra el suelo y avanzó hasta el sofá. Se dejó caer también, como si el cuerpo le pesara más de lo normal, y comenzó a golpear el asiento con el puño cerrado, una y otra vez, siempre en el mismo lugar, sin mirar nada en particular.
+
+Marie apareció desde la cocina, se detuvo al verla y se acercó despacio.
+
+Marie: ¿Sucede algo?
+Alice: … Nada.
+Marie: No te creo, ¿qué pasa?
+Alice: … Mi mamá piensa que soy… (suspira)
+Marie: ¿Por qué?
+Alice: Estupideces, chismes, rumores que no son ciertos.
+Marie: Espera, ya vuelvo.
+
+Marie regresó con una taza de té caliente y la sostuvo frente a ella hasta que Alice la tomó. Luego se sentó a su lado y la rodeó con un brazo, atrayéndola hacia su hombro. Alice no se resistió, pero tampoco respondió al gesto.
+
+Marie: Parecemos madre e hija así, ¿no?
+Alice: (sonríe apenas) Sí… gracias.
+Marie: Por cierto, ¿dónde está Dann?
+Alice: No lo sé.
+Marie: Bueno, en fin, cuéntame todo lo que pasó con tu madre.
+Alice: … Ella me llamó y, al llegar a casa, simplemente nos sentamos y me mostró fotos que habían tomado de la casa y de un puto condón.
+Marie: … ¿Ok? ¿Cómo que un condón?
+Alice: (suspira) Lo tomé de tu cuarto.
+Marie: … O sea… ¿tuviste…?
+Alice: ¡No! Nos pusimos a jugar con él, bueno, mejor dicho, a bromear.
+Marie: Explícate desde el inicio.
+Alice: Bueno, Dann me hizo una broma, a la cual yo respondí pegando el condón en el techo, cerca de la puerta de su habitación, y cuando salió se pegó el rostro con él.
+Marie: Bien, continúa.
+Alice: Y… él tiró el condón, y al parecer había dos chicos que justo pasaban por ahí y lo vieron. Le tomaron fotos, y esos mismos chicos le mostraron todo a mi madre.
+Marie: … Claro… ¿Cuál fue la broma de Dann?
+Alice: Prácticamente nada, simplemente me mojó después de hacerme un desayuno. Creo que es nuestra forma de comunicarnos.
+Marie: … ¿Con el desayuno?
+Alice: Algo así. Yo le hice varios desayunos y hoy, por fin… (sonríe) nos dimos nuestro beso.
+Marie: … (baja la mirada)
+Alice: ¿Qué pasa?
+Marie: ¿Te besaste con él?
+Alice: Eso dije, sí.
+Marie: ¿Y no hubo nada, digamos, sexual?
+Alice: No.
+Marie: … (tomó un sorbo del té) ¿Cómo lo hacen?
+Alice: ¿Hacer qué?
+Marie: … Lo que yo no puedo…
+
+Marie se levantó sin hacer ruido, fue hasta el perchero, se puso el abrigo y buscó las llaves. Abrió la puerta y, justo antes de cruzarla, escuchó la voz de Alice detrás: "Perdón".
+
+Marie no respondió. Salió y cerró con cuidado. Caminó sin un rumbo claro, con las manos en los bolsillos y la cabeza baja. El viento le golpeaba el rostro y le desordenaba el pelo. Varias personas apuraban el paso cuando empezaron a caer gotas finas. Vio a una mujer correr con un paraguas abierto, inclinándolo contra el viento para que no se diera vuelta. Las gotas se volvieron más constantes y el asfalto empezó a oscurecerse.
+
+Llegó hasta el lago cuando la lluvia ya era firme. Las gotas golpeaban la superficie y formaban círculos que se superponían. Se apoyó en la baranda fría y miró el agua sin parpadear. Entonces le vinieron recuerdos que no había pedido. Uno de ellos inclinándose hacia ella, acercando la mano a su boca, deslizando un dedo con cuidado, como si estuviera probando algo frágil.
+
+Cerró los ojos y apretó la baranda con más fuerza. Otro recuerdo la atravesó, una habitación en penumbra, una cama desordenada y una voz que le decía que la amaría siempre, como si esa frase pudiera sostenerse por sí sola.
+
+Abrió los ojos cuando el agua ya le corría por la frente. Se dejó caer en una de las bancas y quedó mirando el lago, sin cubrirse, mientras la lluvia le pegaba en la ropa y en la cara.
+
+Char se acercó y se detuvo a unos pasos, dudando antes de hablar.
+
+Char: ¿Marie?
+Marie: … ¿Char? ¿Qué haces en la lluvia?
+Char: ¿Qué haces tú en la lluvia?
+Marie: … Nada.
+Char: … (abrió su paraguas y se sentó junto a ella, cubriéndola de las gotas)
+Marie: Gracias.
+Char: ¿Y? ¿Qué te sucede?
+Marie: ¡Alice! ¡Eso sucede!
+Char: (sonrió mínimamente) ¿Qué hizo ella?
+Marie: Nada, simplemente se besó con Dann.
+Char: (su sonrisa desapareció)
+Marie: (suspira) Ellos son perfectos… son el uno para el otro. ¿Y yo qué?
+Char: ¿Te sientes sola?
+Marie: No sé cómo describirlo.
+Char: Bueno… podríamos seguir hablando, pero no en esta lluvia, ¿no crees?
+Marie: Sí… (su celular empezó a vibrar) Lo siento, ¿me esperas?
+Char: Sí, claro.
+
+Tomo su teléfono y contesto la llamada.
+
+—¿dónde estás? ¡Te estoy esperando!
+Marie: ...
+—¡¿no hablas o qué?! Quiero que vengas ¡ahora!
+Marie: ... claro, te quier...
+
+La llamada se cortó abruptamente.
+
+Char: ¿quién era?
+Marie: ... nadie. Debo irme, gracias.
+
+Marie se levantó en seguida, antes de irse, dejó muy en claro:
+
+Marie: Char… ¿nos vemos esta noche?
+Char: Claro.
+Marie: Yo… llegaré tarde. Es decir, tú solo entra a la casa, la llave siempre está por debajo de la segunda maceta.
+Char: … Estará vacía… ¿no?
+Marie: Creo que sí. No sé si Alice se va a ir. Lo que sí sé es que Dann no va a estar hoy ni mañana.
+Char: Claro, pues… nos vemos a la noche entonces.
+Marie: Bien, nos vemos.
+
+Mientras tanto, Dann estaba en una tienda de barrio, apoyado contra una heladera vertical, con una lata abierta en la mano. Bebía despacio y miraba la lluvia a través de la puerta de vidrio. Las gotas resbalaban y deformaban las luces de la calle.
+
+El hombre que atendía salió de detrás del mostrador, se acercó y le extendió una barra de cereal, como si fuera parte de la compra aunque Dann no la hubiera pedido.
+
+Dann: … ¿Qué?
+—¿No lo quieres? No hay nada mejor que ver la lluvia comiendo una barrita, ¿no crees?
+Dann: No, no lo creo.
+—… ¿Aceptas o no?
+Dann: (la tomó y se la guardó) Gracias.
+—De nada. Espero que la lluvia termine antes, porque voy a cerrar la tienda contigo adentro.
+Dann: (suspira)
+
+Un auto se detuvo frente a la tienda. El motor quedó encendido y el limpiaparabrisas marcaba un ritmo constante sobre el vidrio. La ventanilla del conductor bajó despacio. Era Miró. Quien vio a Dann desde el asiento, sin sonreír.
+
+Miró: ¡¿te vas a quedar viendo?! ¡¿O vas a entrar?!
+Dann: ¿no íbamos a salir mañana?
+Miró: hoy es mañana, ¡sube!
+
+Dann dejó la lata vacía sobre un estante cercano y salió sin despedirse. Cruzó la vereda bajo la lluvia y se subió al asiento del acompañante. Cerró la puerta y el sonido quedó aislado. Miró arrancó sin apurarse, giró en la esquina y tomó una avenida que los alejaba del centro. No era un viaje largo, pero suficiente para dejar atrás las luces más densas y el movimiento constante.
+
+Durante varios minutos avanzaron en silencio, pasando por barrios más abiertos, con menos edificios y más espacios oscuros entre una casa y otra. La ciudad quedaba atrás sin desaparecer del todo.
+
+Miró: ¿Y bien? ¿Cuánto tiempo?
+Dann: Siéndote sincero, no mucho. Gracias a tu hija logré concentrarme más.
+Miró: Claro… que no se te iluminen los ojitos cuando menciones su nombre, porque te bajo ahora mismo.
+Dann: …
+
+Mientras tanto, en la casa, alguien tocó la puerta. El golpe fue firme, dos veces seguidas. Alice estaba en la cocina, esperando que el café terminara de subir. Dudó un segundo y dejó la hornalla encendida. Se secó las manos en el pantalón y fue hasta la entrada. Abrió.
+
+Un hombre encapuchado estaba frente a ella. La lluvia le caía por los hombros y el agua bajaba por la tela oscura.
+
+Alice: ¿si?
+
+El hombre levantó la mirada y, con un gesto simple, se quitó la capucha. Era Ronald. Tenía el pelo pegado a la frente y la cara mojada.
+
+Ronald: … Hola, Alice.
+Alice: … (abrió la boca, pero ninguna palabra salió de ella)
+Ronald: Perdón por llegar así, pero… tenía que hablar contigo sí o sí.
+Alice: ¿En medio de la lluvia?
+Ronald: …
+
+Alice se hizo a un lado para que entrara. Ronald pasó sin decir nada más. El agua de su ropa empezó a marcar el piso desde la puerta hasta el living. Se sentó en el sofá sin preocuparse por las manchas, dejando la tela húmeda. Alice cerró la puerta y se quedó de pie unos segundos antes de sentarse frente a él.
+
+Ronald: Perdón por ensuciar.
+Alice: Sí, bueno… da igual. ¿Y de qué querías hablar?
+Ronald: Bueno… ¿cómo estás?
+Alice: … Ve al grano.
+Ronald: Últimamente he tenido peleas con mi padre. Desde que se separó de mi madre, pues… nada es como antes, aunque… son pocas las veces que recuerdo algo bueno.
+Alice: Bien, peleas con tu padre. ¿Te hablas con tu madre? Porque creo que no.
+Ronald: No, ni una sola vez desde que se fue.
+Alice: Claro… todo esto me suena a que quieres…
+Ronald: Vivir aquí.
+Alice: (suspira) Solamente hay tres habitaciones.
+Ronald: Lo sé, pero ya que Dann se fue, pensé que podría quedarme en la suya.
+Alice: … ¿De qué hablas?
+Ronald: ¿No sabías?
+Alice: … Pero, ¡¿cómo que se fue?! Me lo hubiera dicho.
+Ronald: ¿Y tu padre no te dijo nada?
+Alice: ¡¿Qué tiene que ver mi padre?!
+Ronald: Ambos se fueron. Dann quería un lugar tranquilo para hacer eso de sus criptos.
+Alice: … O sea, ¿él no se fue de la casa?
+Ronald: No sé, tú sabrás, ¿no?
+Alice: … Okey, ¡puta madre! No me hagas asustar así.
+Ronald: (sonríe) Sí que estás muy enamorada de él, ¿eh?
+Alice: … Mejor cállate.
+Ronald: Vuelvo a preguntarte, ¿puedo quedarme un tiempo?
+Alice: Primero, déjame preguntarte yo, ¿cómo sabías tú que él se iba?
+Ronald: No sé si sabes que esta ciudad es pequeña y, bueno, es fácil conocer gente con vínculos con otros.
+Alice: ¡¿Eh?!
+Ronald: Soy amigo de algunos de sus amigos y fue uno de ellos quien me contó.
+Alice: …
+Ronald: Ahora, vuelvo a repetir por tercera vez, ¿puedo qued…?
+Alice: No.
+Ronald: … ¿No?
+Alice: Lo siento, pero… las decisiones las tomamos los tres: Dann, Marie y yo.
+Ronald: … Claro.
+Alice: Perdón, no lo quería decir tan directa, pero…
+Ronald: Sí, sí, entiendo. Gracias igualmente. ¿Tú crees que si siguiéramos siendo amigos hasta hoy estaría viviendo en esta casa?
+Alice: (bajó la mirada) Voy a buscar el café, ¿sí?
+Ronald: …
+
+Desde la cocina, Alice gritó: "¡¿también quieres un café?!". Ronald, con una pequeña sonrisa le dijo: "¡si!". Y en voz baja habló para si mismo: "te extrañaba amiga, eres igual como antes".
+
+## Capítulo 8: Me Borraste
+
+Alice y Ronald reían sin control, como si todo lo anterior hubiera quedado lejos por un momento.
+
+Ronald: ¿Te acuerdas de esa vez en la que tu amiga te puso el pie?!
+Alice: ¡¿Sí?! Casi se me sale un diente con el putazo que me di contra el suelo.
+
+Volvían a reír, inclinándose uno hacia el otro.
+
+Alice: Igual, no te rías porque tú le dijiste mamá a la profe.
+Ronald: No pude dormir por la vergüenza. ¡Jajaja!
+
+La risa bajaba de intensidad y regresaba otra vez, casi infantil.
+
+Ronald: (respira agitado, sintiendo dolor en el estómago) Nunca me reí tanto como hoy.
+Alice: (sonríe) Sí, la última vez que reí tanto fue cuando... bueno, no importa.
+Ronald: ... Es bueno que nos riamos de esas estupideces.
+Alice: Uno aprende, reírse de las cosas malas... a veces es mejor.
+Ronald: Gracias.
+Alice: ¿Por qué?
+Ronald: Porque entendí que... las personas no olvidan, y tú no olvidaste nada.
+Alice: (sonríe)
+
+Ambos se abrazan. Luego, Ronald se levanta, todavía con una sonrisa tranquila, y salió de la casa mientras Alice lo miraba desde la puerta. Afuera la lluvia seguía, pero ya no golpeaba con fuerza, solo caía constante sobre la vereda húmeda.
+
+En el camino, Ronald notó a otro encapuchado que avanzaba en sentido contrario. Caminaron por la misma vereda, reduciendo apenas el paso cuando quedaron frente a frente. Se sostuvieron la mirada durante unos segundos que parecieron más largos de lo normal. Ninguno dijo nada. Ronald siguió su rumbo sin mirar atrás.
+
+El otro encapuchado se detuvo frente a la casa de Alice, observó el frente con calma y luego pateó una maceta que estaba junto a la puerta. La tierra se desparramó y, entre las raíces expuestas, apareció una llave. La tomó sin dudar.
+
+Dentro, Alice lavaba las tazas con movimientos automáticos, intentando mantener la mente ocupada. El sonido del agua chocando contra la cerámica llenaba la cocina hasta que escuchó la puerta abrirse. Se dio vuelta y vio a Char parado frente a ella, quieto, como si hubiera estado allí desde siempre.
+
+Alice: (pega un salto del susto) ¡¿Quién mierda eres?!
+Char: Ahora sí puedo verte.
+Alice: ... ¡¿Qué?! Vete o llamo a la policía.
+Char: ¿No vas a hacerme un café?
+Alice: ... Tú... eres el mismo del baño, tú querías entrar cuando yo estaba en el... Vete, vete o tomo un cuchillo y te juro que te mato.
+Char: ...
+Alice: ... Vete, por favor, vete.
+Char: Tranquila, solo haz lo tuyo. (saca una lima)
+
+Char cerró la puerta con llave sin apartar la vista. Alice volvió a girarse hacia la mesada y comenzó a preparar café, midiendo cada paso con cuidado. En ese momento, Char se acercó por detrás hasta que su cuerpo chocó por completo contra el de ella. Tomó sus manos y las apretó con fuerza, inmovilizándola.
+
+Alice dejó caer una lágrima, la mirada perdida, como si algo dentro de ella se hubiera terminado.
+
+La lluvia cesa. En la calle queda un bache lleno de agua que refleja el cielo gris. Los autos pasan sin frenar, primero uno, luego un camión que salpica más de lo necesario, después una bicicleta que esquiva tarde y moja sus ruedas. El tránsito continúa rápido hasta que, de pronto, la calle queda vacía. En la casa vecina, una tubería suelta comienza a expulsar agua con fuerza, como si estuviera liberando presión acumulada. El chorro se vuelve irregular, cada vez más débil, hasta transformarse en pequeños hilos que apenas caen. Finalmente, no sale nada.
+
+Marie llega y nota la maceta tirada frente a la puerta. Se acerca, intenta abrir, pero la cerradura no cede. Empuja con más fuerza y entiende que está completamente trabada. Saca el celular y llama a Alice. No obtiene respuesta. El celular de Alice estaba en el suelo, vibrando por la llamada entrante. Marie corta e intenta comunicarse con Char. El celular de Char vibra sobre una mesada de luz en el cuarto de Alice, iluminando apenas el espacio con cada notificación.
+
+Marie guarda su teléfono, confundida. Se sienta en la vereda mientras el cielo comienza a aclararse y los primeros rayos de sol le dan algo de calor después de la noche húmeda.
+
+Decide llamar a Dann. Él contesta enseguida.
+
+Dann: ¿Sí?
+Marie: Hey, Dann, ¿tú no estás en la casa, verdad?
+Dann: No, ¿pasó algo?
+Marie: Está cerrada con llave, invité a un chico para pasar la noche, pero...
+Dann: ¡¿Qué chico?!
+Marie: Pues... se llama Char, le dije que la llave estaba en la maceta y... la maceta está tirada.
+Dann: ¡¿Eres estúpida?! Intenta entrar de cualquier forma.
+Marie: Pero...
+Dann: ¡Ya!
+
+La llamada se corta de forma abrupta. Marie se levanta y rodea la casa buscando otra entrada. Encuentra una ventana lateral, prueba con fuerza hasta que logra abrirla lo suficiente para pasar.
+
+Mientras tanto, Char abre la puerta principal y sale caminando con las manos en los bolsillos de su campera, la capucha puesta, viendo al frente.
+
+Marie ya está dentro. Sube las escaleras y en el pasillo encuentra el celular de Alice tirado en el suelo. Lo recoge, avanza despacio y entra al cuarto. Está vacío.
+Escucha la ducha. El sonido del agua cayendo es constante. Se acerca al baño, apoya el oído en la puerta y pregunta si está bien. No recibe respuesta. Solo percibe pequeños llantos, intermitentes.
+
+Alice está sentada en el suelo de la ducha mientras el agua cae sobre su espalda. Llora sin detenerse, rasguñando su propia piel como si intentara borrar algo que no puede nombrar.
+
+## Capítulo 9: Necesitamos Un Respiro
+
+Alice estaba sentada en la cama, con la espalda recta y las manos apoyadas sobre sus piernas. Miraba el suelo sin parpadear casi, como si allí hubiera algo que los demás no podían ver. No lloraba. No se movía. El cuarto estaba en silencio, pero ella no parecía estar escuchando nada. En eso, tocaron la puerta.
+
+Dann: Alice... ¿puedo pasar?
+
+Alice no respondió. Ni un gesto. Ni un sonido. Desde el pasillo se escucharon pasos rápidos subiendo las escaleras. Dann giró la cabeza y vio a Marie acercarse.
+
+Marie: ... hola
+Dann: ¿Hola? ¿Solamente vas a decir eso?
+Marie: ... (bajó la mirada)
+Dann: Tú lo llamaste, le dijiste todo. Ese tal Char, fue el mismo que casi entra al baño con ¡ALICE ADENTRO!
+Marie: ... por favor, basta, no sigas jodiéndome
+Dann: ¿Y me lo dices a mí? Tú has sido una puta molestia, tú nos has jodido a los dos. Ella era tu amiga... la única que estuvo siempre para ti. ¡Estuvo siempre! Y, ¿cómo le agradeces? Dime... ¡¿cómo le agradeciste?!
+Marie: ...
+Dann: Todo esto, lo has hecho porque eres una puta, una perra, te hiciste coger con todos... ¡todos! No sirves, Marie. ¿Lo entiendes? Por eso te odias a ti misma, porque al final, no importa cuántos hombres estuvieron contigo, no tienes nada para dar.
+Marie: ...
+
+Marie bajo las escaleras y se fue se la casa. Dann regresó frente al cuarto de Alice, sin atreverse a entrar. Se dejó caer despacio hasta quedar sentado en el suelo, apoyando la espalda contra la puerta cerrada. Del otro lado no se oía nada. Él respiraba pesado, como si cada intento por mantener la calma le costara más de lo normal.
+
+Dann: ... perdóname... yo... (suspira) Te quiero, sabes que...
+Alice: ... no hiciste nada... solo te fuiste (decía mientras seguía con la mirada fija en el suelo)
+Dann: ...
+
+Permaneció allí unos segundos más, mirando el techo del pasillo, hasta que se puso de pie y caminó hacia su habitación. Entró y cerró la puerta con fuerza, el golpe seco retumbó en la casa que parecía sostenerse apenas.
+
+Se sentó frente al escritorio. La computadora estaba abierta. En la pantalla seguía activa su plataforma de criptomonedas, terminada después de meses de trabajo. El diseño estaba completo, los gráficos funcionando, cada detalle en su lugar. Todo lo que había planeado estaba allí.
+
+Dann apoyó las manos sobre el teclado y comenzó a golpearlo con el puño cerrado, primero una vez, luego otra, hasta que las teclas empezaron a saltar. Tomó la taza de café que estaba a un lado y la volcó sobre la laptop, viendo cómo el líquido se filtraba entre las ranuras. Sin pensarlo más, levantó el aparato y lo lanzó contra el suelo. El impacto quebró la pantalla y dejó un sonido hueco que quedó flotando en el cuarto.
+
+El lugar que había cuidado como si fuera intocable empezó a perder forma. Empujó la silla hasta que cayó de lado, tiró el escritorio con un movimiento brusco que desparramó cables y papeles, sacó libros de la estantería y arrancó páginas sin leerlas, dejando restos en el piso. El orden que siempre había defendido desaparecía por su propia mano.
+
+Cuando ya no tuvo nada más que romper, se dejó caer en el suelo. Se sentó entre los objetos tirados y se cubrió el rostro con ambas manos, apoyando los codos en las rodillas. No gritó. No dijo nada. Solo respiraba, con el pecho subiendo y bajando de forma irregular.
+
+Mientras tanto, Marie estaba en casa de su madre. Subió a su antiguo cuarto sin saludar a nadie. Abrió un cajón que conocía bien y encontró tres frascos de barbitúricos alineados al fondo. Los miró un momento, tomó uno y lo guardó en el bolsillo de su abrigo.
+
+Al regresar a la casa, se encerró en su habitación. Se sentó en el suelo, con la espalda contra la cama, y abrió el frasco. Volcó varias pastillas en su mano y las llevó a la boca sin buscar agua. Tragó con dificultad, sintiendo cómo se quedaban a medio camino antes de bajar.
+
+Intentó dejar el frasco sobre la mesada, pero los dedos le temblaban y se le cayó. El envase rodó hasta chocar contra la pared. Las lágrimas comenzaron a salir sin ruido. Cerró los ojos, apoyando la cabeza hacia atrás, mientras la habitación quedaba en silencio.
+
+Dann salió de su casa sin mirar atrás. Caminó varias cuadras hasta llegar a la de Norman. Tocó el timbre una sola vez y esperó con las manos en los bolsillos, evitando pensar en lo que había dejado atrás.
+
+Norman abrió la puerta con una sonrisa automática, de esas que se usan cuando uno espera una visita común. Se acercó para saludarlo como siempre, pero notó al instante que Dann apenas respondió al gesto. No había energía en él, solo una tensión contenida que se le marcaba en los hombros.
+
+Dann entró y se sentó en el sofá sin decir nada. Norman cerró la puerta despacio y se quedó de pie unos segundos, observándolo.
+
+Dann: Norman... voy a dejar el proyecto
+Norman: ¿Qué? Jajaja! Decías eso, ¿viste?
+Dann: ...
+Norman: ¿Hablas en serio?
+Dann: ... (asiente con la cabeza)
+Norman: ... ¿Eres estúpido o qué? Ayer estabas estresado por no terminar y ahora... (suspira) Sabía que eras medio idiota, pero no pensé que lo eras de lleno.
+Dann: ...
+Norman: Dann, llevamos dos años, ¡dos putos años!
+Dann: ... perdóname
+Norman: (suspira)
+
+Norman extendió el brazo en un gesto firme, buscando sacarlo de ese estado. Dann lo miró, dudó apenas, y tomó su mano para ponerse de pie. Se acercaron y se abrazaron con fuerza, dándose palmadas en la espalda como si ese contacto pudiera ordenar algo que estaba fuera de control.
+
+Norman: ¿Se puede saber el porqué cambiaste de opinión?
+Dann: ... pasó algo malo, muy malo
+Norman: ...
+
+La tarde fue perdiendo luz sin que ninguno lo notara. Afuera, el cielo cambió de color y la noche terminó de instalarse en las calles.
+
+Char caminaba solo, con la capucha puesta y las manos en los bolsillos. No apuraba el paso. Avanzaba incluso por las zonas donde los faros estaban dañados y la oscuridad cubría casi toda la vereda. Sus pasos resonaban más de lo normal en el silencio.
+
+De pronto se detuvo. Frente a él, a pocos metros, había un chico parado en medio del camino. Char bajó la mirada un segundo y habló con voz baja: "No quiero problemas, amigo".
+
+Giró el cuerpo para regresar por donde había venido, pero apenas dio un paso se encontró con otro chico bloqueándole el paso. Miró a un lado y luego al otro. No estaba solo. Había más sombras moviéndose alrededor.
+
+Char: ¡No me jodan! ¡Váyanse! ¡¿Qué?! ¿Van a golpearme?
+-¡Algo así!
+
+Al darse vuelta por completo, vio a Ronald frente a él. La luz intermitente de un poste cercano alcanzaba apenas para reconocer su rostro.
+
+Ronald: Y... quiero saber si tú sabes por qué te vamos a golpear.
+Char: ... ¿De qué mierda hablas?
+Ronald: Vamos, dinos, ¿qué piensas? ¿No sabes por qué?
+Shei: ¡Yo creo que sí sabe!
+Ronald: Claro que sabe, admítelo. Siente un poco de culpa, ¡hijo de puta!
+Char: ... Yo no hice nada, ¡nada!
+
+Los cuatro comenzaron a avanzar al mismo tiempo. Char intentó retroceder, pero no había espacio. El primer golpe lo tomó por sorpresa, directo al estómago, dejándolo sin aire. Luego vinieron más, puños que impactaban en su cara y costillas, patadas que lo hicieron perder el equilibrio hasta caer al suelo. Trató de cubrirse la cabeza mientras los golpes seguían cayendo sin pausa: "¡Basta! ¡Me arrepiento! ¡Basta, por favor!", gritaba entre jadeos, intentando apartarse.
+
+Pero nadie respondió. Solo se escuchaban los impactos y su voz quebrada repitiendo lo mismo, cada vez más débil, mientras la noche seguía igual de oscura alrededor.
+
+A la mañana siguiente, Dann estaba en la cocina preparando el desayuno sin mirar el reloj. Movía las cosas con cuidado, midiendo el café, cortando el pan en partes iguales, como si ese orden mínimo pudiera sostener algo más grande. No probó nada. Solo acomodó todo en una bandeja.
+
+Subió las escaleras despacio, sosteniéndola con ambas manos. Frente a la puerta del cuarto de Alice se detuvo un momento, escuchando el silencio del otro lado. Bajó la bandeja y la dejó en el suelo, justo frente a la puerta cerrada. Luego golpeó con los nudillos, suave pero firme: "Debes comer algo, si tienes hambre, solo abre la puerta". Esperó en silencio. Dann ya estaba listo para no recibir respuesta cuando, desde adentro, se escuchó la voz de Alice, baja y quebrada: "Por favor, vete".
+
+Dann cerró los ojos un segundo y respiró profundo. No discutió. No insistió. Antes de girarse para irse, apoyó la mano en la madera y habló sin levantar la voz: "Murió. Él murió… lo asesinaron a golpes".
+
+Se alejó caminando despacio hacia las escaleras, con la mirada fija en los escalones. Cada paso parecía más pesado que el anterior. Cuando ya estaba a mitad de camino, escuchó un sonido leve detrás de él. Se detuvo.
+
+A lo lejos, la puerta del cuarto se abrió apenas. Dos manos salieron con cuidado, temblando todavía, y tomaron la bandeja del desayuno para meterla dentro.
+Dann observó la escena sin moverse. Una leve sonrisa apareció en su rostro antes de bajar el resto de las escaleras.
+
+Alice volvió a sentarse en la cama con la bandeja apoyada sobre las piernas. No tocó la comida. Entre el vaso y el plato había una nota pequeña, doblada con cuidado. La abrió sin apuro: "No importa cuánto tiempo pase, tu valor no se quedó en ese momento. Sigue aquí, aunque a veces te cueste verlo”.
+
+Sus ojos regresaron al mismo punto del suelo donde se habían quedado desde la noche anterior. Pero esta vez algo se movía detrás de esa mirada fija. Empezaron a aparecer recuerdos sin orden. La tarde en que volcó café sobre la computadora de Dann y ambos salieron corriendo como si el mundo fuera a terminar por una pantalla rota.
+La vez que no podía dejar de reír cuando Dann, torpe, terminó con el preservativo pegado en la cara y fingía dignidad. El beso que compartieron sin planearlo, en silencio, sin público.
+
+Alice dobló el papel y se lo llevó al pecho, presionándolo contra su cuerpo como si esa hoja pudiera devolverle algo que sentía lejos. Se levantó despacio y encendió las luces del cuarto. La claridad no cambió todo, pero ya no estaba en oscuridad. Tomó el celular.
+
+En la sala de estar, Dann estaba sentado en el sofá, mirando el vacío sin prestar atención a la televisión apagada frente a él. El teléfono vibró en su mano. Miró la pantalla y respondió de inmediato.
+
+Dann: ¿Sí?
+Alice: ¿Puedes venir?
+Dann: ... Alice...
+Alice: Ven, por favor.
+
+Subió las escaleras sin correr. Tocó la puerta. Esta vez, Alice la abrió. Se miraron unos segundos antes de sentarse en la cama, dejando un espacio pequeño entre ellos.
+
+Alice: ... ya no sé ni qué decirte
+Dann: A veces, estar en silencio es mejor
+Alice: ... sí
+Dann: Aunque... quiero preguntarte, ¿cómo has dormido?
+Alice: ... bueno, he tenido pesadillas de eso. Escucho la misma respiración agitada, sus palabras de... esas cosas horribles que decía y...
+Dann: Basta, no hace falta que me digas nada de eso
+Alice: ... ¿Cuándo empezaste a sentir cosas por mí?
+Dann: ... desde el día que me arruinaste la laptop
+Alice: ¿En serio?
+Dann: Sí, me enojé, y mucho, pero... debo decir: que fue una forma tan valiente de pedirme casamiento
+Alice: (ríe mínimamente)
+
+En ese momento, la puerta se abrió de golpe, como empujada por una fuerza que no pertenecía a nadie visible. Tres hombres entraron en fila, vestidos con uniformes de gala militar impecables. El primero llevaba un bombo enorme colgado al pecho, el segundo sostenía un trombón de varas y el tercero un clarinete. Sin anunciarse, comenzaron a tocar con energía exagerada, llenando el cuarto de un ruido festivo que no encajaba con nada.
+Dann y Alice se llevaron las manos a los oídos al mismo tiempo. No sonreían. No entendían. El sonido no traía alivio. Solo más presión. Los tres hombres dejaron de tocar. Se miraron entre ellos, incómodos, como si hubieran entrado en la habitación equivocada. Sin decir palabra, dieron media vuelta y salieron.
+
+(... no se que decir, tenía pensado una broma pero... ¿ellos se taparon los oídos?, ¿no me necesitan?)
+
+La puerta volvió a cerrarse. Alice y Dann se miraron. Había muchas cosas por decir, pero ninguna salió. No porque no existieran, sino porque no era el momento. Permanecieron sentados, compartiendo el silencio sin huir de él.
+
+Al día siguiente, Alice intentó llamar varias veces a Marie. El teléfono sonaba y nadie respondía. Volvía a marcar, esperando un cambio que no llegaba. Dann, en su cuarto, recogía los restos del desastre que había provocado. Levantaba libros del suelo, juntaba hojas rotas, apartaba la laptop destruida sin mirarla demasiado. El orden regresaba poco a poco, aunque no era el mismo de antes.
+
+Ambos salieron de sus habitaciones casi al mismo tiempo. Bajaron las escaleras y se detuvieron frente a la puerta principal.
+
+Dann: ¿No sabes nada de Marie?
+Alice: No... intenté abrir la puerta de su cuarto, pero está cerrada
+Dann: ... debe estar por ahí, no sé
+Alice: Probablemente
+Dann: ¿Con que así termina todo...
+Alice: No... ¿Quién dice que debe terminar así?
+Dann: (sonríe)
+
+Al salir, Dann tomó una dirección sin mirar atrás. Alice eligió la opuesta. Caminaban por la misma calle, pero en sentidos distintos.
+
+Alice llegó a casa de sus padres. La puerta estaba abierta. Entró y los encontró sentados en la sala, esperándola. Se sentó frente a ellos.
+
+Alice: Debo decirles algo
+Sheila: ...
+Miró: ... algo no me sienta bien
+Alice: ... (baja la mirada)
+Sheila: ¿Qué es, hija?
+Alice: Yo... yo...
+Miró: ¡¿Qué?! ¡Habla!
+Alice: ... (respira profundo) Voy a dejar de vivir en la casa
+Sheila: ...
+Miró: ¿Eh?
+Alice: ¿Puedo volver a vivir aquí? Con ustedes?
+Sheila: Alice... somos tus padres, ¿tú crees que te íbamos a decir no?
+Miró: ... Alice, gasté mucho en esa casa, mucho, y nunca en mi vida me arrepentí tanto de haber gastado todo en esa casa y no haberlas llevado de viaje
+Sheila: ¿Eso qué significa?
+Miró: Bueno... los tres tenemos nuevos boletos
+
+Las sonrisas aparecieron con esfuerzo, pero estaban ahí.
+
+Miró: ¡Basta! ¡Ya! ¡Muy lindo todo! Pero me hiciste pagar tanto dinero para que al final ¡quieras volver a vivir aquí? ¡Y yo pensando que iba a ganar más!
+Alice: Bueno... mamá tendrá que conseguir nuevo trabajo entonces
+Sheila: ¿Y tú qué? ¿Vas a vivir plácidamente?
+Alice: ¡Obviamente!
+Miró: No. Ahora vamos a implementar nuevas reglas en la casa
+Sheila: Esperé días y noches a que digas algo así, ¡te juro!
+Miró: Siempre hay una primera vez para escucharlo.
+
+Mientras tanto, Dann llegó a casa de sus padres. Apenas cruzó la puerta, ambos lo rodearon con un abrazo que no pidió, pero tampoco rechazó. Pasó luego al cuarto de sus dos hermanas pequeñas. Estaban sentadas en el suelo haciendo la tarea, concentradas. Su madre se acercó por detrás: "¿Quieres un café?"
+
+Dann tomó la taza cuando ella se la ofreció. Miró a sus hermanas un segundo y, sin advertencia, arrojó el café sobre los papeles y cuadernos. Las hojas se mancharon de inmediato.
+
+Las dos niñas se quedaron quietas un instante, sorprendidas. Luego gritaron su nombre y salieron corriendo tras él. Dann escapó hacia el patio, riendo por primera vez en días. Escaló el árbol sin cuidado, apoyando los pies donde encontraba espacio, mientras ellas intentaban alcanzarlo desde abajo. Padre y madre observaban la escena desde la puerta, sosteniendo cada uno una taza de café.
+
+-Siempre has querido vivir esto de nuevo, ¿no?
+-Desde que se encerró en su cuarto
+-¿Te acuerdas cuando Heidi y Riana se peleaban?
+-¿Cómo no? Se tiraban de los pelos
+-Bueno, adivina quién le enseñó a Dann a separarlas
+-... no hace falta que me lo digas
+-¡Yo! Su papá!
+-¿Me traes otra taza?
+-Sí
+-¡Pero con café! No hagas como la última vez!
+
+(El amor es tan lindo. Pero sigo sin entenderlo. Creo que es la primera vez en toda esta historia que... digo algo que no sea estupido. ¿Qué cosas, no?).
+
+The End.
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Triangle Room';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
