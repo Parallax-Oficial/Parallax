@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fenómeno Vulgar — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: CTRL
+
+Batista tenía la cámara encendida. José lo sabía porque la luz roja parpadeaba.
+
+Batista: bienvenido al colegio Monseñor Gottau, conocido por ser uno de los colegios más...
+José: ...
+Batista: ¿qué maravilla hay de este colegio?
+José: ... no sé, es religioso.
+Batista: ¡conocido por ser un colegio religioso! Hoy estamos aquí con un compañero... que no importa él, importa lo que sucede en este colegio... para comenzar... ¡ya detén la grabación!
+José: listo, ¿qué pasa?
+Batista: necesitamos que algo suceda si queremos seguir con el blog.
+José: ¿cómo qué?
+Batista: mira, hay viene Carla.
+
+Carla se acercó a ellos mientras sus amigas la observaban de lejos. Les entregó una carta. Batista se puso nervioso hasta que entendió que no era para él.
+
+Carla: ¿qué te pasa? No es para ti, entrégasela a Masiel.
+Batista: ¿y por qué yo?
+Carla: tú te hablas con él.
+José: sí, podemos entregarle.
+Batista: ... sí.
+
+Carla se fue. Antes les dijo que fueran rápidos y que no cometieran errores. Batista giró y miró a José.
+
+Batista: no vuelvas a aceptar cosas si yo no estoy de acuerdo.
+José: no eres mi puto padre para que me digas qué hacer.
+
+José volvió a encender la cámara.
+
+Batista: la primera cosa interesante que sucede aquí... una puta carta de amor para ese idiota de allá... ¡graba bien!
+
+Caminaron apresurados hacia Masiel, quien se encontraba en una banca sin mucho que hacer.
+
+Batista: esto te lo envía Carla.
+Masiel: ... no quiero nada de ella, llévaselo.
+Batista: ¿qué pasó entre ustedes? Se veían felices juntos.
+Masiel: ... el amor murió. Ella es una puta que quiere atención, que quiere que sus problemas los arregle yo... ¿pero el amor se trata de estar juntos en lo malo como en lo bueno, verdad?
+Batista: ... no lo sé.
+José: sí, de eso se trata.
+Batista: ¿tú qué mierda sabes? ¡Nunca estuviste en pareja!
+
+Ambos se dirigieron de vuelta con Carla. José se sentía incómodo con las amigas de ella cerca. No podía evitar pensar que se burlaban de él. Pero no se sabe cuál era el motivo de sus risas.
+
+Carla: ¿qué pasó?
+Batista: no lo quiere.
+Carla: ...
+
+La batería de la cámara se agotó poco después. Pero eso no impidió que día a día ambos expandieran su blog. Chismes, secretos, cualquier cosa que funcionara como espectáculo dentro del colegio. Y en ese colegio, el espectáculo sobraba.
+
+## Capítulo 2: Conozcamos A...
+
+Cargando...
+
+- Blog De Batista - Una Desconocida Con Otro Desconocido
+
+Gilda dibujaba. Los últimos detalles, pensó en pintarlo pero decidió mantenerlo blanco y negro. Era un ángel amarrado a sogas casi por romperse y lo más notorio era ese corazón que sobresalía rodeado de alambres de púas.
+
+M se sentaba en el banco de atrás. Gilda se lo mostró.
+
+Gilda: ¿qué tal?
+M: ... pues... como todos, brillan, pero nunca hay más.
+Gilda: ...
+M: ¿cómo lo llamas?
+Gilda: no tiene nombre.
+M: ... ¿qué te parece amor prohibido?
+Gilda: sí... está bonito.
+
+El timbre sonó. Gilda salió del salón. Antes de encontrar a Matthew se topó con Verro.
+
+Verro: muchas gracias por lo que has hecho... eres una gran amiga.
+Gilda: para ti siempre.
+
+Gilda siguió su camino. Encontró a Matthew y le mostró el dibujo. Él lo miró apenas.
+
+Matthew: sí sí, está lindo.
+Gilda: ¡pero mira!
+Matthew: ya te dije... está lindo.
+Gilda: ... aunque sea haz el esfuerzo de mirar el dibujo.
+
+Matthew levantó la cabeza. Pero no miró el dibujo. Miró a Facundo, que se acercaba con una sonrisa y unos ojos brillantes.
+
+Matthew: ¿qué quiere este?
+Facundo: hola hola... ¿por qué esas caras?
+Matthew: ... ¿qué pasa?
+Facundo: ¿qué pasa?... nada... ah, sí sucede algo. Ustedes son...
+Gilda: sí, somos novios.
+Facundo: ajá... ¿y la sonrisa de la parejita feliz?
+Gilda: ... ¿qué te parece mi dibujo?
+Facundo: ... ¿qué es?
+Gilda: olvídalo.
+Matthew: ya vete, eres una molestia para ambos.
+Facundo: ... voy a continuar con lo mío como si no existes... Myriam...
+Gilda: ¡Gilda!
+Facundo: Gilda... ¿qué te parece la idea de salir? ¿Eh? En vez de estar con un poco hombre como Matthew... ¿por qué no estar con una persona que realmente sí te valora?
+Gilda: ¡no!
+Facundo: ... ¿qué tiene Matthew? ¡Ya sé! ¡Dinero! ¿Quieres dinero? Pues yo puedo darte incluso más.
+Matthew: ¿de qué trabaja tu padre?
+Facundo: es el CEO de Focus.
+Matthew: ...
+Facundo: ... ¡vamos! ¿Salimos?
+Gilda: ya te lo dije, es un no.
+Facundo: ... todos estos sapiens saben que tú y este poco hombre son la peor pareja... míralos a Verro y Brian, son polémicos... Ezequiel y Mica, son muy pasionales. Incluso Masiel y Carla, sí... tenían muchas peleas pero justo eso los hace interesantes... tú y Matthew son... nada.
+
+Martín se unió a la discusión.
+
+Martín: ¿sucede algo, Gilda?
+Gilda: ... no.
+Facundo: ¡sí! Gilda será mi novia.
+Gilda: ¡no!
+Matthew: ¡ya basta! Sabes qué... Gilda, terminamos.
+Gilda: ...
+
+Matthew se largó, empujando a Facundo al salir.
+
+Facundo: ... bueno, solo tienes una opción.
+Martín: ¡hey, basta! Vete.
+Facundo: ... ahora sí tienes huevos para hablarme de esa forma...
+Martín: vete.
+Facundo: ... Gilda... ¿aceptas sí o no?
+Gilda: dije mi respuesta miles de veces.
+Facundo: ... entonces, ¡chau chau!
+
+Facundo se fue riéndose. Gilda se quedó parada con el dibujo en la mano.
+
+Gilda: gracias.
+Martín: estuve al tanto de lo que sucedía y me estaba decidiendo si intervenir o no.
+Gilda: ... gracias de nuevo...
+Martín: lindo dibujo.
+Gilda: ...
+Martín: bueno... chau.
+Gilda: bye.
+
+La ruptura entre Matthew y Gilda dejó una tensión que se notaba desde lejos. Martín fue esa persona que de alguna forma ayudó con su presencia. M fue el primero en percatarse de un cambio en él.
+
+M: ¿notaste lo raro de Martín?
+Leiv: ... la verdad es que lo noto igual.
+M: ...
+
+Leiv siguió hablando de Ezequiel y de Mica. M apenas escuchaba. Tenía la cabeza en otra parte.
+
+Lo que nadie esperaba vino después. Una noticia que parecía imposible teniendo en cuenta las pocas interacciones entre Gilda y Martín.
+
+Ambos comenzaron una relación. Poco se sabe de cómo fue. Solo duró tres días, por lo que ya es un spoiler de cómo pudo haber sido ese noviazgo.
+
+M: ¿cómo? O sea... ¿ustedes? No vi ni una sola señal de que... una relación así funcionara.
+Martín: ¿de qué mierda hablas?
+M: tú y Gilda... su relación no tenía sentido.
+Martín: no lo sé... pero mira, me estoy hablando con dos chicas y al parecer les parezco muy... no sé, pero sé que les gusto.
+M: pues... bien por ti.
+M no siguió. Caminó hacia Gilda y se sentó a su lado.
+M: mira... ¿puedes dejar de dibujar y escucharme?
+Gilda: ¡qué!
+M: ¿cómo y por qué?... Martín... es una buena persona pero entre ustedes no hay ninguna chispa.
+Gilda: ...
+M: ¿qué te enamoró de él?
+Gilda: no sé, solo lo vi y...
+M: ¿y qué?
+Gilda: ... a todo esto, ¿qué te importa?
+M: quiero entender... me exaspera no comprender las estupideces de los jóvenes... ¿qué te motivó a iniciar una relación con él?
+Gilda: ... ¡si planeas escribir algo con mi situación te mato!
+M: ... cómo son las cosas, ¿no? Ahora nos enamoramos por... nada. Solo vemos y ya, "hay algo", pero no sabemos qué... pues déjame decirte que entre ustedes no había nada, por eso es muy absurdo.
+Gilda: ¡ya basta! ¡Déjame tranquila, son mis cosas, no te metas!
+M: ... bien.
+
+Esa tarde, en una de sus libretas, M anotó todos los comportamientos de Gilda. En otra hoja escribió un subtítulo: "Ideas".
+
+Finalizando...
+
+## Capítulo 3: Libertad, Libertad, Libertaaaad
+
+Cargando...
+
+- Blog De Batista - Dos Locos Pensando Locuras -
+
+M caminaba por los pasillos cuando se cruzó con Bernal. No era la primera vez que lo veía, pero sí la primera vez que hablaban.
+
+Bernal: pensé que te ocultabas de mí.
+M: pensé lo mismo de ti.
+Bernal: un lugar cerrado pero...
+M: pero fácil perderse.
+Bernal: sí... ¿sabes su nombre?
+M: ¿qué?
+Bernal: ella... ¿sabes cómo se llama?
+M: ¡ah!, sí, ella es Alice.
+Bernal: ...
+M: ya entendí... te gusta, ¿verdad?
+Bernal: no, me da curiosidad... una vez me tropecé con ella y quedé con la duda.
+M: ¿te tropezaste?
+Bernal: ¿no ves algo en sus ojos?
+M: pupilas.
+Bernal: ... además de eso.
+M: si quieres hablarle solo ve, pero no inventes.
+Bernal: hablo en serio... parece perdida.
+M: ...
+Bernal: ¿cómo vas en el amor?
+M: ¿qué pregunta más repentina, no?
+Bernal: ... curiosidad.
+M: realmente no existe ninguna persona que merezca mi amor.
+Bernal: ... ¿ninguna de todas las chicas del colegio te atrae?
+M: míralas... jugando con el "amor"... busco belleza... belleza incomprendida.
+Bernal: incomprendida... ¿no sientes que hay algo que se esconde en nuestras sombras?
+M: todo el tiempo.
+Bernal: bueno... ¿qué crees que sea?
+M: ...
+
+Gilda apareció en ese preciso momento y los interrumpió. M se disculpó con Bernal y se fue con ella. Bernal se quedó solo. Miró hacia donde estaba Alice y no hizo nada. Todavía.
+
+Pasaron algunos días. Bernal y M volvieron a encontrarse. Esta vez la conversación fue diferente.
+
+Bernal: ... estuve pensando en nuestra charla anterior.
+M: ...
+Bernal: ¿te acuerdas de mi pregunta?
+M: sí.
+Bernal: ... ¿qué se esconde entonces?
+M: ... ¿tú crees que solo está escondido? ¿Y si tal vez... desapareció?
+Bernal: ...
+
+Ninguno habló por un momento. Miraban al patio. A todos moviéndose, hablando, riendo sin razón aparente.
+
+Bernal: mira a todos... cada uno con su grupito de amigos... las chicas "lindas" pero superficiales... esos chicos que no le temen a nada pero son unos putos cobardes... y claro, el grupo de rechazados, solo son excluidos... pero también raros en el punto de repulsión.
+M: las cosas que suceden y he oído... mis dos amigos tuvieron un encuentro que no voy a detallar... mi amiga que sufre por amor...
+Bernal: es un fenómeno, un fenómeno...
+M: ¿vulgar?
+Bernal: ... un fenómeno vulgar.
+M: ¿cómo lo defines?
+Bernal: pérdida de valores.
+M: ... no. La pérdida de identidad.
+Bernal: ... la pérdida de inocencia...
+M: ... sí, eso. El fenómeno vulgar es la pérdida de inocencia.
+Bernal: ...
+
+Se quedaron en silencio. Era de esos silencios que no incomodan. Fue entonces que Bernal se levantó de golpe.
+
+M: ¿qué pasa?
+Bernal: ... ¿no te enteraste?
+M: ...
+Bernal: esa chica... Alice... va a escapar.
+M: ¿y? Es su problema.
+Bernal: ... ahora también es el mío.
+M: ¿eh?
+Bernal: ... te diré la verdad... tal vez tú buscas frialdad, buscas sentido y significado siempre manteniéndote en un molde que lastima a los demás pero te llena de orgullo.
+M: ...
+Bernal: pero yo no soy tú. Alice tal vez sí es de esas chicas bellas.
+M: si alguna vez encuentras chicas bellas... me pegaré un tiro en la sien.
+Bernal: chau.
+M: ¡espera! ¿Qué mierda haces?
+Bernal: lo que muchos no harían, lo que tú no harías... cambiar.
+
+Bernal se marchó en busca de Alice. La encontró sentada sola. Se acercó sin apuro.
+
+Bernal: hola.
+Alice: ... hola... me haces familiar.
+Bernal: ¿te acuerdas de aquel día que llevabas libros y...?
+Alice: ¿nos tropezamos?
+Bernal: sí.
+Alice: ... bueno, perdón por eso.
+Bernal: no vengo por un perdón... hay rumores que dicen que te irás de la ciudad, ¿es cierto?
+Alice: sí sí... quiero escapar con mi novio.
+Bernal: bue...
+Alice: ¡sé lo que piensas! La típica chica que toma decisiones equivocadas... escapando en secreto con su novio... bueno, no es tan secreto si hay rumores circulando.
+Bernal: bueno... los chismes son como un virus... pero la verdad es que no pensaba eso de ti... con solo mirar a una persona ya sé más de lo que ellos no saben de sí mismos.
+Alice: ¿eres del club de poetas?
+Bernal: no... solo soy independiente a los clubes.
+Alice: claro... pero ¿eres poeta?
+Bernal: tampoco.
+Alice: ... con que con solo mirar ya sabes todo, ¿eh?... ¿qué me dices de Gustavo? El del suéter en pleno verano.
+Bernal: ... intenta ocultar su propio cuerpo. Lo más probable es que es muy inseguro.
+Alice: ¿qué hay de Carla y Masiel?
+Bernal: el amor que salió mal. Uno de ellos quiere volver a sentir el mismo amor sin comprender lo que los separó.
+Alice: ... ¿y qué me dices de mí?
+Bernal: ...
+Alice: ¿sabes sobre todo pero no sobre mí?
+Bernal: ¿y tú te conoces?
+Alice: yo me conozco más que nadie... ¿sabes quiénes no me conocen? La sociedad.
+Bernal: ¿con que sí te conoces?
+Alice: claro.
+Bernal: entonces te hago una pregunta... ¿quieres escapar?
+Alice: ... sí.
+Bernal: ¿y por qué dudaste?
+Alice: ...
+Bernal: si te conocieras las respuestas se responden automáticamente.
+Alice: ...
+Bernal: bueno... no quiero incomodarte o frustrarte con mis cosas... pero... quiero que sepas que tienes alguien con quien hablar.
+Alice: ¿tú?
+Bernal: ... chau.
+Alice: ... nos vemos.
+
+Alice lo observaba mientras se alejaba. Se sonrojó. Richie apareció de la nada y la asustó.
+
+Richie: perdón pero tengo una buena noticia.
+Alice: ... ¿cuál?
+Richie: el viaje será mañana a la noche.
+Alice: ¿qué?! Pero... ¿cómo?
+Richie: no te preocupes por nada, yo arreglé todo y mañana por fin saldremos de esta ciudad de mierda.
+Alice: ...
+
+Richie la tomó de la mano y la besó. Alice no mostraba un rasgo de emoción como sí Richie.
+
+Al día siguiente Bernal y Alice se sentaron juntos en el patio. Fue la segunda y última vez que hablaron dentro del colegio.
+
+Bernal: muy bien... dime de qué quieres hablar.
+Alice: ... tú... ¿te irías de la ciudad donde diste todo solo porque la gente te desprecia?
+Bernal: ... muchas veces depende. Si la gente quiere matarte será mejor huir.
+Alice: ...
+Bernal: pero... si solo te vas por...
+Alice: porque las personas hablan mal de mí.
+Bernal: no... no dejaría que las personas me dijeran de esa forma. Huir no es una opción... lo mejor siempre es aferrarse hasta solucionar el problema... o aquello que no nos deja dormir.
+Alice: entonces... ¿no debería viajar?
+Bernal: ... yo no quiero decidir por ti.
+Alice: ... entonces ¿qué es lo mejor?
+Bernal: nunca lo pensé de esa forma.
+Alice: dices que ves y entiendes pero...
+Bernal: no puedo resolver la vida de las personas...
+Alice: ... pasé por muchos momentos incómodos y vergonzosos... esos momentos me etiquetaron, bueno... las personas lo hacen... "¡mírenla!, es una puta"... "es ella, ella tenía sexo con diez hombres!"... nunca entienden, nunca escuchan.
+Bernal: ¿te juntabas más con hombres que con mujeres?
+Alice: sí, me sentía identificada con los varones. El mismo humor, la misma forma de hablar... y de ahí conocí a Richie.
+Bernal: ¿y qué tal es él?
+Alice: ... hace todo esto por mí, por verme bien, hacerme feliz.
+Bernal: ¿y estás feliz con lo que hace realmente?
+Alice: ... no, la verdad es que no.
+Bernal: ¿esta noche te irás?
+Alice: ... sí.
+
+Richie apareció antes de que Bernal pudiera decir algo más.
+
+Richie: ¡¿qué hacen ustedes?!
+Alice: ¡Richie!
+
+Alice se levantó rápidamente y presentó a Bernal.
+
+Bernal: ¿qué tal?
+Richie: ¡no vuelvas a hablar con ella!... bueno, tampoco podrás. Vamos, Alice.
+Bernal: ¡hey, Richie! ¿Puedo hablar contigo a solas?
+Richie: ... espera aquí.
+
+Alice volvió a sentarse. Los dos se dirigieron hacia el árbol más grande del patio.
+
+Richie: ¿qué mierda quieres?
+Bernal: ... ¡habla, habla!
+Richie: ... ¿eres idiota o qué?
+Bernal: sé lo que haces. Me enteré de los rumores... le estás siendo infiel a Alice con Mica.
+Richie: ¡jajaja! ¿En serio crees esos chismes?
+Bernal: los chismes son un virus...
+Richie: escucha... no te metas en nuestra relación. Ahora sí, nos vemos.
+Bernal: ¿es cierto que la gente habla mal de ti?
+Richie: ... ¡sí! ¡Deja de molestar!
+Bernal: ¿y qué tan mentira es lo que dicen?
+Richie: ... ¿qué?
+Bernal: es verdad lo que la gente dice de ti... seguro te acuerdas... "hey miren, es el galán"... "¡no! ¡Es el acosador!".
+
+Richie empujó a Bernal con poca fuerza.
+
+Richie: ¡esas mierdas no son reales! ¡La gente dice cualquier cosa! Ellos también mentían sobre Alice.
+Bernal: sí... mentían. Pero sobre ti...
+Richie: ... vete a la mierda y no vuelvas a interrumpir mis asuntos.
+
+Richie tomó la mano de Alice y se fueron. Esa noche Alice escapó de su casa. Le robó dinero a sus padres y se abrazó con Richie al llegar a la terminal.
+
+Richie: falta poco, pronto nos iremos de esta mierda de ciudad.
+Alice: ...
+
+Bernal llegó corriendo. M apareció de la nada y corrió con él.
+
+Bernal: ¡¿qué mierda haces?!
+M: ¡¿qué mierda haces tú?! ¡No me hables y sigamos más rápido!
+
+El ómnibus ya se movía. Lento al principio, después más rápido. Bernal siguió corriendo detrás de él. M se detuvo. Lo supo antes que Bernal. Ya era imposible.
+
+Bernal: ¡Alice!
+
+M dejó de correr y solo se quedó mirando. Bernal detrás del ómnibus intentando alcanzarlo. Hasta que paró.
+
+Adentro, Richie miró hacia atrás. Mica asomó desde su asiento. Richie le tiró un beso silencioso. Mica lo recibió con ganas de más.
+
+Alice miraba por la ventana sin ver nada.
+
+Finalizando...
+
+## Capítulo 4: Había Una Vez
+
+Cargando...
+
+- Blog De Batista - Aquel Trio De Esos Dos (con censura) -
+
+Martín tomó su celular y se lo mostró a Leiv.
+
+Leiv: ... ¿te hablas con Jazmín y Lara?!
+Martín: sí... mira... me enviaron fotos.
+Leiv: ¡puta madre! ¡A mí no me enviaron nada!
+Martín: ¿qué? ¿También te hablas con ellas?
+Leiv: justo de eso quería hablar... ahora me entero que también se hablan contigo.
+Martín: yo estuve pensando en una para cada uno.
+Leiv: ¿eh?
+Martín: nada... bueno, a ver... te mando las fotos esas.
+Leiv: está bien.
+
+El timbre sonó. Leiv se acercó a Martín mostrando un mensaje reciente de Lara.
+
+Leiv: ¡quiere! Le dije que tengo un amigo... o sea tú, y tienes oportunidad con Jazmín.
+Martín: por fin una buena noticia. ¿Cuándo?
+Leiv: no lo sé... deberíamos verlas en el próximo recreo.
+
+Se vieron. Jazmín y Lara los esperaban en el patio y los saludaron antes de que llegaran del todo.
+
+Lara: ¿y bien? ¿Qué haremos esta noche?
+Leiv: ... pasen la ubicación de su casa y lo decidimos allí.
+Jazmín: me parece lo más adecuado... ¿qué te sucede, Mar?
+Martín: ... nada.
+Jazmín: ¿a quién prefieres?
+Martín: ¿qué?
+Jazmín: ¿yo o Lara?
+Martín: ... tú.
+Jazmín: ¡sí! Pues... esta noche... bueno, ya sabes.
+
+Ambas chicas se fueron dejándolos con ilusión. Sin embargo, Martín se mostraba distante.
+
+Leiv: ¿qué te pasa?
+Martín: ... ¿y si no hacemos esto?
+Leiv: ... ¿ha?
+Martín: ... no no, nada, estupideces mías... hagámoslo.
+Leiv: ... okey... ¿esta noche?
+Martín: ... sí.
+
+Al terminar la jornada, Martín le avisó a su madre que saldría.
+
+Martín: ¡voy a salir!
+-bien, cuídate
+Martín: ... ¡¿escuchaste?!
+-¡si! Te escuché
+
+Martín giró su cabeza y observó a su madre irse. Ya de noche se duchó. Leiv también. Ambos salieron de sus casas y se encontraron en la plaza. Caminaron hacia donde la ubicación indicaba. Al llegar las encontraron en la puerta.
+
+Jazmín: ¡hola!
+Leiv: ¿todo bien?
+Lara: ahora que llegaron sí estamos más que bien.
+Jazmín: pasemos.
+
+La casa estaba en silencio. Todo ordenado y en su lugar. Martín al verla le dijo a Jazmín "linda casa". Ella no respondió.
+
+Lara: bueno... yo y Leiv nos vamos al cuarto y... haremos la tarea.
+Leiv: sí. La tarea.
+
+Ambos se encerraron. Jazmín volteó y miró a Martín.
+
+Jazmín: ¿vamos?
+Martín: ... ve tú.
+Jazmín: te espero.
+
+Martín se quedó solo en el silencio del living. Se sentó. Escuchó sonidos que venían del cuarto de Leiv y Lara. Sonidos que lo incomodaron. Se levantó y caminó hacia el cuarto de Jazmín.
+
+Jazmín: tardaste bastante.
+Martín: ...
+Jazmín: ven... quiero que hagamos esto primero.
+
+Tomó el brazo de Martín y con una aguja le pinchó uno de los dedos. Martín no entendió nada pero Jazmín explicó que era una forma de ritual para que esa noche no se volviera a repetir nunca.
+
+Fue en ese momento que Martín comenzó a recordar cuando era niño. En el cuarto de su abuela, idéntico a la habitación en la que se encontraba. Construyendo una rampa con cartas, libros y todo lo que le sirviera para que sus autos de juguete jugaran a una carrera.
+
+Volvió a la realidad. Jazmín, desnuda, estaba durmiendo. Él también estaba desnudo. Se levantó y se miró al espejo.
+
+Jazmín: ¿qué haces?
+Martín: ¿no dormías?
+Jazmín: ... ven, esto no debe terminar así aún.
+Martín: ... no recuerdo nada.
+Jazmín: ¿cómo que no recuerdas? ¿En qué pensabas?
+Martín: ... en mucho.
+
+Al día siguiente las cosas siguieron como siempre. El timbre, los pasillos, los mismos grupos en los mismos lugares. Nadie sabía lo que había pasado. O al menos eso creían Martín y Leiv.
+
+M los miró cuando se acercaron y no dijo nada. Solo los observó un momento y después miró para otro lado. En su libreta, esa tarde, escribió una sola línea debajo del subtítulo "Ideas".
+
+No escribió qué había anotado. Pero cerró la libreta con más fuerza que de costumbre.
+
+Finalizando...
+
+## Capítulo 5: Novena Sinfonía
+
+Cargando...
+
+- Blog De Batista - ¿El Nuevo Es Raro? Dejen Sus Comentarios -
+
+El nuevo estudiante entró al salón como si lo hubiera hecho cien veces antes. Se presentó él solo, sin esperar que la profesora terminara de hablar.
+
+Tild: saluden chicos.
+
+Nadie saludó. Solo observaban.
+
+El nuevo estudiante: al parecer están muy entusiasmados por conocerme.
+Tild: eso seguro.
+El nuevo estudiante: no me interrumpa... mi nombre es Montese...
+Tild: ¿apellido?
+Montese: ... ¡no interrumpa!
+Tild: ...
+Montese: soy de un pueblo que quizás conozcan... Guardia, popular por sus muy variadas leyendas y mitos... popular por los crímenes y castigos hacia los buenos, pero mucho más conocido por las falsas oportunidades del lugar. En fin, soy ayudante de la sacristía de la iglesia de aquí al lado. Si les interesa algo de esto... lo cual dudo mucho, pueden visitarme en la sala de "pensar", que en realidad es de almacenamiento pero pronto será una sala pensativa, para que reflexionemos... y por sobre todo, aprendamos.
+Tild: ... ¿alguna pregunta?
+M: ¿sacristía? ¿Qué ya no hay demasiados chicos ayudando al padre?
+Montese: sí... digamos que el padre... quiere más diversión.
+M: ...
+Tild: bueno, muchas gracias por presentarte...
+
+Montese: por lo que escuché... Tild intenta callar a otros por interrumpir pero ella no puede quedarse callada cuando no debe interrumpir.
+
+Tild: ...
+Montese: muy bien, espero verlos en la sala de pensar... bueno, la de almacenamiento... ¡ah! Otra cosa, casi me lo olvido... ¿quién de aquí es Joana?
+
+El salón quedó en silencio. Joana era la chica más linda del colegio y todos lo sabían. Ella levantó la mano desde uno de los bancos del fondo.
+
+Montese: ... acompáñame.
+
+M no tardó en aparecer por la sala de almacenamiento. Tocó la puerta antes de que Montese la cerrara con llave.
+
+M: ¿puedo pasar?
+Montese: ¿te conozco?
+M: ... el de la pregunta.
+Montese: ha... ¿vienes a pensar? Mira que la sala aún sigue en remodelación.
+M: no vengo a eso, solo quiero hablar.
+Montese: pasa.
+
+M al pasar notó una sala que no parecía estar en remodelación. Una estantería casi llena de libros y en medio de la habitación un reclinatorio de madera.
+
+Montese: ¿de qué quieres hablar?
+M: es sobre Joana.
+Montese: ella cometió un pecado grave y debe pedir perdón. Eso es todo, puedes irte.
+M: escucha... solo quiero... ¿lees?
+Montese: ... ¿en serio? ¿No estás viendo todo lleno de libros?
+M: bueno... a veces solo son decoración elegante.
+Montese: bueno sí, me gusta leer. Disfruto de las palabras, sobre todo guías.
+M: ¿y ese libro?
+Montese: ... es el escrito por Monseñor Gottau.
+M: ¿de qué trata?
+Montese: es como una biografía y a la vez reflexión de todo lo que vivió al lado de los jóvenes.
+M: ... ¿y qué dice la primera página? Seguramente lo sabes.
+Montese: sí... dice que "los chismes son un pecado que hasta incluso el mismo Dios cayó, pero fue fuerte y los venció"...
+M: Dios creó al hombre a su imagen y semejanza.
+Montese: por eso las personas caen en los chismes al igual que Dios cayó.
+M: ...
+Montese: ¿solo de eso querías hablar?
+M: ... ¿puedo leer el libro?
+Montese: ... aquí tienes.
+
+M leyó la primera página en silencio. Una línea decía: "Los jóvenes están marcados por una experiencia, sin importar lo mínimo que hubiese sido, esa marca es la pérdida de lo esencial para un ser humano".
+
+M: ¿qué quiere decir esto?
+Montese: lo que tú perdiste, lo que todos aquí perdimos, incluso yo.
+M: ¿la inocencia?
+Montese: tal vez, quién sabe, quizás es algo totalmente nuevo.
+M: bueno, lo que pensaba de ti se confirmó.
+Montese: ¿qué pensabas?
+M: que no eras un idiota después de todo... nos vemos.
+Montese: ¡espera!
+M: ...
+Montese: Guardia no es para nada seguro, así que no tengas falsas esperanzas.
+M: ¿esperanzas de qué?
+Montese: de que Bernal vuelva y encuentre a Alice.
+M: ...
+
+M se fue. Montese tomó el libro de Gottau y leyó un versículo de la página 34.
+
+"Todo pecador debe pedir perdón".
+
+Lo que Montese tenía contra Joana no era complicado de entender. Ella era linda. Todos lo sabían y todos querían algo de ella por eso. Los rumores que circulaban sobre Joana no eran sobre lo que había hecho sino sobre lo que otros decían que había hecho. Y esos rumores los había extendido más de una persona dentro del colegio. Montese los conocía todos. Y para él, dejar que eso existiera sin consecuencias era exactamente eso. Un pecado.
+
+El problema era que Montese no distinguía entre castigar el rumor y castigar a la persona.
+
+Los días siguientes fueron tensos. Montese rondaba los pasillos con el libro de Gottau bajo el brazo. Joana lo notó desde el primer día y empezó a evitar ciertos caminos. Sus amigas también lo notaron. Después lo notó todo el colegio.
+
+M recibió un correo anónimo. Solo decía: "En el patio, a las 9:20".
+
+Masiel se acercó con su celular en la mano.
+
+Masiel: mira. A mí también me llegó.
+M: ¿de quién es el correo?
+Masiel: de quién crees. Es de Bernal.
+
+M comenzó a unir los cabos. Montese alguna vez le había dicho una frase que había escuchado antes: "los chismes son un virus". Esa misma frase la decía Bernal. Fue Bernal quien integró a Montese al colegio. Y de antemano sabía que M podría serle de ayuda, una escucha para él.
+
+Masiel: acompáñame al patio.
+
+Eran las 9:15. En el patio estaban Gilda, Leiv, Martín, Verro, Brian, Ezequiel, Facundo, Batista, José, Masiel y varios más. Todos habían recibido el correo. Todos estaban ahí por eso, aunque ninguno lo dijera.
+
+M: ¿a qué quieres llegar?
+Masiel: todos ellos recibieron el correo por eso están aquí en el patio como nosotros.
+
+El celular de M vibró. Al revisarlo vio el correo. También observó la hora. Era la hora exacta: 9:20. En ese preciso momento apareció Montese.
+
+Joana estaba en el centro del patio. Giró y lo miró. Montese se detuvo enfrente de ella.
+
+Montese: ... tú eres el motivo de todo esto.
+Joana: ... ¿qué mierda te pasa?
+Montese: ...
+
+Montese la empujó. Joana cayó. Fue entonces que todos los estudiantes se pusieron mucho más atentos que en cualquier otra cosa que hubiera pasado ese año.
+
+Lo que siguió no fue organizado. Nadie lo planeó. Verro fue la primera en ponerse frente a Montese. Brian, bastante aterrado, hizo lo mismo al ver a su novia. Martín se unió. Ezequiel también. Gilda. Leiv y Catering. Masiel. Facundo, que aprovechó para quedar bien. Batista y José, que le pidieron a Gustov que grabara todo para el blog.
+
+Nadie lo decía pero era como si todos gritaran lo mismo: si te metes con uno, te metes con todos. No porque Joana fuera especial para cada uno de ellos.
+
+Sino porque era linda y cada uno, de alguna forma y por distintos motivos, quería algo de ella. Eso también era el fenómeno. También era vulgar.
+
+M se acercó a Montese y le habló bajo.
+
+M: basta... vete o tendrás problemas... y no hablo de los profesores.
+Montese: ...
+M elevó sus manos y lo tomó de la cabeza para que lo mirara de frente.
+M: ¡vete! ¡Deja de una puta vez tu venganza!
+Montese: ...
+M: ¡esto no significa que perdiste... significa que aprendiste!
+Montese: ... ¡hijos de puta!
+
+Montese empujó a M con poca fuerza y se fue. Volvió a la sala de almacenamiento. Tomó el libro de Gottau y arrancó sus páginas una por una. Lo lanzó al suelo y lo pisó. Después tomó su celular y llamó a la policía.
+
+Todos los estudiantes volvieron a lo suyo como si nada hubiera pasado. Si bien no lo demostraban, muy adentro de cada uno había miedo, fe, mentiras, odio, felicidad, ambigüedad, creatividad y... inocencia. Después de todo, la inocencia no desaparece. Al final, solo se esconde. O al igual que los jóvenes, la dejamos de lado.
+
+Finalizando...
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Fenómeno Vulgar';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
