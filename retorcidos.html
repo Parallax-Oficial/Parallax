@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Retorcidos — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3;margin:1.4rem 0 .6rem}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:10px;z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<!-- ============ HISTORIA ============ -->
+<script type="text/plain" id="story">
+**Acto 1: La Magia**
+
+**Torabit — Analista**
+Comenzó en 1985 y fue un hit desde que abrieron sus puertas. El comercial hizo clic en todos nosotros. Los niños, enloquecidos eufóricamente, y hoy en día, aquellos niños lo recuerdan como el mejor momento de su infancia.
+
+**Louis — Analista**
+El local era grande, ruidoso y olía a pizza barata y plástico caliente. Las mesas, llenas de familias apretadas, vasos a medio tomar, globos que nadie agarraba. Al fondo estaba el escenario, una tarima pequeña con un telón rojo desgastado. No era gran cosa, pero cuando las luces bajaban y la música subía, todos dejaban de hablar.
+
+**Torabit — Analista**
+Oprimías el botón rojo y desde las trampillas del escenario salían los tres. Bon primero, un conejo azul de casi dos metros con los brazos extendidos. Después Sha, con su vestido de colores descascarados. Y después Boozoo, el payaso, con la nariz roja fija y esa sonrisa que nunca cambiaba.
+
+**Louis — Analista**
+Se movían mecánicamente mientras sonaba una canción que nadie recordaba, pero todos tarareaban. Los niños saltaban y tiraban comida como si fuera parte del show.
+
+**Louis — Analista**
+La energía de los más chicos alimentaba a los trajes. Los trajes estaban más vivos que nunca.
+
+**Acto 2: La Grieta**
+
+Después del show, los tres animatrónicos quedaban destruidos. Bon con una mancha de refresco en el pecho, Sha con restos de torta en los hombros, y Boozoo cargando fruta aplastada entre los dedos y una capa grasienta en todo el frente. Los metían a la sala de mantenimiento una vez que terminaba el espectáculo, los acomodaban contra la pared y los desconectaban.
+
+**Cans**
+niños de mierda (suspira) todos los putos días hay que limpiar estas mierdas como si fuese fácil
+
+**Jaci**
+cállate y terminemos rápido
+
+**Cans**
+sí... todo es callarse para ti ¿no?
+
+Se escuchó la puerta abrirse y pasos que bajaban los escalones. Los dos chicos voltearon. Era Ashton.
+
+**Ashton**
+pueden salir, yo me ocupo
+
+**Jaci**
+¿y tú?
+
+**Ashton**
+soy el guardia del local, váyanse
+
+**Jaci**
+los de mantenimiento somos nosotros, ocúpate de lo tuyo
+
+**Ashton**
+(sonríe) ¿no quieren ir a tomar unas cervezas? La noche es espectacular
+
+**Cans**
+¡Jaci! ¡Vámonos! Que se joda el local, que se jodan estas mierdas
+
+**Jaci**
+...
+
+Los dos salieron. Ashton se agachó hasta quedar a la altura de Bon, que estaba en el suelo entre los otros dos. Sacó un chip X600 del bolsillo y lo insertó dentro del endoesqueleto por la abertura trasera del traje.
+
+Después sacó un cuchillo pequeño, se hizo un corte rápido en la palma de su mano y dispersó la sangre dentro de Boozoo. Se limpió la mano en el pantalón y salió.
+
+Cuando la puerta se cerró, el dedo índice de Boozoo se movió dos veces, lento, sin fuerza.
+
+Ashton volvió cargando algo y dejó las partes dentro del traje de Sha, una por una, bien acomodadas. Cerró el traje, apagó la luz y se fue.
+
+**Acto 3: El Juego**
+
+Dasha llevaba un rato parada frente a la máquina arcade de Boozoo. La pantalla mostraba a Boozoo en ocho bits saltando entre globos para llegar a la carpa de su circo, con niveles que se ponían cada vez más difíciles. Ella los pasaba sin problema, rápida y concentrada. Boozoo, el animatrónico real, estaba parado a su lado mirándola fijamente con una sonrisa.
+
+De repente empezó a caer baba de él. Una línea que se desprendió de su boca y golpeó el suelo. Empezó a moverse, con movimientos suaves de las articulaciones, y empezó a caminar entre los otros niños del local, su caminar era pesada y lenta.
+
+El reloj marcó las siete. Dasha seguía jugando, pero ya sin el mismo ritmo, y en un descuido falló, perdió. En la pantalla apareció la cabeza grande de Boozoo en ocho bits riéndose de ella. Dasha gritó y pateó la máquina, después se volteó y lo vio parado ahí. Levantó la cabeza despacio mirando el rostro animatrónico de Boozoo.
+
+Boozoo tenía algo detrás de la espalda y poco a poco lo fue mostrando. Dasha sonrió pensando que era comida o una fruta, pero la sonrisa se le fue de la cara, gritó, corrió hacia otro lado, se tropezó y cayó fuerte contra el suelo, dañándose la nariz. Se levantó rápido y salió corriendo. Boozoo sostenía una cabeza humana.
+
+**Acto 4: La Máscara**
+
+Bon estaba parado en el escenario escaneando el local. Sus ojos funcionaban como lentes de alta tecnología, captando cada rincón del lugar en fracciones de segundo.
+
+Vio a Dasha en el arcade, vio a Boozoo moviéndose entre los niños, y después detectó algo más: una mujer y un hombre adultos que se metían a la sala de mantenimiento sonrientes, dándose pequeños besos y caricias como si nadie los viera. Bon bajó del escenario y caminó directo hacia allá.
+
+Abrió la puerta y desde arriba de las escaleras llegaron los sonidos, pequeñas risas e incluso gemidos. Bajó despacio, un escalón a la vez, y se quedó parado muy cerca de ellos sin que lo notaran. Baba le caía de la boca igual que a Boozoo, demasiada, acumulándose en el piso. Una gota pequeña cayó cerca de los dos y ambos se detuvieron. Voltearon rápido y lo vieron ahí parado.
+
+**Richard**
+¿y esta cosa qué?
+
+Bon los miró como un perro mira algo que no termina de entender, y después se abalanzó sobre el hombre. Sus dedos afilados y oxidados le entraron por el torso, el metal oxidado desgarró la tela y la carne al mismo tiempo, abriendo surcos irregulares y profundos que empezaron a largar sangre a borbotones espesos.
+
+La chica gritó y salió corriendo hacia las escaleras, subiéndolas rápido con los tacones golpeando cada escalón, pero el pie se le dobló y cayó hacia adelante, golpeándose la cabeza contra el borde de concreto (el impacto le abrió la frente de un lado al otro, dejando una mancha oscura que se fue expandiendo despacio por el piso). Quedó inconsciente ahí mismo.
+
+Bon terminó con el hombre y después tomó una sierra que estaba sobre la mesa de herramientas.
+
+La puerta de mantenimiento se abrió desde afuera. Una niña llamaba a su madre y padre en voz alta, caminando hacia la puerta porque la había visto abrirse. Asomó la cabeza y vio a Bon parado al fondo de las escaleras, mirándola, con el rostro de su madre puesto encima del suyo. No una máscara de plástico. El rostro de ella, estirado y sostenido.
+
+Bon extendió la mano hacia la niña.
+
+**Darci**
+... ¿encontraste a mi mamá y papá?
+
+La niña la tomó. Bajaron juntos las escaleras y volvieron a la sala de mantenimiento. Unos segundos después, empezaron los gritos, gritos de dolor.
+
+**Acto 5: El Borrego**
+
+Sha vio todo desde el escenario. Vio a Bon cerrarse dentro de la sala de mantenimiento, vio a Dasha corriendo, tropezándose y volviendo a correr, y vio a Boozoo lanzar la cabeza al aire como si fuera una pelota. Bajó del escenario y caminó hasta quedar parada frente a él. Los dos se miraron fijo, sin moverse.
+
+Boozoo tomó el cadáver de uno de los niños con una sola mano y lo levantó para que Sha lo viera bien. Ella empezó a moverse hacia él, rápido, con los pasos pesados golpeando el piso, cada vez más cerca, hasta que Bon salió de ningún lado y le pegó directo en la cabeza.
+
+La cabeza animatrónica de Sha salió volando y rebotó contra el suelo, y el cuerpo cayó de rodillas con un golpe sordo. Bon y Boozoo se miraron un momento, después caminaron juntos hacia la salida, lentos y seguros, y desaparecieron en la noche.
+
+Oscuridad.
+
+El equipo SWAT entró al local horas después, con las linternas cortando la oscuridad en todas direcciones. El lugar olía a sangre vieja y a fritanga rancia. Fueron pasando despacio, documentando cada cuerpo, tomando muestras, marcando posiciones con cinta.
+
+Había silencio, salvo por el crujido de sus botas y el sonido de las bolsas de evidencia cerrándose.
+
+En otro punto de la ciudad, otro equipo estaba parado frente a la puerta de una casa. Le dieron un golpe con el ariete y la madera crujió, pero aguantó.
+
+De vuelta en el local, uno de los hombres levantó la mano para detener al grupo. Había un ruido. Partes metálicas arrastrándose contra el piso, un rechinido intermitente de articulaciones doblándose sin la presión correcta.
+
+Era Sha. Se estaba levantando, sin cabeza, con los cables del cuello colgando y chispeando cada tanto. El equipo se puso en formación de inmediato, apuntando al frente.
+
+Sha se levantó completa y quedó parada frente a ellos.
+
+Al mismo tiempo, el otro equipo logró forzar la puerta y entró de golpe. Encontraron a Ashton sentado, con unos visores tecnológicos grandes cubriéndole los ojos y el brazo apoyado sobre la mesa. La herida que ya se había hecho antes ahora estaba más abierta y seguía chorreando; la sangre había empapado la madera debajo de él.
+
+En el local, Sha dio un paso adelante. Uno de los hombres gritó: ¡Ahora! Los disparos llenaron el lugar, continuos y sin pausa, destrozando el animatrónico parte por parte (el metal se rasgaba en pedazos irregulares, los cables internos reventaban hacia afuera, el torso se fue hundiendo sobre sí mismo con cada impacto hasta que no quedó nada reconocible). Gritó: ¡Alto! Los disparos pararon. Esta vez Sha cayó y no se volvió a mover.
+
+En la casa, uno del equipo le quitó el visor a Ashton. Tenía los ojos rojos, exactamente igual que Bon. El hombre se agachó y lo miró de cerca.
+
+—tomen todas las pruebas. Háganle análisis a este idiota
+—se llama Ashton Cortis, al parecer era mecánico y un muy buen programador, tiene expedientes de robo y estafas
+—como dije... háganle análisis.
+
+Se levantó y salió de la habitación. Un segundo después se oyeron disparos al cielo. El oficial gritaba, parecía estar feliz.
+
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'Retorcidos';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'), box = document.getElementById('box');
+  
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ 
+      var dp = splitLong(m[2]); 
+      items.push({t:'dlg',n:m[1],s:dp[0]}); 
+      for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); 
+    }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='end') box.appendChild(el('big title',it.s));
+    else if(it.t==='tag') box.appendChild(el('tag',it.s));
+    else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }
+    else box.appendChild(el('p',it.s));
+  }
+  
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    show(function(){render(items[i])});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  
+  var btnReset = document.getElementById('btnReset');
+  function showUI(){ btnReset.classList.add('show'); }
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key==='ArrowLeft')prev();
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+    });
+    return;
+  }
+  
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+  });
+})();
+</script>
+</body>
+</html>
