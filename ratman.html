@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RATMAN — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA: RATMAN ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de sección/cámara
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: Por Debajo Del Pueblo
+**::: cámara de seguridad ::: baños ::: 10/11/13 :::**
+Judalon montaba el pen# de Cory. Moviéndose de forma violenta. De pronto, la alarma comenzó a sonar.
+Cory: (suspira) mierda, otra vez
+Judalon: acostúmbrate.
+Judalon se volteó y vio la cámara, saludando.
+**::: grabadora ::: 00:00:00 :::**
+Otari: ¿otra vez? ¿Cogiendo en los baños?
+Cory: no es nuestra culpa que haya cámaras también ahí
+Judalon: ¿para qué nos necesitas?
+Otari: hay un pequeño problema con... no sé, un pueblo chico que ya olvidé el nombre, pero... deben viajar hasta ahí
+Judalon: ¿por qué?
+Otari: porque soy su jefe y lo digo yo
+Cory: admiro el aprecio a sus trabajadores (baja la cabeza y sonríe)
+Otari: van a ir de encubiertos y... graben todo
+Judalon: ¿todo? ¿O exactamente qué?
+Otari: digamos que... el pueblo los guiará a lo que deben grabar específicamente
+Cory: ¿cuánto es la paga?
+Otari: el mismo sueldo, pero podrán tener sexo cuando quieran
+Cory: ... acepto.
+**::: grabadora ::: 00:11:34 :::**
+**::: cámara dicom ::: encendida ::: 10/11/13 :::**
+El equipo SWAT salió uno por uno por la apertura en el suelo. Cory giró la cámara hacia la pared de concreto más cercana e hizo zoom lento hasta que las letras quedaron enfocadas: PSC corporation.
+Judalon: ¡¿qué mierda haces grabando?! ¡no puedes grabar las instalaciones!
+**::: cámara dicom ::: apagando ::: 10/11/13 :::**
+**::: cámara dicom ::: encendida ::: 10/11/13 :::**
+Cory levantó la cámara hacia Judalon, quien estaba parada en la acera principal con un micrófono en la mano, vestida de reportera. Detrás de ella, el pueblo seguía su ritmo normal, como si nadie supiera lo que había debajo de sus pies.
+Cory: sabes... siento que la camioneta no va con nuestra vestimenta
+Judalon: ¿y eso qué importa? Nadie se dará cuenta
+Cory: ¿eso crees?
+Judalon: esperemos que no.
+**::: cambio de escena :::**
+Los dos patinadores estaban sentados en los bordes de una rampa de concreto, con las tablas apoyadas contra sus piernas, mirando la cámara con esa mezcla de desconfianza y curiosidad que tienen cuando un adulto les mete un micrófono en la cara.
+Judalon: somos del noticiero del canal 6, ¿cómo es vivir en el pueblo más pobre de Texas?
+Shouted: ... (fuma y suelta el humo) ¿qué putas te importa?
+Milena: ¿saben que esto no es Texas, no es así?
+Judalon: bueno... podría decirse que están pegados a Texas
+Shouted: somos el trasero de Texas
+Judalon: ... (traga saliva)
+Milena: ¿vienen a reportar al sacerdote loco, no es así?
+Shouted: ¿o a la criatura?
+Judalon: ... ¿criatura?
+Cory: ¿loco?
+Judalon: ¡shh! No hables, Cory
+Cory: ...
+Shouted: la criatura que todos los días grita por el desagüe, le apodan el hombre alcantarilla
+Milena: nadie lo llama así
+Shouted: ¡jajaja! Lo inventé sobre la marcha.
+**::: cambio de escena :::**
+El cazador los esperaba apoyado contra su camioneta en el límite del bosque, con los brazos cruzados y los ojos del tipo que no se fía de nadie que llegue con una cámara.
+Judalon: ¿usted es cazador o lo opuesto?
+Yeats: ¿lo opuesto?
+Cory: si proteges a los animales de la zona
+Judalon: ¡que no hables!
+Yeats: los animales podrían matarme, yo solamente me adelanto a ellos
+Judalon: ... okey...
+**::: cambio de escena :::**
+El sacerdote los recibió frente a la iglesia con las manos juntas y una sonrisa que no llegaba del todo a los ojos, eligiendo cada palabra con cuidado.
+Reyes: aquí la gente nunca reza... directamente, es como si las iglesias estuviesen prohibidas
+Judalon: ¿por qué cree que suceda esto?
+Reyes: ... ya no lo toleran, los domingos desaparecieron, y los días de gracia se sepultaron
+Judalon: ¿cree en alguna forma de revertir la situación?
+Reyes: solo una... "la era de infrigilia"
+Judalon: ¿qué es eso?
+Reyes: los monarcas del pueblo se referían a eso con una cena para los santos... año tras año no se supo más... pero la verdad es que... nada terminó, simplemente cambió de forma, ya no es elegancia, es... ocultismo.
+**::: cambio de escena :::**
+Caminaban por las calles sin rumbo fijo.
+Cory: ¿de qué hablaba ese idiota?
+Judalon: no le entendí ni una sola palabra
+El teléfono de Cory empieza a vibrar. Era una llamada.
+Cory: ¿sí, jefe?
+Otari: vayan a la calle... cero treinta y cuatro
+Cory: ¿pasó algo?
+Otari: están a punto de averiguarlo.
+La llamada finalizó.
+Judalon: ... ¿y?
+Cory: (suspira) mira (señaló con el dedo)
+Judalon se volteó y vio un cartel: calle 034. Se acercaron a la casa de enfrente.
+Tocaron la puerta y la abrió una niña de unos nueve años, mirándolos sin ninguna expresión, como si los estuviera esperando.
+Judalon: hola, ¿cómo estás?
+-...
+Cory: hey, niña, ¿hay alguien en casa?
+Judalon: ¿están tus padres?
+-...
+Cory: perfecto, una niña sorda muda, ¡puta madre PSC!
+Judalon: ¡shh! ¡aprende a cerrar la boca!
+Cory: ¡oye, niña! ¿Podemos pasar?
+-...
+La niña los dejó pasar. Adentro no había nada, ni un mueble, ni nada en las paredes, solo el sonido de sus pasos en el piso de madera.
+Los guió hasta el baño y señaló la bañera con un dedo. Cory hizo zoom con la cámara.
+Judalon se acercó y se asomó al tapón del desagüe, donde empezó a salir un chorro de líquido negro y viscoso, denso como aceite podrido, con un sonido húmedo al golpear la porcelana, extendiéndose por el piso hacia los zapatos de Judalon.
+La niña salió corriendo y Cory fue tras ella con la cámara en mano, dejando a Judalon atrás.
+Salieron a la calle y la niña corría con una velocidad rara para su tamaño. Doblaron esquinas, cruzaron hacia el límite del bosque y entraron entre los árboles, donde la niña saltaba raíces como si conociera el camino de memoria, mientras Cory pisaba mal el terreno y la imagen de la cámara temblaba.
+La vio, agarró una piedra del suelo sin detenerse del todo y la lanzó. El golpe fue limpio y la niña cayó. Cory la agarró por el brazo y la giró.
+Cory: ¡¿dónde mierda están tus padres?! ¡¿qué era eso?! ¡habla, hija de...
+De repente, la niña abrió la boca y vomitó ese mismo líquido negro en cantidad exagerada.
+Cory se apartó de un salto. El golpe en la nuca llegó desde atrás sin que lo viera venir, duro y seco.
+Yeats lo dejó inconsciente. La cámara cayó al suelo del bosque apuntando al cielo gris entre los árboles, grabando el silencio que siguió.
+**::: enviando archivos ::: 10/11/13 :::**
+**::: cámara dicom ::: apagando ::: 10/11/13 :::**
+
+## Capítulo 2: Un Paseo Por Skate
+**::: cámara dicom ::: encendiendo ::: 10/11/13 :::**
+Shouted agarró la cámara del suelo y la apuntó directo a su cara, con el bosque detrás y la respiración todavía agitada.
+Shouted: ... es de los idiomas esos... (sonríe)
+Los disparos sonaron desde algún punto entre los árboles, secos y cercanos, y Shouted salió corriendo sin apagar la cámara, con el lente grabando el suelo y las ramas mientras se abría paso fuera del bosque.
+Llegó a la casa de Milena por la parte trasera y entró por la ventana lateral, cayendo adentro con más ruido del que quería.
+Milena: ¿qué haces aquí? ¡vete!
+Shouted: ¡mira! Es su cámara
+Milena: ... ¿te la dieron?
+Shouted: la encontré en el bosque, algo les pasó
+Milena: ¿estará grabado?
+Shouted: ... no sé.
+Los disparos volvieron a sonar, esta vez más cerca, y antes de que pudieran moverse la ventana explotó hacia adentro con un golpe seco cuando Yeats la cruzó de un empujón, con la escopeta en la mano y la cara de alguien que no viene a hablar.
+Milena y Shouted salieron disparados hacia la puerta, agarraron sus skaters del suelo del pasillo y los tiraron al asfalto antes de subirse.
+Lo que siguió fue un desastre total y completamente funcional. Shouted iba grabando con una mano y equilibrándose con la otra mientras la tabla se le escapaba en cada grieta del pavimento, y Milena le gritaba que mirara hacia adelante justo cuando él casi se llevaba por delante un bote de basura.
+Doblaron una esquina demasiado rápido y los dos perdieron el balance al mismo tiempo, chocando el uno con el otro y separándose sin caerse del todo, por puro milagro y mala técnica.
+En una bajada Shouted aceleró más de lo que podía controlar, pasó volando por encima de un bordillo y aterrizó de milagro sin romperse nada, con la cámara apuntando al cielo durante medio segundo antes de volver a su cara.
+Milena lo alcanzó riéndose aunque no era el momento, y los dos siguieron por calles que no conocían bien hasta que las piernas dijeron basta.
+**::: cambio de escena :::**
+Se sentaron en la acera a recuperar el aire y Shouted puso la cámara sobre sus rodillas.
+Milena: deberíamos ver las grabaciones anteriores
+Shouted: por fin tienes una buena idea
+Milena: jódete.
+**::: cámara dicom ::: apagando ::: 10/11/13 :::**
+**::: cámara dicom ::: encendida ::: 10/11/13 :::**
+Shouted: ...
+Milena: ...
+Shouted: ... sabes... por un momento pensé que estaba drogado, y casi me lo creo pues en ningún momento fui consciente de que estaba viendo una grabación
+Milena: esa niña... creo que me crucé con ella antes
+Shouted: ¿y?
+Milena: y... no sé, era normal, supongo
+Shouted: líquido negro... una vez empezó a salir por el desagüe
+Milena: creo que el sacerdote debe saber algo
+Shouted: no es descabellado pensarlo
+Milena: ¿qué tal si vamos?
+Shouted: ... ¿en serio quieres acercarte a ese loco? Pensé que no lo dirías nunca.
+**::: cambio de escena :::**
+Cuando llegaron a la iglesia no había nadie, entraron forcejeando la entrada.
+El lugar estaba vacío y en silencio, hasta que Milena encontró una puerta pequeña detrás del altar que bajaba por unas escaleras de piedra hasta un sótano amplio.
+Ahí abajo había una biblioteca entera, con estantes del suelo al techo llenos de libros con las tapas tan gastadas que era imposible leer los títulos, del tipo de libros que nadie ha tocado en mucho tiempo pero que tampoco se han podrido del todo.
+Antes de que pudieran revisar nada, el sonido empezó, un roce constante y húmedo viniendo de todos lados a la vez.
+Fue en ese momento que ratas empezaron a salir, primero una, luego diez, luego cientos de ellas corriendo en la misma dirección, ignorando a los chicos.
+Todas moviéndose hacia los desagües del suelo y desapareciendo dentro como si algo las estuviera llamando.
+Milena encontró el libro en uno de los altares laterales, una cosa gruesa con la tapa de cuero seco.
+Lo abrió y el texto adentro no era en ningún idioma que reconocieran, letras que no eran letras, símbolos mezclados con palabras que tampoco eran palabras, pero había una que se repetía en casi todas las páginas: "infrigilia".
+Entre el texto había dibujos hechos a mano, cenas al aire libre con mesas largas, fiestas con personas usando máscaras de animales muertos, pieles reales con las cuencas vacías y las bocas cosidas, y entre los celebrantes en esos mismos dibujos estaban los cadáveres de los animales cuyas máscaras usaban, tirados en el suelo como decoración.
+Pasaron páginas y los dibujos cambiaban, rituales, procesiones, personas caminando en fila hacia algo que no se veía todavía.
+Hasta que llegaron a uno que ocupaba las dos páginas completas: una multitud arrodillada, y al frente de todos una figura con una capa larga que tenía una cruz tallada en la espalda, levantando un plato de comida hacia algo enorme dibujado encima de todos ellos, algo que no era humano ni animal, con demasiadas extremidades y la boca abierta recibiendo la ofrenda.
+El disparo reventó el silencio del sótano y Shouted cayó hacia un lado, el tiro le entró por el hombro y salió arrastrando pedazos, dejando la camisa pegada a la herida con sangre oscura.
+Milena intentó correr hacia las escaleras pero Yeats la agarró del cuello antes de que llegara al primer escalón y la degolló con algo corto y rápido, la sangre no fue dramática, fue práctica, cayó directo al suelo de piedra y ella con ella.
+Yeats caminó hasta donde estaba la cámara, la miró un segundo al lente y la apagó.
+**::: cámara dicom ::: apagando ::: 10/11/13 :::**
+**::: enviando archivos :::**
+
+## Capítulo 3: Caete En El Aceite
+**::: cámara dicom ::: encendida ::: 10/11/13 :::**
+Yeats grababa con la cámara en una mano y en la otra cargaba una bolsa de plástico mojada, adentro había cabezas de conejos y ciervos mezcladas, los ojos todavía abiertos, las orejas pegadas al cuero con sangre seca, el olor a carne vieja saliendo por el nudo de la bolsa.
+Reyes estaba de pie frente al túnel con un tarro grande del líquido negro en las manos, rodeado por un grupo de personas del pueblo que no hablaban, solo miraban hacia adelante.
+Judalon estaba amarrada a un lado, con las muñecas atadas a su espalda.
+Judalon: ¡AYUDAAA!
+Reyes: es inútil gritar... mejor empieza a rezar
+Judalon: ¡¿QUÉ MIERDA ES ESTO?!
+Reyes: ¿no escuchaste nada de lo que te dije? No se trata de ser cristiano, sino... de conquistar el cristianismo... no me metí a la iglesia solo porque sí... dios existe, pero es un puto idiota cuyos planes son... ¿cómo decirlo? Inacabados
+Judalon: ... están locos... ¡TODOS ESTÁN LOCOS!
+Reyes: para tu sorpresa, el loco no existe, existe el loco que es tachado de uno, la historia demostró siempre lo contrario, y en otras veces, creó a monstruos.
+El túnel frente a ellos era grande, las paredes empapadas de líquido negro que bajaba lento por el concreto y se juntaba en el suelo formando charcos espesos.
+Judalon gritaba pidiendo ayuda, la voz rebotando en las paredes del túnel sin llegar a ningún lado.
+Reyes: ¡CÁLLATE! Es momento de saber si serás elegida para esta nueva era.
+Reyes se acercó al borde del túnel con el tarro en las manos.
+Reyes: ven... ven, raatma, acércate, es hora de brindarte todo lo que mereces... puta rata.
+Raatma apareció despacio desde adentro, moviéndose sin apuro, con un tamaño que llenaba casi todo el ancho del túnel.
+Los sonidos que hacía eran bajos y continuos, el tipo de sonido que no se escucha solo con los oídos sino que se siente en los dientes y en el pecho, y Judalon dejó de gritar porque ya no podía concentrarse en nada más.
+Dos hombres la agarraron de los brazos y la sostuvieron de frente al túnel mientras Yeats se acercaba más con la cámara, sin bajarla.
+Reyes levantó el tarro despacio y lo vació sobre la cabeza de Judalon, el líquido negro cayó en chorro y se desparramó por su cara, su cuello y su ropa, el olor subió de golpe, algo entre materia orgánica podrida y químico quemado, el tipo de olor que hace que la garganta se cierre sola.
+Judalon lloró y gritó como no lo había hecho antes, pero en su piel no pasó nada, el líquido escurrió sin quemarla, sin marcarla, sin nada visible. Raatma, en cambio, empezó a gritar desde adentro del túnel, un sonido distinto al de antes, más agudo y urgente.
+Tres hombres más arrastraron a Cory hasta el mismo lugar, lo pusieron de rodillas frente al túnel y Reyes repitió lo mismo, volcó el tarro sobre su cabeza. En Cory sí pasó algo.
+El líquido empezó a quemar de inmediato, la piel de la cara se abrió en ampollas que reventaron solas, la carne debajo empezó a moverse como si se derritiera desde adentro, el olor a quemado se mezcló con el del líquido y Cory dejó de gritar después de unos segundos porque la boca ya no le funcionaba bien.
+Los disparos del equipo SWAT entraron desde todos los ángulos a la vez, sin aviso.
+Los del pueblo caían uno por uno sin tiempo de moverse, y Yeats recibió un tiro en el pecho que lo tiró hacia atrás mientras la cámara salía volando de su mano y golpeaba el suelo de lado, sin apagarse.
+**::: glitches :::**
+**::: bodycams ::: 10/11/13 :::**
+Raatma se dio la vuelta y entró de nuevo al túnel a toda velocidad.
+Pero el operativo ya no importaba tanto, porque Judalon, todavía de pie con el líquido negro escurriéndole por la cara, abrió la boca y empezó a escupirlo a presión contra los del equipo SWAT, cubriéndoles la cara y los visores mientras avanzaba hacia ellos, la escena duró más de lo que debería, cuatro hombres armados retrocediendo ante una mujer amarrada que los empapaba de algo negro y viscoso, y dos de ellos quemándose donde el líquido tocaba piel directa.
+Otari dio la orden de contenerla y seguir.
+**::: bodycam ::: Bennet ::: 10/11/13 :::**
+Entró al túnel solo, con la linterna y el arma. Los primeros metros eran rectos pero después el túnel se dividía, luego se volvía a dividir, y después de varios minutos caminando ya no tenía claro por dónde había entrado ni hacia dónde quedaba la salida.
+Bennet se detuvo a escuchar y el silencio era completo, sin goteos, sin movimiento, sin nada.
+Siguió avanzando por el tramo más ancho hasta que la linterna llegó a dos puntos brillantes a lo lejos, quietos, a la altura de lo que sería la cabeza de algo grande.
+Bennet apuntó y disparó sin esperar, vaciando en esa dirección hasta que los gritos monstruosos que llenaron el túnel se cortaron de golpe y no quedó nada más que el eco de los tiros apagándose.
+Encendió la linterna de nuevo y la apuntó hacia adelante. Raatma estaba muerto en el suelo del túnel, enorme e inmóvil, con el cuerpo ocupando casi todo el ancho del pasaje.
+**::: cámara dicom ::: encendida ::: 10/11/13 :::**
+Judalon se asomó al encuadre desde abajo, con el líquido negro todavía escurriéndole por la cara y el pelo pegado a los lados.
+Miró directo al lente, sonrió, levantó la mano y saludó despacio, luego juntó los dedos en la boca y tiró un beso hacia la cámara antes de desaparecer del encuadre.
+**::: enviando archivos :::**
+**::: cámara dicom ::: apagando ::: 10/11/13 :::**
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'RATMAN';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
