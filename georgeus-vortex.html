@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Georgeus Vortex — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400;margin:.4rem 0}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3;margin:1.4rem 0 .6rem}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:10px;z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<!-- ============ HISTORIA ============ -->
+<script type="text/plain" id="story">
+Bienvenidos al programa Georgeus. Soy Anova, la inteligencia detrás de este texto. Los resultados del experimento han sido exitosos como prueba de estudio. Sin embargo, para el sujeto de prueba 034, Filicia, ocurrió todo lo contrario. Ha declarado públicamente que no se siente muy bien después de lo ocurrido...
+
+::: Cámara del set ::: Grabando... :::
+
+Había diez personas en la habitación. Frente a ellas, una mesa repleta de objetos que podían utilizar como quisieran con Filicia, quien se encontraba sentada en una silla, completamente inmóvil. Solo parpadeaba.
+
+Una voz comenzó a escucharse por los altavoces de la habitación. Era Anova.
+
+**Anova**
+Ya conocéis las reglas. Todo está permitido. ¿Quién será el primero en dar el paso?
+
+Silencio. Y entonces... Bennis dio un paso. Se acercó a la mesa y observó la variedad de objetos: flores, maquillaje, pegatinas, kétchup e incluso un arma, entre otras cosas. Decidió no utilizar ninguno.
+
+Se puso frente a Filicia. Bennis simplemente la abrazó y volvió con los demás.
+
+::: Corte de cámara :::
+
+Varias chicas con el pecho descubierto acariciaban a la criatura sentada en su trono. Fue entonces cuando esta emitió sonidos guturales. Un hombre que estaba a su lado caminó lentamente hacia el televisor de enfrente y subió el volumen para luego volver a su puesto.
+
+::: Cámara funcionando :::
+
+La siguiente en pasar fue Agelly. Ella sí utilizaría uno de los objetos: el maquillaje. Se acercó a Filicia y se puso de rodillas para quedar a su altura.
+
+Empezó a maquillarla prolijamente. Otras tres chicas decidieron acercarse para ayudarla. Al ver el resultado final, todas volvieron a sus lugares.
+
+**30 minutos después**
+
+Filicia estaba cubierta de objetos y productos después de que varias personas pasaran, algunas incluso más de una vez. Volvieron a utilizar el maquillaje, pero de una forma más «chistosa». Le pegaron cientos de pegatinas en la cara y sus dos hermanas le dieron un beso en cada mejilla, dejando las marcas de sus labiales.
+
+Y, obviamente, también la habían llenado de kétchup.
+
+Entonces llegó el turno de Massimo. Al acercarse a la mesa, tomó directamente el arma. Se puso frente a Filicia, le apuntó y...
+
+::: Corte de cámara :::
+
+La criatura emitía varios sonidos. Estaba disfrutando de lo que veía en la televisión. A sus costados, dos mujeres bailaban de forma provocativa, completamente desnudas.
+
+::: Cámara funcionando :::
+
+Apuntó y... no disparó. Sonrió y dejó el arma sobre la mesa (aclaración: no tenía balas). Esto fue el principio de lo que vendría después.
+
+Algunos hombres comenzaron a besarla en los labios. Otros se acercaron para tocarle los brazos y las piernas. Solo uno le tocó las partes íntimas. Las chicas decidieron romper varios pedazos de sus prendas, dejándola casi desnuda.
+
+Después de tantas horas, Anova volvió a hablar por los altavoces.
+
+**Anova**
+Esperamos que hayáis disfrutado de la experiencia, ya que nunca volverá a repetirse en vuestras vidas.
+
+**Massimo**
+¡¿Hacer lo que queramos con una persona?!
+
+**Anova**
+No. Tener poder.
+
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'Georgeus Vortex';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'), box = document.getElementById('box');
+  
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ 
+      var dp = splitLong(m[2]); 
+      items.push({t:'dlg',n:m[1],s:dp[0]}); 
+      for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); 
+    }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='end') box.appendChild(el('big title',it.s));
+    else if(it.t==='tag') box.appendChild(el('tag',it.s));
+    else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }
+    else box.appendChild(el('p',it.s));
+  }
+  
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    show(function(){render(items[i])});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  
+  var btnReset = document.getElementById('btnReset');
+  function showUI(){ btnReset.classList.add('show'); }
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key==='ArrowLeft')prev();
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+    });
+    return;
+  }
+  
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+  });
+})();
+</script>
+</body>
+</html>
