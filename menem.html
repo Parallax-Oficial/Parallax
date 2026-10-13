@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MENEM — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+**Aunque esta historia está inspirada en hechos reales, muchos eventos, escenarios, personajes, incidentes y diálogos fueron creados para seguir la lógica de la plataforma.**
+
+## Capítulo 1: El Show Empieza
+
+1988 
+
+Menem apareció en un lugar que ni Dios sabe que existía, montado en su caballo y cubierto con un poncho que se movía con el viento. Frente a él, una pequeña multitud de gente (no más de 10), y su fotógrafo, Víctor Bugge, estaba tirado en el suelo, buscando el ángulo perfecto con la cámara apuntando hacia arriba.
+
+Víctor: ¡Haz la V, Carlos!
+
+Carlos levantó la mano y extendió dos dedos, formando la clásica "V" mientras sostenía la mirada hacia el lente.
+
+Carlos: ¡la única historia que perdura en el tiempo! ¡Es la que el pueblo guarda en su memoria! ¡Gracias compañeros!
+
+**Víctor Bugge - Fotógrafo de Menem**
+Uno de los "suyos" me encontró, eso sí, yo no quería, no era peronista. Pero, me sacudió la codicia, sabía que iba a ganar mucho (se acomodó en la silla), ¿sabe?... no fue una mala experiencia.
+
+Al amanecer comenzaron a imprimirse los nuevos periódicos del día. En la portada principal destacaba una fotografía tomada por Víctor: Menem sentado en una butaca del teatro, mientras una joven, vestida de forma provocativa, permanecía entre sus piernas.
+
+Uno de esos ejemplares llegó a manos de Zulema. Apenas vio la imagen y leyó el titular, su expresión se endureció. Sin decir una palabra, arrugó el periódico y lo arrojó a la basura.
+
+**Zulema Yoma - Ex esposa de Menem**
+Yo no siempre entiendo sus ideas, pero tampoco soy una cornuda sumisa que él quiere... (tomó un sorbo de whisky) el no lo puede admitir, pero soy igual de importante que él, no le conviene tenerme divorciada.
+
+**MENEMÓVIL TIME**
+
+Carlos viajaba hacia Buenos Aires acompañado por su equipo de campaña. Entre ellos estaba, como siempre, el fotógrafo Víctor, cámara preparada y ojo atento.
+
+El Menemóvil avanzaba por pueblos pequeños, donde las calles polvorientas y las casas bajas hacían que cualquier visita política pareciera un evento extraordinario.
+
+Al llegar a uno de esos pueblos, Carlos decidió bajar y recorrerlo a pie. Iba puerta por puerta, golpeando suavemente y saludando a quien saliera.
+
+En la primera casa lo recibió un hombre mayor con un viejo tocadiscos sonando de fondo. Desde el interior se escapaban los acordes de un tango de Gardel. El hombre, orgulloso, le explicó que coleccionaba discos desde hacía treinta años. Carlos escuchó unos segundos, moviendo la cabeza al ritmo, mientras Víctor capturaba la escena.
+
+En la siguiente vivienda apareció una mujer que, al reconocerlo, lo invitó a pasar al patio. Allí, su esposo sostenía con orgullo varias medallas colgadas en la pared. Era campeón local de bochas. Carlos observó las copas y posó para una foto sosteniendo una de las bolas, mientras el hombre sonreía como si acabara de ganar otro torneo.
+
+Un poco más adelante, en una casa pintada de celeste, salió una adolescente con una guitarra colgada al hombro. Contó que soñaba con ser cantante. Carlos le pidió que tocara algo. La chica rasgueó unos acordes nerviosos y Víctor, tirado casi en la vereda para lograr el encuadre, disparó varias fotografías.
+
+En otra puerta apareció un hombre con manos llenas de tierra. Era jardinero y hablaba con orgullo de sus rosales. Carlos caminó unos pasos por el pequeño jardín mientras escuchaba sus explicaciones sobre cómo cuidar las plantas.
+
+Casa tras casa, el recorrido continuó. Un fanático del fútbol que mostraba su colección de camisetas, una abuela que ofrecía el peor mate del pueblo, un carpintero que enseñaba su taller, trucho (sí, porque de carpintero no tenía nada). Víctor registraba cada encuentro.
+
+**Fabiolo - Observador histórico**
+El carisma de Menem era único, sea o no peronista reflejaba mucho de lo que la gente perdía luego de votar a su mandatario: el acercamiento. Y él... nunca dejó de sonreír, pero eso no es tan bueno como parece.
+
+**Dos Meses Antes De Las Elecciones**
+
+Menem se presentó en el estadio de River Plate. Frente a él se extendía una multitud de cientos de personas que coreaban su nombre con euforia. Las banderas se agitaban entre los gritos y el murmullo constante de la gente.
+
+Carlos levantó los brazos para saludar a la multitud. El estadio respondió con una nueva ola de aplausos.
+
+Carlos: ¡¿qué esperan para decirle al presidente Alfonsín qué hay que hacer para sacar a este país adelante?! ¡este es un gobierno radical! ¡no un gobierno de extraterrestres! ¡queremos terminar definitivamente con este país de la especulación y de la usura!
+
+Soltó el micrófono y decidió que era mejor quedarse sin voz. Los gritos bastaban para que todo el estadio escuchara.
+
+Carlos: ¡hay que entrar en el país de la cultura del trabajo y de la producción! ¡por los niños ricos que tienen tristeza! ¡por los niños pobres que tienen hambre! ¡por todos ellos que tienen sueños!
+
+Cuando llegó al final, hizo una breve pausa y volvió a alzar las manos.
+
+Carlos: ¡Síganme! ¡Que no los voy a defraudar!
+
+El estadio estalló otra vez en aplausos y gritos, gritando su nombre: "¡MENEM!".
+
+Carlos Saúl Menem vence a Antonio Cafiero en la interna justicialista con el 53,94% de los votos.
+
+En 1989 vencería en las elecciones presidenciales a Eduardo Angeloz, convirtiéndose en el nuevo presidente de la República Argentina.
+
+## Capítulo 2: Es Un Problemón
+
+**Quinta de Olivos, 1990**
+
+Zulema llega en su vehículo a la residencia.
+Al detenerse frente a la entrada, advierte que varias personas se encuentran reunidas allí. Cuando intenta avanzar hacia el interior, el jefe de la guardia militar le bloquea el paso.
+
+Zulema insiste en entrar, pero el oficial se mantiene firme en su decisión. Comienza un intercambio tenso entre ambos.
+
+Zulema: ¡¿así es Menem?! ¡¿vieron?! ¡deja afuera a su familia!
+
+Al enterarse de la situación, sus hijos salen rápidamente al exterior e intentan convencer al jefe de la guardia para que la deje pasar. Argumentan, insisten, elevan la voz. Pero no hay caso.
+
+Toda la escena está siendo registrada por cámaras de televisión.
+
+**Carlos Menem - Presidente**
+Necesitaba que Zulema se ocupe de las cosas de la casa. Pero repetía una y otra vez, "que la patria está en peligro". (Sonríe levemente) estaba siendo influenciada, por su amiguito Seineldin. Es un padrino de golpista, ¿entendés?
+
+*(Significa que es un protector político de quienes intentan derrocar un gobierno democrático) o sea, gente que no beneficia a Menem.*
+
+**Carlos Menem - Presidente**
+Le dije a Zulema, le dejé bien claro que dejara de meterse donde no debe. Que se quede en el molde. ¿les cuento un secreto? Mis pasados musulmanes murieron, descansan en paz... y yo debo ver para el futuro. Y como los yanquis son los que tienen la guita, bueno, me tengo que llevar bien con ellos. Hay que jugar a los soldaditos (sonríe de oreja a oreja).
+
+**Una Semana Antes, Curtiembre Yoma, La Rioja**
+
+Zulema camina por el lugar acompañada por tres hombres que la escoltan. El ambiente es más tranquilo, casi cotidiano. Mientras recorren el sitio, comienzan a conversar.
+
+Zulema: muchachos, debo agradecerles por responder a mi llamado y por haber venido acá
+
+*(¿Quiénes son estos? Bueno, son desleales a Menem).*
+
+—por favor, señora Menem
+Zulema: ¡Zulema! Por favor, soy Zulema
+—mire, señora Zulema, jamás de los jamases me vi venir algo así de un compañero peronista
+Zulema: (mueve la cabeza indicando "sí")
+—volvimos a ser el perrito de Estados Unidos
+Zulema: a Menem de Perón le quedan las fotitos viejas que pegaba en su cuaderno cuando iba a la escuela
+—¿y qué podemos hacer por usted?
+Zulema: pues... para todos nosotros, hay que atacar a Menem donde más le duele... su imagen.
+
+**Más Tarde En La Casa Rosada**
+
+Menem se prepara para viajar a Italia. Todo parece listo para la partida, hasta que su colaborador Ariel irrumpe en la sala. En la mano lleva un cartel que acaba de ver en la calle.
+
+El título, escrito en letras grandes, resulta provocador: "La patria está en peligro. No a los delincuentes." Ariel se lo muestra con preocupación.
+
+Ariel: ¿qué hacemos con esto? A los yanquis no les va a gustar una mierda, lo empapelaron por toda la ciudad
+Carlos: (su sonrisa decae lentamente)
+Ariel: no te lo quiero decir Carlos pero... sospecho de alguien
+Carlos: no digas nada... fue Zulema
+Ariel: ¿y qué hacemos?
+Carlos: ... ver el mundial (sonríe)
+
+Carlos decide igualmente viajar a Italia para asistir al Mundial.
+
+**Quinta De Olivos**
+
+Zulema sube al automóvil junto a sus hijos. Apenas cierran las puertas, varias personas se acercan y rodean el vehículo. Algunos gritan, otros intentan hablar con ellos a través de las ventanillas. El ambiente es tenso y caótico.
+
+Carlos: ¿estás bien Ma?
+
+*(Hijo de Menem, no confundir con Carlos, llevan el mismo nombre).*
+
+Zulema: ... ¡la recalcada concha, bien puta de tu padre! ¡HIJO DE CIEN MIL PUTAS!.
+
+**3 De Diciembre, 1990**
+
+La Casa Rosada se encuentra en un estado de alerta inusual.
+
+Menem permanece en el interior junto a sus colaboradores más cercanos: Ariel, Ayala y Víctor. Afuera, la noticia corre con rapidez: un grupo de militares rebeldes ha iniciado un alzamiento y ha tomado el Edificio Libertador, a cargo de Seineldin.
+
+Los pasillos del edificio se sienten extrañamente silenciosos. Cada tanto, algún teléfono suena, alguien camina con prisa o se escuchan voces lejanas. La incertidumbre pesa sobre todos.
+
+Ariel revisa una y otra vez la información que llega desde el exterior. Víctor observa con inquietud, sosteniendo su cámara y tomando fotos a cualquier cosa, incluso un retrato de un perro que ni él ni Menem reconocían, pero el retrato tenía la firma de: "Conan", y se veía un perro en la imagen.
+
+Menem, que intenta mantener la calma, no puede ocultar cierta tensión en el rostro.
+
+Solo Ayala parece inmune al miedo, pues se lo ve pidiendo fuego para su cigarro. De pronto, uno de los militares se acerca al lugar donde están reunidos.
+
+—señor presidente, necesitamos su orden para contraatacar
+Carlos: ... (su cabeza estaba fija en el suelo)
+—... ¿Carlos?
+Carlos: déjame pensar.
+
+Carlos decide retirarse y se encierra en una habitación.
+
+**Fabiolo - Observador histórico**
+Nadie sabe de verdad qué es lo que hizo Menem cuando se encerró. Algunos dicen que durmió una siesta, otros que se escapó por un pasadizo secreto y se fue a jugar un partido de golf. Y son muchos los que creen que se jugó un solitario.
+
+Pasa una hora y media. Finalmente, la puerta se abre y Menem vuelve a salir para reunirse con los demás.
+
+Carlos: ¿podrás encargarte de esto?
+—sí, señor presidente
+Carlos: ¿cómo pan comido?
+—no, como salsita con ñoquis señor presidente
+Carlos: ... ¿qué son los ñoquis?
+—...
+
+Todos miraron a Menem como quien mira a un extraterrestre.
+
+Carlos: no importa, te autorizo a acabar con esto de una vez
+—a su orden, señor presidente.
+
+Menem indultó a 302 personas. 227 militares y 75 civiles. El levantamiento militar sufrido el 3 de diciembre sería el último de la historia Argentina.
+
+## Capítulo 3: No Invadas Mi Privacidad
+
+**ENTEL ¡Gente que se comunica mejor! Incluso con mil problemas con respecto a la telefonía.**
+
+Carlos baila con dos chicas, moviéndose sin apuro, con ese ritmo suelto y algo torpe de un hombre mayor que ya no intenta impresionar a nadie.
+
+Sus pasos son cortos, cómodos, casi perezosos, como si la música fuera apenas una excusa. De pronto, golpean la puerta.
+
+Carlos: ¡Pasá!
+
+La puerta se abre y Ariel entra rápido, casi sin mirar atrás.
+
+Ariel: Carlos... quebramos
+Carlos: (se detiene) ¿quebramos? Mis rodillas siguen intactas (las chicas ríen delicadamente)
+Ariel: no es lo que piensas, no es... como quebrar, digamos, wow, pero... o privatizamos o quebramos
+Carlos: ¿privatizar? Qué linda palabra ¿no cree?, algo me dice que va en contra mía, pero... si eso hay que hacer, que se haga nomás.
+
+**Ariel - Compañero de Menem**
+Teníamos que hacer una ley de reforma del estado. Privatizar significa perder una gran ganancia de las empresas, sobre todo la de ENTEL. Carlos tenía una idea sobre cómo mover las piernas y empezar, por eso, llamó a una señorita muy... "fina".
+
+**Un Día Después**
+
+Los tacones marcaban su presencia contra el suelo, secos, inevitables. Cruza hasta la sala del presidente y, al abrir la puerta, Carlos ya la está mirando, con una sonrisa que parece ensayada.
+
+María Julia no pide permiso. Entra y se sienta como si el lugar le perteneciera. Carlos no va a su silla. Prefiere la mesa. Se sube y se apoya sobre ella.
+
+Carlos: dígame, ¿usted hace ejercicio o pura genética de su padre? (Mira sus piernas)
+María: (sonríe) bueno, digamos que heredé el vigor de mi padre, como también la actitud, claro
+Carlos: usted ya rugió
+María: ¿a qué se debe mí presencia?
+Carlos: bueno, tengo pensado privatizar ENTEL, los teléfonos son un desastre en este país
+María: el Estado es un desastre en este país
+Carlos: sí, sí... tengo pensado encontrar a la persona adecuada
+María: ¿necesita que lo ayude con eso?
+Carlos: no hace falta, ¿no lo sos vos?
+María: ¿y yo qué gano?
+Carlos: (sonríe dejando mostrar sus dientes blancos) dejas de ser la hija de... (guiña un ojo)
+María: (levanta una ceja con una sonrisa).
+
+**Ariel - Acompañante de Menem**
+Ahora, lo más difícil, la votación. Teníamos tres lados, el Menemismo, los campeones digamos. Los opositores y la UCD. Toda la rosca. Aun así, la UCD no era la preocupación, de eso, se encargaba María Julia.
+
+**Una Semana Después**
+
+**A continuación, tres escenas, agradecele a Menem, o mejor dicho, al escritor.**
+
+**1**
+María Julia está sentada en una oficina. Frente a ella, cara a cara, un inversor extranjero: Mister Cole. Él la observa con la calma de quien mide cada gesto; ella no se inmuta.
+
+María: bienvenido, (tose) perdone, welcome
+Cole: lindo... corte
+María: ¿mi cabello?
+Cole: yes
+María: ... bien
+Cole: ENTEL, me suena a... poca creatividad (hablaba en español, pero con un acento gringo)
+María: no se preocupe, la creatividad no es la que importa
+Cole: ¿y las garantías?
+María: más que generosas.
+
+**2**
+Ahora está con Monsieur Dubois. La mesa de la oficina, invadida por comida típica francesa, rompe cualquier idea de formalidad. Dubois habla entre bocado; María Julia escucha, o finge hacerlo.
+
+María: Bonjour
+Dubois: no se preocupe por el idioma, sé perfectamente hablar español
+María: perfecto, seré directa entonces... Invertir en ENTEL, en un escenario de reactivación, tiene tres beneficios claros. Entra a una valuación baja, lo que maximiza la ganancia cuando el activo se recupere. Estás en un sector esencial, con demanda constante y flujo previsible. Y contás con respaldo estructural: no es un proyecto descartable, es infraestructura crítica, lo que reduce el riesgo real de pérdida
+Dubois: ... (miraba confundido) Purrié vu repété, Por favú?
+María: (suspira).
+
+**3**
+Luego, el señor Serrano de la Peña. Su expresión es rígida, poco amable. En un gesto lento, se gira en su asiento y deja ver, detrás, banderas españolas perfectamente alineadas. Sonríe apenas. No alcanza para tranquilizar a nadie.
+
+María: bienvenido señor Serrano de la Peña, no sabe cómo me alegra alguien que hable en español
+Serrano de la Peña: seré corto y conciso... dudo de la estabilidad del país
+María: ... ¡mierda!
+Serrano de la Peña: ¿perdone?
+María: no se preocupe, a veces soy peor.
+
+**María Julia - Disputa de la UCD**
+La gente empezó a hablar. Los opositores me decían tantas cosas, nada agradables. Eso, sumado a los inversores que debían "pensar" y... pedían hablar con Carlos. Estaba (suspira) no sé cómo decirlo. Y con todo esto... aceptaba consejos de todos, incluso la palabra de Menem. ¿Saben qué me dijo?, con una sonrisa de idiota, me dice "organizate una fiesta".
+
+**Tres Semanas Después, Fiesta en Olivos**
+
+María Julia le dedica unas palabras sobre Menem, medidas, casi protocolarias. Pero Carlos no está. Asiente sin escuchar, distraído, hablando con sus hijos como si todo lo demás fuera decorado.
+
+Después de unos segundos, se levanta y recién entonces se acerca a ella, como si cumpliera con una obligación.
+
+María: ¿cuál es el siguiente paso?
+Carlos: vos los seducis con tú encantó, yo, saraseo un poco
+María: tu especialidad, digamos
+Carlos: la fiesta recién empieza.
+
+Menem circula. No con los inversores, sino con sus esposas. Una por una, extrañamente relajado. Les habla al oído, sonríe, exagera gestos. ¿De qué habla? De nada importante: cuentitos, chistes viejos, algún chisme disfrazado de confidencia. Las hace reír. Ese es su negocio en ese momento. ¡Grande, señor presidente!.
+
+Del otro lado, María Julia baila con los inversores. No es un baile íntimo ni torpe, es funcional. Se mueve lo justo para sostener la escena, para mantenerlos dentro del clima. Ellos siguen, pero ya están cansados. Se nota en los hombros, en las miradas que se pierden.
+
+Entonces Menem rompe el aire: "¡Que siga la fiesta!". Todo cambia.
+
+La música sube, el ritmo se vuelve más vulgar, más directo. La bailanta entra sin pedir permiso. Menem baila también, sin pudor, exagerado, casi performático.
+
+María Julia intenta reactivar a los inversores, los empuja con gestos, con sonrisas, con insistencia. Algunos ceden, otros apenas acompañan. La noche se desarma. Risas más fuertes, movimientos más torpes, copas que se llenan demasiado rápido. El control se diluye.
+
+Horas después, el ruido muere. Carlos y María Julia están en un sofá, con vasos en la mano. Se ríen. Ya no hay protocolo, ya no hay escena que sostener. Solo restos de lo que fue.
+
+María: bueno, qué noche
+Carlos: fuiste tú la sorpresa, gracias a vos ellos van a firmar con ENTEL, no lo logra cualquiera
+María: (sonríe) no lo podría haber hecho sola
+Carlos: ¿quién dice que las mujeres no pueden separarse de los hombres? Sobre todo de sus padres
+María: ¡Jajaja!
+Carlos: (mira su pierna).
+
+Carlos acerca un poco más su cuerpo. Su mano baja y se apoya sobre la pierna de María Julia.
+
+Ella lo nota al instante. La sonrisa se le apaga apenas, lo suficiente para que deje de ser genuina. No dice nada. Toma un trago largo, como comprando tiempo.
+
+María: ya es tarde, debo irme
+Carlos: ¿cómo que tarde?.
+
+María Julia deja el vaso. Lo mira un segundo más de lo necesario. No responde a eso. Se inclina, toma su bolso con rapidez, casi cortando la escena.
+
+No espera reacción. Se levanta y se va. Carlos queda ahí, con la mano suspendida en el aire, como si recién entendiera que la fiesta había terminado mucho antes.
+
+La primera privatización del Gobierno de Carlos Saúl Menem fue ENTEL. Luego, le siguió la privatización de Aerolíneas Argentinas, Ferrocarriles, YPF, Gas, Subterráneos y la Casa de la Moneda, como también otras.
+
+## Capítulo 4: Patada Al Higado
+
+**Domingo Cavallo - Ministro de Economía**
+Bueno, antes era canciller. Me presento, mi nombre es...
+
+**Carlos Menem - Presidente**
+Yo soy Carlos Saúl Menem, su presidente, el más carismático, el que jamás permite que otros le roben su sonrisa... ¿o no Mingo?
+
+**Domingo Cavallo - Ministro de Economía**
+Bueno, mi relación con el presidente no es de las más afinadas. Pero... supongo que es porque toqué algo de él que no le gusta. No, supongo que no.
+
+**Dos Meses Después**
+
+El salón estaba lleno de trajes caros y sonrisas falsas. Carlos avanzaba por el pasillo con los hombres a cada costado. Saludaba y tocaba hombros. Su atención se detenía solo en lo que le servía.
+
+En una esquina, Domingo sostenía una carpeta gruesa mientras explicaba algo con las manos, marcando ritmos invisibles en el aire.
+
+Carlos: ¡Mingo! ¿Qué tal su mujer?
+Domingo: emm... supongo que bien
+Carlos: ¿supones?
+Domingo: ... bien, bien
+Carlos: (sonríe) ¿me acompaña?
+
+Carlos tomó la carpeta sin pedir permiso, hojeó páginas mientras caminaba junto a Domingo a la oficina presidencial. Una vez allí, se sentaron.
+
+Domingo: ¿y bien? ¿Qué le parece?
+Carlos: hemos tenido un par de problemitas en estas semanas, seguro te enteraste
+Domingo: sí, lo de...
+Carlos: ¡por lo tanto! Necesitamos de una cara que pueda ayudarnos, ¿será usted Mingo?
+Domingo: ... ¿el plan de convertibilidad?
+Carlos: ya me entendió.
+
+**Domingo Cavallo - Ministro de Economía**
+Sinceramente, no lo hubiera imaginado, pero aquí estoy. Y estar con Menem, es un problemón. Pero, con esto lo voy a tener comiendo de mi mano.
+
+Domingo se movía de un lado a otro, inquieto. Junto a él, estaba su nerd de economía favorito. Su ayudante, Russell.
+
+Russell: ¿qué le parece... cien australes, un dólar?
+Domingo: ... no.
+
+Saca de su billetera un austral. Toma pegamento de su escritorio y se lo pega en la frente.
+
+Domingo: un austral, un... (se pega un billete de un dólar por encima del austral de su frente).
+
+**Russell - Nerd Economista**
+Había un problema, ¿qué pensará el congreso?.
+
+**En el Congreso**
+
+Manos levantándose, papeles firmándose con velocidad sospechosa. Afuera, gente pegada a vidrieras mirando televisores, viendo como aceptaban el plan de convertibilidad.
+
+**Russell - Nerd Economista**
+Bueno, si resultó. Pero había un gran problema. Era feriado, y necesitábamos un boletín. De eso se encargó Menem. Pero preocupó a Cavallo, no tanto, bueno, tendría que denominar eso. Aún así, el plan estaba en marcha.
+
+Y así... colorín colorado, la inflación fue bajando. Domingo se despierta por una llamada por teléfono.
+
+Domingo: ¿si?
+—¿señor Cavallo?
+Domingo: ¿quién habla?
+—¡un gusto hablar con usted! Quisiéramos invitarle al programa de CNN, discutiremos, eso se lo aseguro. ¿Podría?
+Domingo: ... (sonríe) sí.
+
+**Esa Noche**
+
+—Domingo Cavallo, ¡que presidente nos perdimos, pueblo Argentino!, aquí esta, sentadito, esperando para hacerle una nota, humilde, eso si.
+
+Carlos lo veía por televisión acostado en cama. Con cara fría, nada amigable. Algo lo había tocado muy en el fondo.
+
+—¡Cavallo! ¿No consideró ser presidente?
+Domingo: bueno...
+—por favor, dígame que no lo pensó, encima, estando junto a Menem
+Domingo: (ríe levemente).
+
+Carlos apagó la televisión. Luego, lanzó el control remoto, destruyendo la pantalla.
+
+**Domingo Cavallo - Ministro de Economía**
+Y así comenzó. Pero claro, él no debía mostrar su parte más frágil, nunca lo hizo, bueno, hasta que falleció su hijo. Aún así, nada lo iba a detener para comenzar una guerra.
+
+Carlos se encontraba jugando golf fuera de la Casa Rosada. Hoyo en uno. Junto a él estaba Ariel.
+
+Ariel: ¿no va a hacer nada con el pelado?
+Carlos: por primera vez, no tengo pensado nada, ¡pelado tenía que ser!
+Ariel: la gente lo idolatra, si no lo detiene, su imagen se va a ir a pique
+Carlos: ... (falló en el golf) pelado tenía que ser
+Ariel: ¿quiere oír mi consejo?
+Carlos: estoy tan desesperado (palmadas al hombro de Ariel)
+Ariel: expóngalo
+Carlos: tampoco tan desesperado
+Ariel: no, no. No me entendió, el se debe quemar
+Carlos: ¿alguna idea de cómo hacerlo?
+Ariel: bueno...
+Víctor: de la misma forma que fotografiar.
+
+Víctor había aparecido detrás de ellos. Carlos se contentó al verlo, era riojano.
+
+Carlos: ¿alguna brillante idea Vic?
+Víctor: como dije, es como sacar una foto, hay que buscar el ángulo correcto, para la mejor toma. Pero, si hay demasiado brillo, la foto baja de precio
+Carlos: ... (hoyo en uno) riojano tenía que ser.
+
+**Víctor Bugge - Fotógrafo Presidencial**
+Mi idea no brillaba por su complejidad, sino por lo simple. Nada es simple para un economista.
+
+**Esa Misma Tarde**
+
+Domingo: ¿me llamó?
+Carlos: te necesito otra vez Mingo, confío plenamente en usted
+Domingo: ¿para qué soy bueno?
+Carlos: ¿no quiere ser la voz de los medios?
+Domingo: no piense eso, yo solo soy economista
+Carlos: ¿y quién dice que no puede con todo?
+Domingo: ...
+
+**Carlos Menem - Presidente**
+¿Qué se le va a hacer? Después de todo, todavía no es momento de perder.
+
+**1**
+Domingo se encontraba sentado. Frente a él una periodista. Y mil cámaras enfocandolo.
+
+—digame señor Cavallo, ¿qué provincias ha visitado?
+Domingo: ... no... no soy de recorrer mucho el país
+
+**¡Otra Pregunta!**
+
+—¿empanadas salteñas o tucumanas?
+Domingo: ... (se limpia la frente con un trapo) empanadas salteñas... ¿y qué?
+
+**¡Otra Pregunta!**
+
+—¿qué le puede decir a la gente que se está quedando sin trabajo?
+Domingo: no sé... que se consigan otro trabajo, eso les diría.
+
+**¡Otra Pregunta! ¡Este Tipo Debe Tener Algo!**
+
+—¿Boca o River?
+Domingo: no miro fútbol
+—bueno... eso sí es nuevo.
+
+**¡Otra Pregunta! ¡No Pega Una!**
+
+—¿se sabe cuánto gana al mes?
+Domingo: eso lo maneja mi esposa, Sonia, digamos, 10.000 pesos por mes
+—no lo puedo creer
+Domingo: ¿mucha cantidad?
+—no. Que fue tan... "valiente" en decirlo.
+
+Un camarógrafo gritó detrás de una de las cámaras: "¡tan estúpido!".
+
+**¡No Más Preguntas! Se Pudrió Todo.**
+
+**Carlos Menem - Presidente**
+Algo que no voy a tolerar, es la falta de respeto a mi persona. Hable con Cavallo, pero, no llegamos a buen término... así que, lamento mucho lo que pasó. En fin, que siga la fiesta.
+
+**Esa Noche**
+
+Escena simple, sin pretensiones. Como debe ser. La música está al máximo y el piso vibra. Nadie habla, todos gritan.
+
+Un grupo salta en el centro, chocándose y riéndose sin control. Alguien intenta un paso ridículo, falla, y en segundos ya hay varios imitándolo peor.
+
+Una chica se sube a una silla, baila sin equilibrio y casi se cae. La sostienen entre risas. Nadie quiere que pare.
+
+El tema cambia y todos lo festejan como si fuera el mejor de la noche. No hay orden, ni estilo, ni vergüenza. Solo fiesta.
+
+El éxito de la convertibilidad catapultó la popularidad de Menem preparando el terreno a una reelección presidencial. La cual ganó con el 47,49% de los votos.
+
+Sin embargo, atravesaría la pérdida de su hijo Carlos Jr. Destruyendo por completo su legado.
+
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'MENEM';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
