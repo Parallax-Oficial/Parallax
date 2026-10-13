@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Without Warning — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 20px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:38rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(2.6rem,13vw,5.2rem)}
+.chnum{font-size:clamp(1.4rem,7vw,2.2rem);margin-bottom:.4rem}
+.chname{font-size:clamp(2rem,11vw,3.6rem)}
+.p{font-size:1rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:.95rem;text-align:center;line-height:1.4;color:#aaa;margin:.4rem 0}
+.time{font-family:'Courier New',monospace;font-size:.85rem;color:#666;text-align:center;margin:.2rem 0 .6rem}
+.anno{font-style:italic;color:#888;font-size:.95rem}
+.event{color:#ffdd44;font-weight:600}
+.dlg{text-align:left;margin:.3rem 0}
+.who{font-weight:600;color:#ddd}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.4rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.6rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA: Without Warning ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo
+"[tiempo] | SECCIÓN" = encabezado de tiempo/sección
+"VIDEO:" / "GRÁFICO:" / "DETALLE:" = etiquetas descriptivas
+"NOMBRE:" = diálogo
+"[ANOTACIÓN]:" / "[EVENTO]:" = notas del sistema
+"The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: Interrupción
+[00:00:00] | ARCHIVO - APERTURA
+VIDEO: Imágenes limpias. Cielos despejados. Terreno rural.
+GRÁFICO: 31 OCT 1994
+[00:00:04]
+SANDER BOKER: Buenas noches. Interrumpimos la programación habitual con información confirmada hace minutos.
+[00:00:12]
+SANDER BOKER: El asteroide Venturi 6645 ha ingresado en la atmósfera terrestre y se ha fragmentado en tres partes principales.
+[00:00:21]
+VIDEO: Mapa global. Tres puntos marcados.
+GRÁFICO: Wyoming (EE.UU.) — Desierto de Gobi — Pirineos (Francia/España)
+[00:00:26]
+SANDER BOKER: Los impactos se registraron en zonas no urbanizadas. No hay reportes de impacto en grandes ciudades.
+[00:00:34]
+SANDER BOKER: Las autoridades consideran esto un evento afortunado dentro de un escenario potencialmente catastrófico.
+[00:00:48] | ARCHIVO - CRÁTERES
+VIDEO: Toma aérea. Cráter en Wyoming.
+DETALLE: Borde circular casi perfecto.
+[00:00:52]
+VIDEO: Cráter en Gobi.
+DETALLE: Sin fragmentos visibles en el perímetro.
+[00:00:55]
+VIDEO: Cráter en Pirineos.
+DETALLE: Simetría constante.
+[00:00:59]
+[ANOTACIÓN]: No se detectan múltiples puntos de impacto secundarios.
+[00:01:10] | EXTERIOR - WYOMING
+BRI WALKER: Nos encontramos dentro del perímetro de seguridad establecido hace menos de una hora.
+[00:01:18]
+VIDEO: Equipo de rescate caminando lentamente.
+BRI WALKER: Las condiciones del terreno no coinciden con otros impactos registrados históricamente.
+[00:01:26]
+[EVENTO]: MOVIMIENTO DETECTADO
+VIDEO: Camarógrafo enfoca a una figura sentada.
+[00:01:29]
+BRI WALKER: Tenemos… una persona aquí.
+[00:01:32]
+IDENTIFICACIÓN: Kimberly Hastings — Edad aprox: 12 años — Estado: Consciente. Sin heridas visibles.
+[00:01:34]
+BRI WALKER: Kimberly, ¿puedes decirnos qué ocurrió?
+[00:01:41]
+KIMBERLY HASTINGS: No lo sé.
+[00:01:48]
+[PAUSA]: 1.6 segundos
+BRI WALKER: ¿Estabas aquí durante el impacto?
+[00:01:53]
+KIMBERLY HASTINGS: Sí.
+[00:01:55]
+[PAUSA]: 2.1 segundos
+[ANOTACIÓN]: La menor mantiene contacto visual constante. No presenta signos de shock.
+[00:02:00]
+BRI WALKER: ¿Estás herida?
+[00:02:03]
+KIMBERLY HASTINGS: No.
+[00:02:05]
+[PAUSA]: 2.8 segundos
+[EVENTO]: La menor no parpadea durante el intervalo.
+[00:02:18] | CORTE BREVE DE SEÑAL
+[INTERFERENCIA]: 0.7 segundos
+[00:02:20] | ARCHIVO - PIRINEOS
+VIDEO: Equipo de rescate asistiendo a un hombre.
+IDENTIFICACIÓN: Jean-Paul (apellido no confirmado)
+[00:02:24]
+REPORTERO (FUERA DE CÁMARA): Señor, ¿puede escucharnos?
+[00:02:27]
+JEAN-PAUL: Sí.
+[00:02:29]
+[PAUSA]: 2.4 segundos
+REPORTERO: ¿Recuerda el impacto?
+[00:02:32]
+JEAN-PAUL: Sí.
+[00:02:34]
+[PAUSA]: 3.0 segundos
+[ANOTACIÓN]: Retraso en respuestas no consistente con desorientación común.
+[00:02:38]
+REPORTERO: ¿Está solo?
+[00:02:41]
+JEAN-PAUL: Sí.
+[00:02:50] | REGRESO A ESTUDIO
+SANDER BOKER: Las autoridades mantienen la hipótesis de un evento natural.
+[00:02:56]
+SANDER BOKER: Los equipos científicos continúan evaluando los restos.
+[00:03:04] | INCIDENTE DE SEÑAL
+[AUDIO DISTORSIONADO] — Patrón: Repetición breve (no identificada)
+[00:03:06]
+TÉCNICO (FUERA DE CÁMARA): Tenemos interferencia en la banda.
+[00:03:08]
+SANDER BOKER: Continuamos en directo.
+[00:03:15] | ARCHIVO - WYOMING (REPETICIÓN)
+VIDEO: Kimberly Hastings en cuadro.
+DETALLE: Misma posición.
+[00:03:18]
+[ANOTACIÓN]: El encuadre coincide con registro anterior.
+[00:03:20]
+[ANOMALÍA]: No se detecta movimiento en un intervalo de 3.2s.
+[00:03:25] | ESTUDIO
+SANDER BOKER: No hay indicios de riesgo adicional para la población.
+[00:03:30]
+[INTERFERENCIA AUDIO]: —encu— —host— —encu—
+[00:03:32]
+SANDER BOKER: Repetimos: no hay indicios de riesgo adicional.
+[00:03:40] | FIN DE SEGMENTO
+[SEÑAL INESTABLE]: 1.1 segundos
+CORTE A NEGRO
+
+## Capítulo 2: A Un Segundo
+[00:03:41] | RETORNO DE SEÑAL
+[SEÑAL RECUPERADA]
+VIDEO: Estudio. Iluminación intacta.
+[00:03:43]
+SANDER BOKER: Retomamos la transmisión. Hubo una breve interrupción técnica.
+[00:03:48]
+SANDER BOKER: Las autoridades continúan asegurando que no existe riesgo inmediato.
+[00:03:55] | AUDIO DE FONDO
+[INTERFERENCIA LEVE] — Patrón: Repetición irregular
+[00:03:57]
+ADUAN: Estamos recibiendo reportes adicionales desde distintos puntos.
+[00:04:01]
+ADUAN: Las comunicaciones presentan fallas intermitentes.
+[00:04:08] | AUDIO EXTERNO - TORRE DE CONTROL
+[GRABACIÓN]
+OPERADOR 1: Vuelo 247, confirme altitud.
+[00:04:12]
+PILOTO: Altitud estable, pero tenemos interferencia en—
+[CORTE]
+[00:04:14]
+[INTERFERENCIA]: —encu— —encu— —encu—
+[00:04:16]
+OPERADOR 2: Repita, no tenemos claridad.
+[00:04:18]
+PILOTO: No es ruido. Se repite.
+[00:04:21]
+[CORTE TOTAL DE AUDIO]
+[00:04:30] | ESTUDIO
+SANDER BOKER: Se trata de fallas técnicas aisladas.
+[00:04:34]
+[ANOTACIÓN]: La señal de fondo persiste durante la declaración.
+[00:04:40] | ARCHIVO - WYOMING
+VIDEO: Kimberly Hastings permanece en el mismo lugar.
+DETALLE: Sin cambio de postura.
+[00:04:44]
+BRI WALKER: Kimberly, ¿puedes decirnos cuánto tiempo llevas aquí?
+[00:04:48]
+KIMBERLY HASTINGS: No lo sé.
+[00:04:50]
+[PAUSA]: 3.1 segundos
+BRI WALKER: ¿Recuerdas algo antes del impacto?
+[00:04:54]
+KIMBERLY HASTINGS: No.
+[00:04:56]
+[ANOTACIÓN]: Frecuencia de parpadeo: 0 durante 12.4s.
+[00:05:05] | INCIDENTE VISUAL
+[ANOMALÍA] — Distorsión breve en imagen — Duración: 0.3s
+RESULTADO: El fondo del cráter presenta alteración momentánea en profundidad.
+[00:05:08]
+CAMARÓGRAFO: Ajusta enfoque manual.
+[00:05:12] | CORTE A PIRINEOS
+VIDEO: Jean-Paul sentado.
+[00:05:14]
+REPORTERO: ¿Hay alguien más contigo?
+[00:05:17]
+JEAN-PAUL: No.
+[00:05:19]
+[PAUSA]: 4.2 segundos
+[00:05:23]
+REPORTERO: ¿Escuchaste algo antes del impacto?
+[00:05:27]
+JEAN-PAUL: Sí.
+[00:05:29]
+REPORTERO: ¿Qué escuchaste?
+[00:05:32]
+JEAN-PAUL: —...
+[00:05:33]
+[INTERFERENCIA]: —encuentro— —encuentro—
+[00:05:35]
+[CORTE AUTOMÁTICO]
+[00:05:42] | ESTUDIO
+ADUAN: Estamos perdiendo varias señales externas.
+[00:05:45]
+SANDER BOKER: Intentamos restablecer comunicación con nuestros corresponsales.
+[00:05:52] | FILTRACIÓN - OPERATIVO
+VIDEO: Grabación inestable. Baja calidad.
+IDENTIFICACIÓN: Dr. Abraham Mandel
+ACCIÓN: Dos agentes lo escoltan.
+[00:05:58]
+[ANOTACIÓN]: No hay resistencia.
+[00:06:00]
+MANDEL: (sin mirar a cámara) Es temprano.
+[00:06:02]
+AGENTE: Avance.
+[00:06:04]
+MANDEL: No deberían hacerlo ahora.
+[00:06:06]
+[CORTE]
+[00:06:12] | ESTUDIO
+SANDER BOKER: No hay confirmación oficial sobre este material.
+[00:06:16]
+ADUAN: Se desconoce el motivo del operativo.
+[00:06:20] | AUDIO GLOBAL
+[INTERFERENCIA INTENSA] — Patrón: Repetición clara
+SONIDO: —encuentro hostil— —encuentro hostil— —encuentro hostil—
+[00:06:26]
+[ANOTACIÓN]: El patrón se mantiene constante en distintas frecuencias.
+[00:06:30] | AUDIO MILITAR
+[GRABACIÓN]
+CONTROL: Objetivo detectado. Procedan.
+[00:06:33]
+PILOTO F-16: Negativo… no coincide con radar.
+[00:06:36]
+CONTROL: Confirme visual.
+[00:06:38]
+PILOTO: Lo tengo… pero—
+[00:06:40]
+[PAUSA]: 1.1 segundos
+PILOTO: Eso no es una roca.
+[00:06:42]
+[INTERFERENCIA TOTAL]
+[00:06:45] | PÉRDIDA DE SEÑAL
+[AUDIO Y VIDEO CAEN]
+[00:06:50] | REGRESO PARCIAL
+VIDEO: Estudio con interferencias visibles.
+[00:06:52]
+SANDER BOKER: Hemos perdido contacto con la unidad aérea.
+[00:06:55]
+[ANOTACIÓN]: No se registran datos posteriores.
+[00:07:02] | VIDEO DE SEGURIDAD - WYOMING (CIUDAD CERCANA)
+VIDEO: Calle urbana. Tránsito normal.
+PERSONAS: Caminando. Rutina diaria.
+[00:07:08]
+[ANOMALÍA] — Distorsión: 0.2s
+[SEÑAL RESTAURADA]
+VIDEO: Misma calle.
+DETALLE: Sin personas.
+[00:07:13]
+[ANOTACIÓN]: Vehículos detenidos. Puertas abiertas.
+[ANOTACIÓN]: No hay signos de evacuación.
+[00:07:20] | ESTUDIO
+ADUAN: …
+[00:07:22]
+[PAUSA]: 2.3 segundos
+SANDER BOKER: Estamos verificando esta información.
+[00:07:28] | AUDIO DE FONDO
+SONIDO: —encuentro hostil— —encuentro hostil—
+[00:07:32] | FIN DE SEGMENTO
+[SEÑAL INESTABLE]
+CORTE IMPRECISO
+
+## Capítulo 3: Globalmente
+[00:07:33] | RETORNO INESTABLE
+[SEÑAL PARCIAL]
+VIDEO: Estudio. Imagen degradada.
+[00:07:35]
+SANDER BOKER: Estamos… seguimos en transmisión.
+[00:07:38]
+[INTERFERENCIA DE FONDO CONSTANTE]
+SONIDO: —encuentro hostil— —encuentro hostil—
+[00:07:44] | INTENTO DE CONTROL
+ADUAN: Se solicita mantener la calma. Las autoridades—
+[00:07:47]
+[CORTE DE AUDIO]
+[00:07:50] | TRANSMISIÓN INTERCEPTADA
+[ORIGEN DESCONOCIDO]
+VIDEO: Imagen fija. Iluminación baja.
+IDENTIFICACIÓN: Dr. Abraham Mandel
+[00:07:52]
+MANDEL: Si están viendo esto, ya es tarde para protocolos.
+[00:07:56]
+MANDEL: No son fragmentos. No son restos.
+[00:08:00]
+MANDEL: Son unidades.
+[00:08:03]
+[INTERFERENCIA BREVE]
+[00:08:05]
+MANDEL: Los primeros impactos no fueron ataques.
+[00:08:08]
+MANDEL: Fueron pruebas.
+[00:08:11]
+MANDEL: Wyoming. Gobi. Pirineos.
+[00:08:16]
+MANDEL: Zonas controlables. Población limitada.
+[00:08:20]
+MANDEL: Observación de respuesta humana.
+[00:08:23]
+[INTERFERENCIA]
+[00:08:25]
+MANDEL: Comunicación. Reacción. Defensa.
+[00:08:28]
+MANDEL: Todo medido.
+[00:08:30]
+[PAUSA]: 1.2 segundos
+[00:08:32]
+MANDEL: El objetivo real—
+[00:08:34]
+[CORTE BRUSCO]
+[00:08:36] | ESTUDIO (RETORNO FORZADO)
+VIDEO: Sander y Aduan en cuadro.
+[00:08:38]
+SANDER BOKER: No podemos confirmar la autenticidad de esa transmisión.
+[00:08:42]
+[ANOTACIÓN]: El audio de fondo aumenta en volumen.
+[00:08:45] | MULTIPLES FUENTES
+VIDEO: Fragmentos de distintas ciudades. — TOKIO · MOSCÚ · NUEVA YORK
+DETALLE: Personas mirando al cielo.
+[00:08:50]
+VIDEO: Cielo despejado.
+[00:08:52]
+[ANOMALÍA]
+PUNTOS OSCUROS: Aparecen.
+[00:08:54]
+[ZOOM DIGITAL]
+DETALLE: Múltiples objetos. — Trayectoria: Descenso directo.
+[00:08:58]
+ADUAN: Estamos recibiendo reportes globales.
+[00:09:01]
+ADUAN: No son tres.
+[00:09:03]
+ADUAN: No son fragmentos.
+[00:09:06] | AUDIO GLOBAL
+SONIDO: —encuentro hostil— —encuentro hostil— —encuentro hostil—
+[00:09:10]
+[ANOTACIÓN]: La señal es clara. Sin distorsión.
+[00:09:12] | VIDEO - WYOMING (CRÁTER)
+VIDEO: Kimberly Hastings en el mismo lugar.
+DETALLE: Sonríe.
+[00:09:16]
+[ANOMALÍA]: Movimiento detectado detrás del cráter.
+FORMA: No definida.
+[00:09:20]
+BRI WALKER (FUERA DE CÁMARA): Kimberly, ¿qué está pasando?
+[00:09:23]
+KIMBERLY HASTINGS: Llegaron.
+[00:09:25] | CORTE AUTOMÁTICO
+[00:09:27] | ESTUDIO
+SANDER BOKER: Las autoridades—
+[00:09:29]
+[CORTE DE AUDIO]
+[00:09:30] | VIDEO GLOBAL — CIUDADES MÚLTIPLES
+DETALLE: Los objetos aumentan. — Decenas → Cientos
+TRAYECTORIA: Coordinada. Sin desviación.
+[00:09:36]
+[ANOTACIÓN]: No hay intentos visibles de evasión.
+[00:09:38] | AUDIO MILITAR (FRAGMENTO)
+CONTROL: No podemos fijar objetivo—
+PILOTO: Se están moviendo—
+[00:09:42]
+[INTERFERENCIA TOTAL]
+[00:09:45] | ESTUDIO
+VIDEO: Señal degradándose.
+ADUAN: No tenemos—
+[CORTE]
+[00:09:48] | ÚLTIMA SECUENCIA
+VIDEO: Cielo sobre ciudad no identificada.
+OBJETOS: Cubren el encuadre.
+[00:09:50]
+[INTERFERENCIA]: —encuentro hostil—
+[00:09:51]
+[SEÑAL FALLA]
+[NO SIGNAL]
+[00:09:53]
+FIN DE TRANSMISIÓN
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'Without Warning';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'), box = document.getElementById('box');
+  var MAXLEN = 500;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\[([^\]]+)\]\s*\|\s*(.+)$/))) items.push({t:'time',tme:m[1],s:m[2]});
+    else if((m = l.match(/^(VIDEO|GRÁFICO|DETALLE|IDENTIFICACIÓN|ACCIÓN|RESULTADO|PATRÓN|SONIDO|ORIGEN|TOKIO · MOSCÚ · NUEVA YORK|CIUDADES MÚLTIPLES):\s*(.+)$/i))) items.push({t:'desc',lbl:m[1].charAt(0).toUpperCase()+m[1].slice(1).toLowerCase(),s:m[2]});
+    else if((m = l.match(/^\[(ANOTACIÓN|EVENTO|ANOMALÍA|PAUSA|INTERFERENCIA|CORTE|SEÑAL|GRABACIÓN|FIN DE SEGMENTO|ÚLTIMA SECUENCIA|TRANSMISIÓN INTERCEPTADA|AUDIO DE FONDO|AUDIO GLOBAL|AUDIO MILITAR|INCIDENTE DE SEÑAL|INCIDENTE VISUAL|FILTRACIÓN):\]?:?\s*(.*)$/i))){
+      var txt = m[2] || '';
+      var type = m[1].charAt(0).toUpperCase()+m[1].slice(1).toLowerCase();
+      if(type==='Pausa' && txt) txt = txt.replace(/segundos?/g,'s').trim() + 's';
+      items.push({t:'anno',type:type,s:txt});
+    }
+    else if((m = l.match(/^([^:]{2,32}):\s+(.*)$/))){
+      var dp = splitLong(m[2]);
+      items.push({t:'dlg',n:m[1],s:dp[0]});
+      for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]});
+    }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='time'){
+      box.appendChild(el('time','['+it.tme+']'));
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='desc'){
+      var d=el('p','');
+      var lbl=document.createElement('span');
+      lbl.style.color='#888';lbl.style.fontWeight='600';lbl.textContent=it.lbl+': ';
+      d.appendChild(lbl);d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else if(it.t==='anno'){
+      var cls='anno'; if(it.type==='Evento'||it.type==='Anomalía'||it.type==='Interferencia') cls='anno event';
+      var a=el(cls,'');
+      var t=document.createElement('strong');t.textContent='['+it.type+']';
+      a.appendChild(t); if(it.s){a.appendChild(document.createTextNode(' '+it.s))}
+      box.appendChild(a);
+    }else if(it.t==='dlg'){
+      var d=el('dlg','');
+      var who=document.createElement('span');who.className='who';who.textContent=it.n+': ';
+      d.appendChild(who);d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i]; show(function(){render(it)});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'), btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'), list = document.getElementById('list');
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button'); b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation(); setPanel(false);
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI(); i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
