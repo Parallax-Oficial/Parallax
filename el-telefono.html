@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El Teléfono — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3;margin:1.4rem 0 .6rem}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA ============ -->
+<script type="text/plain" id="story">
+## Capítulo 1: Llamada Pendiente
+
+**1988**
+
+"¿Recuerdas cuándo empezó?"
+
+Todo empezó... (suspira) no es tan fácil, y... parece que sí, pero no. (Respira profundo), bien. Todo empezó cuando Octopo ocupó el lugar incorrecto.
+
+**Un Año Antes, 1987**
+
+**Tarot**
+¿a qué viene?
+
+**Octopo**
+... entrevista de trabajo
+
+**Tarot**
+(baja la cabeza y sonríe) ¿trabajo? Te equivocaste de edificio
+
+**Octopo**
+sabe de qué hablo, déjeme pasar
+
+**Tarot**
+... no estoy seguro, ¿algo?
+
+**Octopo**
+bueno... tengo una verificación.
+
+Octopo sacó de su portafolio unos papeles, luego, se los dio a Tarot. Él los revisó.
+
+**Tarot**
+... ¿Octopo Frehide?
+
+**Octopo**
+correcto
+
+**Tarot**
+los nombres de hoy en día... está bien, puedes pasar.
+
+**1988**
+
+"¿Qué tan consciente era él?"
+
+Lo suficiente para ser engañado. Mire, mi hermano no es fácil de manipular, pero... pobre, estaba necesitado, la bancarrota de su empresa creo que le quitó la razón.
+
+"Trabajar en Marfill requiere... bueno, mucha determinación y lógica, ¿crees que él no pensó bien las cosas?"
+
+La verdad no, (baja la cabeza) no... simplemente lo pensó, no hizo otros cálculos.
+
+**1987**
+
+**Mitre**
+¡Octopo!
+
+**Octopo**
+¡¿otro desesperado por trabajo?!
+
+**Mitre**
+sí, la verdad sí. ¿Y tú qué tal? ¿Qué tal tu hermana? Me enteré del accidente
+
+**Octopo**
+está bien, bien, bien. Una fractura nada más, se va a recuperar, lento pero seguro
+
+**Mitre**
+esa es mi sobrina... escucha, me dejaron a cargo de... ya sabes, las grabaciones de las llamadas
+
+**Octopo**
+entonces yo...
+
+**Mitre**
+entonces tú eres quien atiende las llamadas
+
+**Octopo**
+fácil
+
+**Mitre**
+sí, tan fácil que me preocupa.
+
+**1988**
+
+"¿Cómo guardaban los registros de llamadas?"
+
+Mitre me había contado que usaban una especie de aparatos grandes, algo así como servidores, pero de los años ochenta. Ahí se almacenaba todo. Un movimiento estúpido para Marfill, si los descubrían tenían las pruebas suficientes con eso. Pero también, eran inteligentes, guardar esos registros era valioso. Era... una nueva moneda, ese era el objetivo, o bueno, eso pienso.
+
+**1987**
+
+Llamada entrante. Octopo contesta el teléfono.
+
+**Octopo**
+¿sí? Diga nombre, apellido, emm... y... ¿hola?
+
+—(sonidos extraños, metálicos)
+
+**Octopo**
+...
+
+—he... lp...
+
+**Octopo**
+¿Help? ¿Hablas inglés?
+
+—...
+
+**Octopo**
+mierda.
+
+Cuelga la llamada. Mira fijo el teléfono.
+
+## Capítulo 2: Interrogatorio
+
+**1988**
+
+"¿Quieres agua?"
+
+Sí... (sonidos de pasos). Gracias (bebe).
+
+"Entonces... ¿cuál fue la siguiente llamada?"
+
+(Toma más agua) un poco más normal, al menos era entendible.
+
+**1987**
+
+Nueva llamada.
+
+**Octopo**
+¿hola?
+
+—¿debo decir mi nombre completo?
+
+**Octopo**
+sí, nombre y apellido
+
+—... Yoku Massaguri
+
+**Octopo**
+okey, sí
+
+**Yoku**
+soy un... empresario, sí
+
+**Octopo**
+(mira a Mitre) ¿seguro?
+
+**Yoku**
+sí, sí, no lo dude
+
+**Octopo**
+¿cómo se llama su empresa?
+
+**Yoku**
+... soy un maldito emprendedor ¿okey?
+
+**Octopo**
+mejor no mentirle a un verdadero empresario
+
+**Yoku**
+¿tú? ¿Empresario? Tu empresa se fue en bancarrota, yo nunca tuve ni un error
+
+**Octopo**
+... (sonríe) ¿sabes qué? Si quiero puedo joderte
+
+**Yoku**
+¿ah sí? ¿Se puede saber cómo?
+
+**Octopo**
+... trabajo en Marfill
+
+**Yoku**
+... ¿eh?
+
+**Octopo**
+trabajo en...
+
+La llamada se cortó abruptamente.
+
+**Octopo**
+¿registraste la llamada?
+
+**Mitre**
+¿qué piensas hacer?
+
+**Octopo**
+ya sabes, si conociste a mi padre me conoces a mí, busca el puto registro.
+
+**1988**
+
+"¿Por qué?"
+
+Había algo que mi hermano no toleraba... la verdad.
+
+**1987**
+
+**Mitre**
+aquí se almacena todo, putos servidores
+
+**Octopo**
+Rz34 dice, busca el... ya te lo dije
+
+**Mitre**
+sí, lo sé. Aquí está.
+
+Mitre presionó el botón. Las luces de la sala empezaron a parpadear.
+
+**Mitre**
+... solo espero que si me despiden, no me maten
+
+**Octopo**
+nadie debe saberlo
+
+**Mitre**
+justamente por eso, nadie lo sabrá.
+
+"Noticia del día, bueno, de aquella época... persona muere de disparos en la cabeza, según sus vecinos, era obsesivo en su emprendimiento de barras proteicas... diecisiete de diciembre de mil novecientos ochenta y siete"
+
+Es un solo botón, un solo botón que puede causar todo en tan poco tiempo.
+
+## Capítulo 3: Golpe A La Telefonía
+
+**1987**
+
+Llaman por teléfono.
+
+**Octopo**
+¿quién habla?
+
+**Cocacio**
+... ¿es de Marfill?
+
+**Octopo**
+sí
+
+**Cocacio**
+... escucha, te lo diré de forma simple y directa... puedo darte mucho dinero, mucho
+
+**Octopo**
+¿de qué mierda hablas? (Observa cómo Mitre lo miraba fijamente)
+
+**Cocacio**
+digamos que seríamos como cómplices, aunque tú tendrías una paga muy buena
+
+**Octopo**
+...
+
+**Cocacio**
+la cosa es así, dime todo lo que puedas decirme sobre la empresa, y te llegará directamente a tu cuenta bancaria el dinero
+
+**Octopo**
+... ¿de cuánto estamos hablando?
+
+**Cocacio**
+lo suficiente para construir otra empresa, y si entra en bancarrota, puedas tener tu revancha
+
+**Octopo**
+... (sonrió levemente) ¿qué necesitas saber?
+
+**Cocacio**
+lo primero, mi número es ##########, ¿lo anotaste?
+
+**Octopo**
+sí
+
+**Cocacio**
+bien, escucha, necesito.
+
+La llamada se cortó. Mitre la colgó.
+
+**Mitre**
+¿qué haces?
+
+**Octopo**
+era un cliente
+
+**Mitre**
+claro, ¿y por qué no dijiste nada de empezar a grabar la llamada?
+
+**Octopo**
+pues...
+
+**Mitre**
+yo solo digo, si yo no grabo, directamente no puedo escuchar lo que estés hablando
+
+**Octopo**
+(suspira) creo que en el trabajo, debe haber confianza, nosotros debemos tenernos confianza
+
+**Mitre**
+tranquilo, conozco a tu familia de hace mucho, yo tengo la confianza... pero ahora, ¿tú la tienes conmigo?
+
+**Octopo**
+... obvio que sí
+
+**Mitre**
+intentaré creerte.
+
+**1988**
+
+"¿Y así empezó el debacle?"
+
+Bueno... creo que también fueron por otras causas de la misma compañía ajenas a mi hermano.
+
+"Okey... ¿Cómo continuó?"
+
+De forma predecible, según yo. Al menos yo me lo esperaba.
+
+"¿Crees que... Octopo fue el responsable de la muerte de Mitre?"
+
+No lo creo. Fue así.
+
+**1987**
+
+Octopo escribe en una libreta pequeña. Escribe velozmente, ninguna palabra se le escapaba, no se equivocaba, todo lo tenía en la cabeza, sin falta.
+
+La puerta se abre y las luces se encienden. Mitre había llegado.
+
+**Mitre**
+¿ya estás aquí? ¿Qué hora es?
+
+**Octopo**
+... (no respondía)
+
+**Mitre**
+te estoy hablando
+
+**Octopo**
+... (seguía sin responder)
+
+**Mitre**
+¿ahora usas libretitas? ¿No querés que te preste hojas?
+
+**Octopo**
+me harías un favor
+
+**Mitre**
+... eres una mierda.
+
+Mitre corre hacia él, tira su maletín y empieza a asfixiarlo. Apretando fuertemente su cuello.
+
+**Mitre**
+¡HIJO DE PUTA! ¡TRAICIONERO!
+
+**Octopo**
+(no podía hablar).
+
+**1988**
+
+"Mitre lo asfixió, sí, entiendo eso. Lo que entendí fue... ¿Qué estaba escribiendo Octopo?"
+
+No lo sé. Lo más probable, una lista de toda la información que él tenía sobre Marfill.
+
+"Okey, sí. Tiene sentido"
+
+Sí, mucho.
+
+**1987**
+
+Octopo lo patea con sus dos piernas. Mitre cae y rompe la mesita de cristal, cayendo por encima de los teléfonos.
+
+Octopo se levanta, toma el maletín de Mitre y agarra dos hojas. Comienza a escribir como un loco.
+
+**Mitre**
+¡Estás demente! ¡eres un puto demente Octo!
+
+**Octopo**
+¡JODETE! Las oportunidades no se desaprovechan
+
+**Mitre**
+no es eso, idiota... estás perdiendo... solamente no quiero que te maten.
+
+Octopo deja de escribir.
+
+**Octopo**
+(voltea)
+
+**Mitre**
+(respira agitado) esta empresa puede matarte si quiere, en cualquier momento, sin pero, sin disculpas, nada
+
+**Octopo**
+... ya lo sé, claro que lo sé, al igual que tú, yo también leo la letra chica de los contratos
+
+**Mitre**
+... bien, jodete entonces
+
+**Octopo**
+(siguió escribiendo).
+
+Mitre se levantó. Caminó vagamente, y de su maletín tomó un arma.
+
+**Mitre**
+estamos jodidos Octo, ¡JODIDOS!
+
+Mitre se apuntó y se disparó. La sangre salió disparada a la pared. Octopo ni se inmutó.
+
+Dejó de escribir, sonrió viendo las hojas. Tiró el bolígrafo y se sentó en el sofá. Empezó a llamar al número.
+
+**Cocacio**
+¿y bien?
+
+**Octopo**
+tengo todo
+
+**Cocacio**
+gracias, mis más sinceras gracias
+
+**Octopo**
+me da igual, dame lo que quiero
+
+**Cocacio**
+te llegará el dinero a tu cuenta, no solo eso, recibirás en tu correo una carta, ahí están los números de muchos de los empleados de Marfill más poderosos, necesito que vengas mañana, llámalos a cada uno con cualquier pretexto, registra sus llamadas y presionó ese maldito botón
+
+**Octopo**
+... bien pero... ¿es opcional?
+
+**Cocacio**
+sí
+
+**Octopo**
+...
+
+**Cocacio**
+¿cuento contigo o te quedas solo con el dinero?
+
+**Octopo**
+... (sonrió) ¿te voy leyendo en voz alta mi lista?
+
+**Cocacio**
+... ¡Jajaja!
+
+**Octopo**
+(sonríe de oreja a oreja).
+
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'El Teléfono';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'), box = document.getElementById('box');
+  
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(.+)$/i))) items.push({t:'ch',n:'',s:m[1]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ 
+      var dp = splitLong(m[2]); 
+      items.push({t:'dlg',n:m[1],s:dp[0]}); 
+      for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); 
+    }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+  
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    show(function(){render(items[i])});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+  var panelOpen = false;
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = 'Capítulo';
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+  
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key==='ArrowLeft')prev();
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+    });
+    return;
+  }
+  
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight') next();
+  });
+})();
+</script>
+</body>
+</html>
