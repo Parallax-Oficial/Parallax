@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eternamente Vivo 2 — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div> 
+
+<script type="text/plain" id="story">
+## Capítulo 1: Respira Profundo 
+
+Diciembre, 2034 
+
+La música de apertura suena. Es reconocible, animada, de esas que te hacen aplaudir casi sin pensarlo. No dura mucho. El telón se abre y el estudio aparece en orden, como siempre, listo para arrancar otro programa. 
+
+Murray Franklin entra caminando tranquilo, sonríe, saluda con la mano y espera a que la música termine. Se acomoda el saco, mira a cámara y se presenta con su tono habitual, el de alguien que hace esto todos los días y lo disfruta. Hace un comentario corto sobre la noche, algo liviano, algo que no promete nada raro. 
+
+Se sienta detrás del escritorio. Apoya las manos, mira al público y juega un poco con ellos, con comentarios rápidos y gestos cómplices. 
+
+Murray: ¡bueno, bueno, bueno! ¿Qué programa el de hoy, eh?
+Reiralda: hey, Murray (su voz de abuelita era imposible de no recordar), ¿dónde está mi cojín? Le he dicho varias veces a esta producción que lo pongan cada vez que deba sentarme.
+Murray: perdóname, por favor, ¡un cojín!
+Reiralda: gracias, querido, esto me sirve, ¿no tienes el de colores? No importa, gracias.
+Murray: ¿ahora sí, abuela?
+Reiralda: sí, sigue, sigue.
+Murray: muy bien... hoy tenemos un programón, los invitados de hoy, mejor dicho, el invitado de hoy, un escritor, cantante, con su propia editorial, actor, ahora comediante y... ya no sé qué más va a ser, pero necesitamos más gente como él, ¿no? 
+
+El público gritó afirmando, contentos y emocionados. 
+
+Murray: el invitado estrella de hoy, y para su sorpresa, no van a tener que esperar a conocer a los demás. 
+
+Nuevamente, el público estalló aclamando: "¡síii!". Parecían infantes. 
+
+Murray: tenemos muchas, muchas cosas de qué hablar, y puede que nos encontremos con el programa más extenso de la televisión... ¿futurista? La cuestión es que la gente está expectante, y si pueden durar más de dos horas, pues... tendremos que dejar a los demás invitados para otro momento. En fin, creo que llegó la hora de presentar a un escritor valiente, que atravesó mucho en su vida... su pseudónimo, Mlive, era la forma que quería llamarle, pero... él no aceptó. 
+
+Murray se levanta del escritorio con energía, da un par de pasos hacia el centro del escenario y alza la voz: "¡Démosle la bienvenida a Martino Lipschitz!". 
+
+El telón del costado se abre. Martino sale caminando sin apuro. Mira al público apenas, levanta una mano, llega hasta Murray y le da un apretón de manos firme y corto. Se sienta en uno de los sofás destinados a los invitados. Reiralda, la abuela de Murray, está sentada a un costado, como siempre. Martino pasa y se sienta, ignorándola por completo. 
+
+Murray: ¿cómo estás, Martino?
+Martino: me lo imaginaba más grande.
+Murray: ¿te gustan las cosas grandes?
+Martino: seguimos hablando del set, ¿verdad?
+Murray: (sonrió, con una carcajada que aguantó, al igual que lo hacía con todos los invitados) 
+
+El público no logró aguantarse las risas. Rieron como niños jugando al ajedrez, usando al caballo para luchar con el rey. 
+
+Murray: bueno, antes de nada, ¿hay algún rencor con mi abuela?
+Martino: ...¿qué? ¿Por qué eso?
+Murray: no la saludaste, ¿odias a las abuelas o algo así?
+Martino: ... 
+
+Martino gira un poco el cuerpo, apoya un brazo en el respaldo del sofá y recién ahí vuelve a mirar a Reiralda. Sonríe apenas, dice su nombre en voz baja y vuelve a acomodarse en su lugar. Reiralda extendió su brazo; Martino, mirando como si lo estuviese pensando, terminó por saludarla formalmente. 
+
+Murray: bien, supongo que no te diste cuenta, ¿no?
+Martino: ...sí, estaba bastante perdido, y... es mi primera vez en un programa como este, por cierto, ¿por qué esas líneas?
+Murray: se llama decoración, es el estilo del set.
+Martino: sí, lo sé, pero... ¿no crees que, bueno, todo se ve muy... ochentero?
+Murray: sí, jajaja (su risa era relajada, calmada), es parte de la personalidad del programa, un programa que recuerda cómo eran esos años, años inolvidables... años que no es fácil olvidar.
+Martino: claro, creo que no muchos pensarán igual.
+Murray: sí, gente mediocre, gente que vive el hoy, los que no miran el pasado, y cuando lo miran, se pierden, incluso si es imposible perderse.
+Martino: ...
+Murray: ...perdón, yo... ya sabes, me comprometo mucho con esto, no quería incomodar.
+Martino: no pasa nada. 
+
+Capítulo 1: Respira Profundo 
+
+Toshiba corre por la calle sin mirar a otra parte que no sea al frente. Corre como si llegara tarde a algo importante. La gente lo mira pasar, algunos se corren, otros se quedan quietos. Tropieza con el borde de la vereda, cae de frente, se queda un segundo en el piso y se levanta sin pensarlo. 
+
+Sigue corriendo. Cruza un semáforo en verde sin frenar; esto ocasiona que un auto clave los frenos, otro se desvíe y termine chocando contra una tienda. El ruido queda atrás y Toshiba se detiene unos segundos, respira hondo y mira la escena sin acercarse. 
+
+-¡Hijo de puta! ¡Ahora vienes y me lo pagas, loco de mierda!
+Toshiba: ...(respira sin calma) 
+
+Vuelve a correr, mejor dicho, vuelve al caos. Empuja sin querer a dos chicas que estaban paradas hablando. No pide disculpas pues ya está lejos. Llega al estudio de televisión y entra por la parte trasera, cruza pasillos conocidos y se mete directo en su camerino. 
+
+Cierra la puerta, se saca la ropa rápido, junta todo en el suelo y abre una bolsa. Saca un traje elegante, se lo pone sin perder tiempo. Ajusta la camisa, el saco, los zapatos y respira otra vez. Sale del camerino, pero vuelve a entrar. Se para frente al espejo, acomoda el cabello con las manos, inclina un poco la cabeza, se observa un segundo más. Asiente para sí mismo y sale de nuevo. 
+
+Camina hasta el lugar del telón. Se toca la cara, saca un pañuelo y se seca el sudor del cuello y la frente. Guarda el pañuelo en el bolsillo interno del saco. Da un paso al frente. Pero le apoyan una mano en el pecho y lo detienen. 
+
+Toshiba: ¿qué haces? Es mi turno.
+-Estás equivocado, amigo, hay otro invitado.
+Toshiba: ...¿qué dices? Este es mi horario, bueno, llegué tarde, lo sé, pero Murray sabe cómo manejar eso.
+-No me hagas repetirlo.
+Toshiba: ...¿quién está ahora?
+-...¿conoces a Martino Lipschitz?
+Toshiba: no...
+-Búscalo en internet, te sorprenderás.
+Toshiba: ... 
+
+Toshiba vuelve a su camerino sin decir nada. Cierra la puerta de un golpe suave. Se queda frente al espejo y aprieta la mandíbula. Mira su propio reflejo y lo suelta casi sin pensarlo: "¿quién putas es Martino?". 
+
+Se deja caer en la silla. Saca el celular y empieza a buscar. El nombre aparece en todos lados. Comienza a leer rápido: «treinta y cuatro millones de seguidores. Actor, comediante, escritor, creador de ideas, cantante». Todo junto, uno atrás del otro, como si no tuviera freno. Al seguir bajando, encuentra una entrevista. La primera de todas, bueno, es la única y todas a la vez. Le da play. No la escucha entera, pero ve fragmentos, titulares, recortes. Ahí habla de su vida, de su infancia, de cosas que no parecen pensadas para decirse en voz alta. La nota marca billones de visitas. Desde ese momento, el apoyo creció. Después vinieron los premios. Reconocimientos como escritor. Fotos con trajes caros. Un Óscar a mejor actor por Tragedia De Amor. Toshiba apoya el celular sobre la mesa. Mira el piso unos segundos. No mueve las piernas ni las manos. Vuelve a agarrar el teléfono. Lee una nota corta, perdida entre otras: «mi padre era problemático, a veces dudaba si realmente me quería». Se queda ahí. Apaga el celular, levanta la vista y se mira otra vez en el espejo. La expresión ya no es la misma. Respira lento y empieza a recordar. 
+
+2019 
+
+Toshiba corre otra vez, pero ahora es un chico de nueve años. Entra apurado a la escuela, cruza el pasillo y llega a su salón. Toca la puerta con los nudillos. La profesora abre la puerta apresurada. 
+
+-¡Miren quién llegó! Llega cuando puedas.
+Toshiba: perdón, yo... bueno, casi me duermo.
+-Te dormiste, por eso llegaste tarde.
+Toshiba: ...
+-Ya, pasa. 
+
+Entra y mira a todos ya sentados. La profesora señala un lugar adelante, no es el de siempre. Por llegar tarde, le toca sentarse al frente de todos, al lado de un compañero que no conoce. No está solo, y eso ya lo incomoda. Se sienta. Mira de reojo al chico de al lado. No se dicen nada al principio. Después, sin mirarlo, Isadox habla en voz baja. 
+
+Isadox: ¿cómo estás?
+Toshiba: bien, ¿qué cuentas?
+Isadox: nada interesante, bueno, ¿sabías que el Big Bang no ocurrió en un solo lugar del espacio? Más bien... ocurrió en todas partes al mismo tiempo.
+Toshiba: ¿te gusta el espacio?
+Isadox: no, lo dijo la profesora recién.
+Toshiba: ...claro.
+Isadox: ...¿cómo te llamas?
+Toshiba: ¿acaso no nos presentamos todos a principio de año? ¿No recuerdas?
+Isadox: ¿eh?
+Toshiba: ya sabes lo de... ¡hey, tú!
+Isadox: ...¡¿qué?!
+Toshiba: (suspira) nada, me llamo Toshiba.
+Isadox: yo soy Isadox.
+Toshiba: ...¿Isadox?
+Isadox: ¡hey! No vengas a decir que mi nombre es raro, el tuyo también.
+Toshiba: ¡no! Es que... no recuerdo a nadie que se llame... ¿Isadox? 
+
+Diciembre, 2034 
+
+Volvemos. Toshiba estaba parado en su camerino. Frunce el ceño. Algo no encaja. Recuerda ese momento, pero hay un detalle que le molesta. Ese compañero no se llamaba Isadox. Está seguro de eso. 
+
+Mira el celular un segundo, como si buscara confirmarlo, y ahí lo entiende. Sus recuerdos se mezclaron. Lo que acaba de ver, lo que leyó en esa entrevista, se metió donde no debía. El amigo de Martino se llamaba Isadox, no el suyo. Guarda el teléfono. No le da más vueltas. Suspira corto y deja pasar el error. Vuelve a cerrar los ojos. Regresa al recuerdo. 
+
+2019 
+
+Isadox: ¿y? ¿Pasa algo?
+Toshiba: ...no, no, no... vuelvo a la pregunta de antes, ¿qué cuentas?
+Isadox: pues, ahora creo que sí puedo responderte, pronto tendremos el viaje.
+Toshiba: sí, lo sé, aunque esa respuesta no tiene nada que ver con la pregunta.
+Isadox: ¡da igual! ¿Algo que te guste?
+Toshiba: no sé, me gusta dibujar, aunque, ¡no! Ni siquiera eso.
+Isadox: ¿y entonces?
+Toshiba: no sé, es que... creo que no me gusta nada.
+Isadox: entonces dime algo que hagas con frecuencia.
+Toshiba: ...a veces hago muñecos.
+Isadox: ¿muñecos? ¿Haces muñecos?
+Toshiba: no, bueno, o sea... no son como crees, son dibujos de algún personaje, lo recorto y lo pego a un cartón, y ahí tengo una figura de acción, digamos.
+Isadox: ...eso es muy, diría, ingenioso para hacerte sentir bien, pero es bastante estúpido.
+Toshiba: sí, eso mismo piensa él.
+Isadox: ¿quién?
+Toshiba: ...no importa, la cuestión es que (suspira) lo hago y ya, me gusta, me entretiene, ¿qué más debo pedir?
+Isadox: bueno, cada quien tiene sus gustos.
+Toshiba: sí...
+Isadox: hablando de gustos, ¿quién te gusta?
+Toshiba: una pregunta muy apresurada, ¿no crees? Recién nos conocemos.
+Isadox: entonces imagínate que nos conocemos desde que éramos bebés.
+Toshiba: no me gusta nadie.
+Isadox: sí, claro.
+Toshiba: es verdad, no siento que ellas, u otras, sean...
+Isadox: ¿tu tipo?
+Toshiba: ...
+Isadox: pues... a veces solo hay que hacer que las cosas marchen, por ejemplo, hablar, y ya, las cosas se moverán solas.
+Toshiba: ...
+Isadox: habla con ella.
+Toshiba: ¿eh?
+Isadox: no te hagas el tonto, ve y háblale.
+Toshiba: ¿por qué lo haría?
+Isadox: porque lo pido yo, háblale.
+Toshiba: no lo voy a hacer, aparte, todavía estamos en clases. 
+
+En ese precioso momento, el famoso timbre sonó. 
+
+Isadox: ya no estamos en clase.
+Toshiba: ... 
+
+Toshiba se levanta de su asiento. Camina despacio entre las filas y se acerca a una de sus compañeras. Zoé está sentada sola, mirando su cuaderno. Toshiba se queda a su lado unos segundos, sin decir nada. 
+
+Zoé: ¿sí?
+Toshiba: ...¿hola?
+Zoé: ...¿hola?
+Toshiba: yo... bueno, ¿todo bien?
+Zoé: sí, ya me iba.
+Toshiba: ¡ah! Bueno, nos vemos entonces. 
+
+Isadox levanta la vista. Se acerca a ellos, colocando su brazo por encima del hombro de Toshiba. 
+
+Isadox: ¡hey! Zoé, ¿cómo vas?
+Zoé: todo bien, Isa, ¿qué tal el examen?
+Toshiba: ¿examen? ¿Examen de qué?
+Isadox: no te asustes, ambos vamos a catequesis, el examen era de eso.
+Toshiba: ...
+Isadox: sí, bastante bien, es un examen de catequesis, es súper fácil.
+Zoé: sí, es verdad, yo las hice todas y apruebo fácilmente.
+Isadox: la primera prueba que vas a aprobar en tu vida, ¿no?
+Zoé: sí, básicamente sí. 
+
+Toshiba sonrió, como si el hecho de que no fuera perfecta le llamara más la atención. Esta vez preguntó sin miedo. 
+
+Toshiba: ¿te da igual aprobar o no?
+Zoé: si viviera sola, sí, pero, como todos... tengo padres y son, ya sabes, padres.
+Toshiba: sí, padres.
+Isadox: oigan, hay un recreo que no hay que perderse, ¿vamos los tres? 
+
+En ese momento, Martina, la amiga de Zoé, se acerca desde el fondo del aula. Se para al lado del banco, mira a Toshiba y después a Zoé. 
+
+Martina: ¡hola, Zoé!
+Zoé: ¡amiga!
+Martina: ¡Isa!
+Isadox: ¿todo bien, Mar?
+Martina: estoy súper bien, ¡hoy me van a dar mi primer celular!
+Toshiba: hola.
+Martina: ...¿hola? Como decía, ¡mi primer celular!
+Toshiba: si yo fuera tú, contestaría mejor a un saludo.
+Martina: ...
+Zoé: ...
+Isadox: Toshiba, ¿te sientes bien?
+Toshiba: sí, perdón, yo...
+Martina: ¡sí! Tienes razón, igualmente, ¿cómo estás? Amigo de Isadox, ¿verdad?
+Toshiba: sí, y estoy bien, gracias.
+Martina: bueno, me van a comprar mi primer celular.
+Zoé: tienes mucha suerte, lo que daría por un celular.
+Isadox: sigue soñando, porque ningún chico de nuestra edad tendría celular.
+Toshiba: ...
+Isadox: ¿y qué tal si salimos al recreo de una vez los cuatro?
+Martina: ¿perdón? Ella es mi amiga, mi mejor amiga, no sale con cualquier... tipo grande que se encuentre.
+Isadox: sí, sí... este tipo grande se va, porque al menos todos me respetan y no me hacen burla diciéndome que soy Pitufina.
+Toshiba: ¡sí! Pero cuando llueve sos el primero que se moja.
+Isadox: (miró a Toshiba con cara algo mal parada) eso fue bastante estúpido, ni da risa. 
+
+Eso pensaba Isadox. Pero tanto Martina como Zoé se dedicaron a reírse a carcajadas, soltando esa risa natural, esa risa que parecía un cerdo en un matadero. Esa risa que a Toshiba le gustaba escuchar. 
+
+Martina: ¡ya me cae bien!
+Zoé: bueno, creo que a ninguno de los cuatro nos gustaría perder el recreo, así que...
+Isadox: bueno, tú con ella, yo con él. 
+
+Diciembre, 2034 
+
+Alguien toca la puerta del camerino. Toshiba se sobresalta un poco, camina hasta la puerta y la abre apenas. 
+
+Toshiba: ¿es mi turno?
+-...lamento decirle que no, Murray dijo que no habrá tiempo para los demás invitados, con todo respeto debo decirle que será mejor que se vaya.
+Toshiba: ...claro, gracias. 
+
+El chico se va por el pasillo. Toshiba cierra la puerta y queda quieto un segundo. Después se sienta de golpe en la silla, grita sin medir el volumen y le pega a la silla con el puño. Se levanta de nuevo y la patea, empujándola contra la pared. Aún con la respiración agitada, abre la puerta y sale del estudio sin avisar. Camina por la calle con las manos en los bolsillos, la espalda algo encorvada, la mirada baja. No parece apurado, pero tampoco relajado. Sigue caminando. 
+
+Se sienta en una parada de autobuses. Apoya los codos en las piernas. Un anciano, parado a unos metros, lo mira de reojo varias veces. 
+
+-Perdone, usted vino del estudio de Murray, ¿verdad?
+Toshiba: sí, ¿pasa algo?
+-¿Es cierto que está Martino?
+Toshiba: ...sí, y por cierto, ¿no le suena conocido un tal... Toshiba Feez?
+-...no, nada.
+Toshiba: claro...
+-¿Y? ¿Qué escuchó? Yo no puedo enterarme de nada, no tengo televisión, hoy en día con todo lo nuevo ya es imposible, no alcanza, nada.
+Toshiba: pues, no, siendo sincero, no escuché nada de nada.
+-...mi Guillermina tenía ganas de escucharlo, le recuerda a nuestro nieto (sonríe mirando a otro niño).
+Toshiba: ...
+-Siempre me decía... «a veces lo entiendo y otras no», la gente de hoy está perdida, estaba enojada por haber escuchado toda esa entrevista que tuvo, me hacía reír, se enfurecía mucho con él, pero al final volvía a llorar cuando escuchaba su historia.
+Toshiba: (sonríe apenas)
+-...y... esta pregunta es por ella, ¿no sabes nada de lo que pasó con Garilda? Era una amiga de Martino, nunca nadie supo más de ella, Martino nunca más la nombró de nuevo.
+Toshiba: ...¿Garilda? ¿Apellido?
+-A ver si me acuerdo... no, nada, tú no puedes buscarlo ahí por... ¿eso? El... ¡puta! No me acuerdo, ¿el internet?!
+Toshiba: sí... 
+
+Toshiba saca el celular. Escribe rápido: «Martino Lipschitz y Garilda». Aparecen notas, fotos y recortes viejos. Lee una en particular, la misma, se detiene ahí: «fue amor y odio, mi forma de verla siempre cambiaba, a veces la quería y en otras no podía esperar para irme del colegio y no volver a verla». 
+
+Toshiba busca más al respecto y descubre el apellido: Garilda Calcagnoli. Baja el teléfono lentamente. Se queda mirando la pantalla apagada. 
+
+-¿Y? ¿Lo averiguaste?
+Toshiba: ...tengo que irme. 
+
+## Capítulo 2: Un Paso Aquí, Cha, Cha, Cha 
+
+La música arranca fuerte: una batería rápida y una guitarra eléctrica sin pausa. Brec y Brian, dos hermanos gemelos, tocan como si no hubiera nada más alrededor. No hablan, solo siguen el ritmo. Se escuchan pasos en la escalera. Toshiba aparece apurado. Mira alrededor, junta algunas cosas que estaban tiradas, las guarda sin orden. 
+
+Brec: hey, Tosh, ¿qué pasa?
+Toshiba: no tengo tiempo, les digo luego.
+Brian: ¿otra vez corriendo? ¿No te cansas?
+Brec: Brian.
+Brian: ¿qué?
+Brec: mejor cállate.
+Brian: ...
+Toshiba: les hablo luego, ¿bien?
+Brec: ...
+Toshiba: nos vemos al rato.
+Brec: ¡hey!
+Toshiba: (se voltea)
+Brec: vamos a grabar la última canción del álbum, lo sabes, ¿no?
+Toshiba: ...sí.
+Brec: bueno, no llegues tarde, no queremos hacer otra canción sin ti.
+Toshiba: ...bien, no te preocupes, llegaré temprano, ¡te lo aseguro! 
+
+Toshiba abre la puerta y se va, cerrando la puerta con fuerza. La música sigue unos segundos más y después baja. 
+
+Brian: ¿le crees? Pospusimos las fechas de salida del álbum por su culpa, no le importa.
+Brec: tenemos cinco canciones con él.
+Brian: ¡¿y todas las demás?!
+Brec: ...(suspira)
+Brian: no se sabe ni las letras, luego llora porque no es reconocido, siempre va a ser igual. 
+
+Félix está sentado frente al televisor, comiendo un sándwich. Mira la pantalla sin demasiado interés. Garilda baja por las escaleras y se queda parada a su lado. 
+
+Félix: ¿pasa algo? ¿Tengo un grano o algo?
+Garilda: más o menos, tienes cara de... a ver... ponte de perfil.
+Félix: (se movió rápido)
+Garilda: déjame ver... hay un solo problema.
+Félix: ¿ah, sí? ¿Cuál?
+Garilda: eres... ¡estúpido! 
+
+Garilda se inclina y le da un mordisco al sándwich, sin pedir permiso. Félix la mira, resignado. 
+
+Félix: hija de...
+Garilda: (reía lanzando migajas de pan) es broma, eres hermoso. 
+
+Garilda se inclina y le da un beso en la mejilla. 
+
+Félix: me llenaste de mierda la cara.
+Garilda: qué bonito que me recibes.
+Félix: lo digo en serio, me llenaste de migajas.
+Garilda: perdón, jajaja. 
+
+Félix se levanta, va a la cocina y toma una mochila. Se la cuelga al hombro. Antes de irse, vuelve, se inclina y le da un beso a Garilda. Abre la puerta y sale. Garilda sube a su habitación. No llega a sentarse cuando escucha golpes en la puerta de entrada. Baja, abre y se encuentra con Toshiba. 
+
+Garilda: ...¿Toshiba?
+Toshiba: ...hola, ¿cómo has estado?
+Garilda: ...bien, ¿tú?
+Toshiba: mira, voy al grano, quiero hablar, ¿puedo pasar?
+Garilda: ...
+Toshiba: si no puedo pasar, no pasa nada.
+Garilda: ...no, no, pasa. 
+
+Ambos pasan y se sientan en la sala de estar. No están demasiado cerca. 
+
+Garilda: ¿y bien?
+Toshiba: ...¿conoces a Martino Lipschitz?
+Garilda: ...(abrió la boca para intentar decir algo, pero era como si su lengua hubiera sido exterminada)
+Toshiba: ¿lo conoces?
+Garilda: ...sí.
+Toshiba: ¿qué tanto sabes de él? ¿Qué fueron? Y... ¿qué pasó?
+Garilda: ¿por qué tantas preguntas?
+Toshiba: ...hablaremos luego de eso.
+Garilda: ...bueno, éramos amigos en la secundaria, era... era una buena persona.
+Toshiba: ¿sabes qué hace ahora? No sé, muchas cosas y... ¿tiene muchas ganas?
+Garilda: ...sí, aunque intento ignorar eso.
+Toshiba: ...¿por qué? 
+
+De pronto, la puerta se abre otra vez. Félix entra apurado, como si hubiera olvidado algo. Se detiene en seco al ver a Toshiba. Se queda inmóvil un segundo. 
+
+Garilda: ¡Félix!
+Félix: ...¿quién eres tú?
+Toshiba: ¡hola! Venía de visita.
+Félix: ¿visita? Las únicas visitas de Garilda son sus amigas.
+Garilda: él es Toshiba, es un amigo, lo conocí hace poco.
+Félix: hace poco, ¿eh?
+Toshiba: ...
+Félix: yo... solo venía a por algo. 
+
+Félix recoge lo que había venido a buscar. Cierra la puerta y se va. Ya afuera, Félix mira el suelo. Camina hasta el auto. Está por abrir la puerta, pero se detiene. Da media vuelta y rodea la casa. Se asoma por una ventana para escuchar. 
+
+Toshiba: ¿y entonces? ¿Qué pasó con Martino?
+Garilda: ...era, amor... 
+
+Félix se queda quieto. Se siente raro. Sorprendido. Traicionado, pero no hace ningún gesto de más. Se aleja de la ventana y vuelve al auto. Se sienta, respira hondo. Abre la mochila y saca una lata de cerveza que tenía varias. Arranca el auto y pisa el acelerador. 
+
+Mientras, en la sala, Garilda y Toshiba siguen sentados. 
+
+Garilda: era, amor... y odio, creo que fue más odio que otra cosa.
+Toshiba: eso lo escuché.
+Garilda: sí, bueno, en realidad él era bastante complicado, pero no demasiado, era como ver a esos típicos amigos que... ya sabes, por fuera son lobos pero por dentro son ovejas.
+Toshiba: ...pues, no entiendo.
+Garilda: amigos con carácter duro, pero que en realidad esconden esa parte amigable y dulce.
+Toshiba: ¿él era uno de esos?
+Garilda: quizás la respuesta es más compleja.
+Toshiba: claro...
+Garilda: aun así era bueno, solo que... tenía sus cosas, y los tres años que pasamos juntos era... bueno, iba cambiando, no sabías con qué te iba a salir.
+Toshiba: ¿y cómo comenzó su amistad?
+Garilda: pues... sabes, mi memoria es algo mala, pero... si no mal recuerdo, fue gracias a una actividad de la profesora, empezamos nuestras primeras interacciones y luego solamente hablábamos, y ya.
+Toshiba: okey... ¿y cómo fue cambiando toda esa interacción?
+Garilda: pues... 
+
+2025 
+
+Suena música. Canciones que todos conocen. Risas, voces mezcladas, gente bailando sin preocuparse demasiado por nada. Es una fiesta de cumpleaños. Nada elegante, nada formal. Solo gente junta pasando la noche. Garilda está sentada con sus amigas. Hablan, miran alrededor, comentan cosas sueltas. Garilda escucha más de lo que habla. En un momento gira la cabeza y ve una mano extendida frente a ella. Es la de Isadox. 
+
+Isadox: ¿quieres bailar?
+Garilda: ¿bailas? ¿En serio?
+Isadox: supongo.
+Garilda: ...
+Isadox: ¿y?
+Garilda: ... 
+
+Garilda le toma las manos y caminan hasta el centro. La música cambia justo cuando llegan. Isadox se mueve primero, sin pensar demasiado. Garilda lo sigue. Al principio es torpe, como si ambos estuvieran midiendo el espacio. Después se acomodan. 
+
+Isadox marca un paso sencillo. Garilda lo copia y le agrega algo propio. Se separan un poco, vuelven a acercarse. Él gira, ella lo rodea. Se ríen cuando se pisan sin querer. Garilda levanta los brazos, deja que la música la lleve. No baila para nadie más. Isadox la mira, intenta seguirle el ritmo, se equivoca, vuelve a empezar. 
+
+Ella da una vuelta lenta, vuelve al centro y lo empuja suave con la palma abierta, como jugando. Isadox retrocede, exagera el movimiento y vuelve a acercarse. Bailan sin tocarse por un momento, solo mirándose y marcando con los hombros y los pies. Después se toman de las manos otra vez. 
+
+La canción baja un poco la intensidad. Garilda se acerca más. Se mueve con menos apuro. Isadox acompaña. No dicen nada. Cuando la música termina, Garilda suelta las manos, sonríe, se acomoda el pelo y se aleja caminando, todavía con esa sonrisa puesta, vuelve a su asiento. Isadox vuelve a acercarse. 
+
+Garilda: estuvo bien, estuvo... bueno, me gustó.
+Isadox: ¿eso es todo?
+Garilda: ...es que ya estoy cansada.
+Isadox: pero... es una fiesta, hay que divertirse incluso cuando uno está cansado.
+Garilda: perdón, es que solo... voy a ir al baño, ¡ya vengo, chicas! 
+
+Garilda se levanta. Isadox la toma del brazo, no fuerte, solo para detenerla un segundo. 
+
+Isadox: ¿eso es todo?
+Garilda: ...ya, basta.
+Isadox: ¿te vas a ir así sin más? Solo quiero que te diviertas.
+Garilda: lo lograste, ya, suéltame.
+Isadox: no, antes respóndeme esto... ¿por qué estuvimos en pareja?
+Garilda: ¡ya! Suéltame.
+Isadox: ¡no! Contesta, ¡fueron tres días! ¿Por qué? ¿Qué pensabas? ¿Y qué pasó?
+Garilda: ¡no pasó nada!
+Isadox: ...o sea, ¿nunca te gusté?
+Garilda: ...sí, bueno, no, o sea, es complicado.
+Isadox: ... 
+
+Isadox se acerca a ella. Casi rozando sus labios con los de Garilda. Por esto, Garilda se suelta y se va sin mirar atrás. Entra al baño. Cierra la puerta. Saca el celular y abre la cámara frontal para mirarse. Se mueve un poco, inclina la cabeza y cambia la expresión. Da un paso más y se percata del espejo que estaba justo enfrente. Se da un pequeño golpe en la cabeza y se ríe sola, llamándose: «Tonta». 
+
+Diciembre, 2034 
+
+Toshiba: ¿y eso qué tiene que ver?
+Garilda: si me dejas contar, sin interrupción lo sabrás.
+Toshiba: bien, sigue.
+Garilda: bueno... solo es para que sepas eso y que... Martino tenía una función, parece algo malo, pero creo que todos tenemos alguna función para la otra persona. 
+
+2025 
+
+Martino está sentado solo, en una mesa del colegio. Tiene una hoja delante y una lapicera en la mano. No escribe frases ni ideas. Escribe una sola palabra. «Nada». La repite una y otra vez, llenando el papel sin apuro. Garilda se acerca y se sienta a su lado. Mira la hoja, después lo mira a él. 
+
+Martino: ¿pasa algo?
+Garilda: ...sí, Isadox, bailamos juntos en el cumpleaños.
+Martino: (sonríe apenas)
+Garilda: y también... intentó besarme.
+Martino: (elevó la mirada) a ver, te escucho.
+Garilda: pues... 
+
+Diciembre, 2034 
+
+Toshiba: entiendo, él era con quien te expresabas, ¿no?
+Garilda: sí, le contaba casi todo lo que pasaba.
+Toshiba: entonces... él era bueno, ¿cierto?
+Garilda: (suspira) bueno... hay más cosas. 
+
+Octubre, 2025 
+
+Martino no levanta la vista. Cuando Garilda se levanta para irse, él estira el pie y lo cruza apenas en su camino. Garilda tropieza, se tambalea, pero no cae. Lo mira sorprendida. 
+
+Al día siguiente vuelve a hacerlo. Y al otro también. Siempre en distinto momento, siempre igual de preciso. Garilda ya camina con más cuidado cuando él está cerca. 
+
+Junio, 2025 
+
+Martino está hablando con el preceptor del colegio y dos compañeros. El preceptor, Juanjo, se encontraba sentado sobre el escritorio y ambos compañeros parados. Martino habla seguro, gesticula poco. Los otros escuchan. 
+
+Juanjo: ¿y? ¿Cómo vas, Sosa? Ustedes terminaron, ¿verdad?
+Sosa: sí, nos dimos un tiempo.
+Santillán: ¿un tiempo? No me parece que fue un tiempo, y si hablamos de que es un... «tiempito», es un poquito largo, ¿no?
+Sosa: tú qué sabes, es un tiempo, vamos a volver seguramente, es para darnos, ya sabes, espacio.
+Santillán: ...sí, claro.
+Juanjo: ¿y tú, Santi? ¿Qué sucede? ¿Cómo vas con tu suegro? ¡Jajaja!
+Santillán: me quiere... me quiere matar.
+Sosa: sí... eso por ser muy pegado a tu novia.
+Martino: eso sí no lo discuto, Sosa, tienes razón.
+Sosa: ¡ves!
+Juanjo: ¿y tú, Martino? ¿Nada todavía?
+Martino: no, absolutamente nada.
+Juanjo: ¿pero no te gusta nadie?
+Martino: por el momento, nadie.
+Sosa: sí, seguro.
+Juanjo: ¡jajaja! ¿Por qué lo dices?
+Sosa: le gusta Garilda, es obvio.
+Juanjo: ¿es verdad eso, Martino?
+Martino: hablamos mucho, sí, quizás por eso se confunden las cosas.
+Santillán: ...
+Juanjo: ¿y quién está atrás?
+Martino: ...(voltea) 
+
+Detrás estaba Garilda. No se acerca del todo. Escucha. Su cara cambia apenas. Mira al piso, después al grupo. Da un paso atrás. 
+
+Garilda: ...¿qué?
+Martino: tú, (mirando al suelo) tápate los oídos. 
+
+Juanjo se reía. Martino, al notarlo, sonrió. Garilda se va sin despedirse. 
+
+Mayo, 2025 
+
+Martino está con Santillán, sentados en un banco del patio. Hablan de gente del colegio, se ríen, Martino dice lo suyo con naturalidad. 
+
+Martino: sabes, a veces me arrepiento de las cosas.
+Santillán: ¿arrepentirte?
+Martino: ya sabes, de haber conocido a gente mediocre, fracasados, los odio.
+Santillán: ¿yo soy uno?
+Martino: no, para nada, te quiero.
+Santillán: ¿y de quién hablas específicamente?
+Martino: ...pues... hay varias personas, pero una gana el premio sin duda.
+Santillán: ¡¿Garilda?!
+Martino: ¡jajaja! 
+
+Garilda, quien se encontraba escuchando a escondidas, se larga de allí, sin escuchar el resto. 
+
+Diciembre, 2024 
+
+Martino está con su grupo de amigos en su cumpleaños. Música, vasos en la mano, todos alrededor. Martino habla fuerte para que lo escuchen. 
+
+Martino: ¡oigan! Para ustedes, ¿quiénes son las peores personas, las más mierdas de todo el colegio?
+Isadox: ¡yo conozco a una! Lamento decirles que no puedo dar el nombre.
+Martino: ¡adivinó! ¡Emilia!
+Santillán: ¡¿por qué no me chupan el pene?!
+Martino: ¡jajaja!
+Isadox: es la más odiada, todos coincidimos, nos quitó a nuestro amigo.
+Santillán: ¡sí! Como digan.
+Isadox: ¡estás hablando con ella ahora mismo, todo el puto tiempo con el celular!
+Santillán: bueno, a ver, ¿puedo decir yo?
+Martino: sí, dilo.
+Santillán: ¡comienza con «Isa»! ¡Y termina con «Dox»!
+Isadox: ¡jódete!
+Martino: jajaja, ¿y tú, Garilda?
+Garilda: no sé, creo que no me pongo a pensar en eso.
+Martino: claro... pues yo sí, y es muy claro quién es la persona más mediocre y... (sonríe y lo dice bajo) fracasada.
+Garilda: ...¿quién?
+Martino: ¿quién crees que sea?
+Garilda: ... 
+
+Diciembre, 2034 
+
+Toshiba: ¿lo decía por ti?
+Garilda: no lo sé, pero todo apunta a que sí.
+Toshiba: ...¿y sabes por qué era así? Se me hace que su comportamiento ya es mucho.
+Garilda: mira, la verdad de todo es difusa, pero... hay algo que lo demuestra al cien por ciento, lo veas por donde lo veas, y... a esta altura de mi vida lo entendí... es inteligente, sabe cómo mover las piezas para, ya sabes, pensar en él... ¿o acaso me vas a decir que no te marcó? Recién lo conoces, y ya te genera interés; a él no le importa si lo odias o lo amas, lo que le importa es que hablen, y piensen en él. 
+
+La visión era casi borrosa. Tenía mareos y náuseas, se sentía como si estuviera en un barco. Félix seguía acelerando, no veía claro desde la tercera cuadra. La cerveza ya hizo lo suyo. El auto avanza irregular, no demasiado rápido, pero sin control fino. Félix aprieta el volante más de lo necesario. Mira al frente, pero no enfoca del todo. Un segundo de distracción. Una curva mal tomada. El ruido llega antes que el golpe. El auto se va de eje, roza algo, gira. Todo pasa rápido. Un impacto seco. El cuerpo se le va hacia adelante. El cinturón lo frena. El mundo se sacude y se apaga. 
+
+Todo se vuelve oscuro. 
+
+Enero, 2023 
+
+Félix está en su casa. Tiene una pala en las manos. Su padre está de espaldas. Félix levanta la pala, tiembla. Se queda así un momento. Respira fuerte. La baja. La deja caer al piso. 
+
+Febrero, 2022 
+
+Félix en la cocina. Su padre sirve vino. Félix pone alfileres dentro de la copa, uno por uno, con cuidado. Mira la copa. Se queda quieto. Después, su padre vuelve. Félix lo ve tomándose todo el vino. 
+
+Octubre, 2021 
+
+Estaba en el pasillo de la escuela. Un compañero se le acerca, le dice algo al oído: «eres un puto gay». Félix no responde; sin embargo, el otro insiste. Félix lo empuja, logrando que su cabeza impacte contra el suelo, luego sigue caminando. 
+
+Diciembre, 2034 
+
+Félix abre los ojos. La vista le cuesta. Ve luces, sombras, gente alrededor. Escucha voces, pasos, alguien diciendo su nombre. Intenta moverse, no puede. Respira hondo. 
+
+Una figura se acerca. Se inclina sobre él. 
+
+-¿Estás bien? Logramos llamar a una ambulancia, resiste.
+Félix: ...Ga... (lo dice largando sangre por la boca)
+-¿Ga? ¿Qué es Ga?
+Félix: Ga... Garilda...
+
+  ## Capítulo 3: ¡Puta Madre, Abuela! 
+
+Septiembre, 2033 
+
+Los gritos del público se repiten sin parar. 
+
+«Murray, Murray, Murray». Desde atrás del telón, Murray escucha todo mientras fuma. No apura nada. Mira al frente, como si ya supiera exactamente cuándo salir. Reiralda se le acerca despacio, apoyándose apenas en su bastón. 
+
+Reiralda: deberías cuidarte, el cigarro daña mucho, ¿no aprendiste nada de los ochenta? Gente moría, la gente sufría, hubo pérdidas de familiares.
+Murray: ...
+Reiralda: tú más que nadie debería entenderlo.
+Murray: ...
+Reiralda: ...¿qué harás cuando yo muera? No tienes madre, no tienes padre, solo una abuela te amaría.
+Murray: ... 
+
+Murray no responde. Ni la mira. Da una última pitada y deja el cigarrillo en el cenicero. El sonido del público sigue igual, constante, casi automático. El telón se abre. Murray sale primero, sonríe, levanta la mano. Reiralda lo sigue, un poco más atrás. Ambos se presentan al público, cada uno a su manera. Reiralda no espera indicaciones: va directo al sofá del set y se sienta con cuidado, acomodándose como si estuviera en su casa. 
+
+Murray: el programa de hoy nos tiene reservadas varias sorpresas, sin embargo, y haré hincapié en esto, es que... ¡el clima! Sí, sí, sí... parecen estúpidos los gritos, pero... estos últimos tiempos hubo muchas tormentas, la verdad, las inundaciones son... ya saben, complicadas.
+Reiralda: ¡no te olvides de hablar de las experiencias de las familias!
+Murray: ...(suspira) 
+
+Murray camina hasta su escritorio y se sienta. Ordena unos papeles que no va a usar. Mira a cámara y, casi sin cambiar el tono, dice esa frase suelta, como si fuera un comentario más del programa: «Esperemos que estén contentos en casa, y por sobre todo, contentos con su familia, porque hay gente que no tiene mucha suerte con eso». Reiralda lo escucha con atención. No aplaude. No sonríe. Solo lo mira. 
+
+Reiralda: ¿qué acabas de decir?
+Murray: ...¿qué? ¿Qué sucede?
+Reiralda: ¿cómo vas a decir eso?
+Murray: ...mira, abuela, sabes... no siento que...
+Reiralda: ¡no! Claro que no sientes, jamás has sentido nada.
+Murray: saben... iremos a un corte publicitario y... ¡ya volvemos con... «Un Show De Todos Para Todos»! 
+
+El público aplaude igual. Las luces bajan apenas y entra el corte publicitario. Murray se levanta del escritorio y se va hacia el pasillo que lleva a su camerino. Reiralda se levanta también y lo sigue, sin apurarse pero sin dudar. Antes de que él llegue a la puerta, ella se le pone enfrente y lo obliga a frenar. 
+
+Reiralda: ¿qué te pasa, Franklin? ¡¿Eh?!
+Murray: no tengo tiempo para esto, abuela.
+Reiralda: ¡Murray Alexander Franklin! Puedes hablar conmigo, puedes, ¿por qué no me tienes confianza?
+Murray: ...abuela, eres un estorbo en mi vida, siempre lo has sido.
+Reiralda: ¿sí? ¿Y toda esa gente que te apoya, seguro que no?, ¿verdad?
+Murray: toda esa gente está ahí porque...
+Reiralda: ¡porque eres famoso! Nada más, no buscan otra cosa de ti, yo cambié tus pañales, yo te leí esos cuentos de mierda, yo estuve ahí cuando llorabas en el baño, siempre estuve, ¿pero ellos qué? Solo están cuando tuviste mil seguidores en una de esas redes que no sirven para nada.
+Murray: ...basta, abuela, por favor, basta (siguió adelante)
+Reiralda: ...(se volteó) ¡encontré el maniquí!
+Murray: ...(se detuvo) ¿qué?
+Reiralda: estaba en el sótano, tapado con cinta, ese maniquí era de mi negocio, ¿verdad?
+Murray: no sé de qué hablas, yo no toqué ningún maniquí.
+Reiralda: no te sirve mentir, somos dos en casa.
+Murray: ...
+Reiralda: ¿por qué estaba pintado? ¿Qué le hiciste? ¿Y por qué?
+Murray: ... 
+
+Diciembre, 2034 
+
+Murray está en su habitación. Está sentado frente al espejo, con la espalda recta y las manos apoyadas en las piernas. Mira su reflejo sin apuro. Después baja la vista y revisa el celular. Busca un contacto y llama. 
+
+Martino: ¿hola? ¿Quién habla?
+Murray: ¿Martino? ¿Martino Lipschitz?
+Martino: ...¿sí?
+Murray: ...
+Martino: ¿hola?
+Murray: ...¡ah! Sí, cierto, no, solo... mi nombre es Murray, Murray Franklin.
+Martino: ¿Murray Franklin?... ¿el del programa?
+Murray: ese mismo, mira, te llamaba solo para, realmente de esto se encarga mi secretaria, pero... quería llamarte personalmente para preguntarte si, no sé, ¿quisieras pasarte por mi programa?
+Martino: ...pues... voy a pensarlo.
+Murray: claro... y cuando lo pienses y te decidas, ¿podrías venir con tu atuendo?
+Martino: mi... ¿atuendo?
+Murray: el que usas, con el maquillaje y todo eso, los labios negros, el delineado. ¡Y otra cosa! ¿Quieres que te llame por tu verdadero nombre? ¿Cómo Mlive?
+Martino: ...ese no es mi «verdadero nombre».
+Murray: pues creo que te queda mejor.
+Martino: ...voy a pensarlo, y... también lo del atuendo.
+Murray: okey, piénsalo, nos vemos. 
+
+La llamada se corta. Murray baja el teléfono y gira la cabeza. Mira el maniquí que está apoyado contra la pared. Está pintado de una forma rara. La cara es pálida, los labios oscuros. Los ojos están delineados con un negro demasiado marcado. Lleva un traje puesto y el cabello está desordenado, como si alguien lo hubiera acomodado sin ganas. Los dientes son blancos, demasiado prolijos. Las uñas están pintadas de negro. El cuerpo es masculino, pero todo lo demás lo hace parecer otra cosa. Murray se levanta despacio. Empieza a bailar. Los movimientos son lentos, torcidos, incómodos. Da pasos cortos, mueve los brazos sin ritmo claro. Se acerca al maniquí y lo toma con cuidado. Bailan juntos. Murray gira, arrastra los pies, se inclina hacia adelante y vuelve atrás. 
+
+En una de las vueltas, lo suelta con fuerza. El maniquí cae al piso. Murray vuelve y empieza a pisotearlo. No grita. Solo pisa, una y otra vez, hasta cansarse. Sale de la habitación y entra al cuarto de su abuela. Abre cajones, toma maquillaje. Se pinta frente al espejo. Se marca los ojos, oscurece los labios, empalidece la cara. Se pinta las uñas. Se deja el cabello desordenado. Se queda mirándose un momento más. 
+
+Tres Días Después 
+
+El telón se abre. El estudio aparece iluminado. Murray sale caminando, sonríe y saluda al público. Los aplausos lo reciben fuerte. Hace una charla breve, se acomoda y se sienta en su escritorio. Levanta la mirada y presenta al invitado. Martino Lipschitz entra, saluda y se sienta. 
+
+Murray: ¿cómo estás, Martino?
+Martino: me lo imaginaba más grande.
+Murray: ¿te gustan las cosas grandes?
+Martino: seguimos hablando del set, ¿verdad?
+Murray: (sonrió, con una carcajada que aguantó, al igual que lo hacía con todos los invitados)
+Martino: sabes... quiero preguntarte, ¿qué sucede? ¿Por qué me invitaste?
+Murray: una pregunta no muy frecuente, sabes.
+Martino: solo quiero saber.
+Murray: mira, no sé si soy un admirador, pero todo lo que haces, tu trabajo, hay algo que me llama la atención... y... no sé, me hace conectar contigo de alguna forma.
+Martino: claro... ¿te sientes cercano a mí?
+Murray: ¡eso! ¡Eso mismo! Sabes, por un momento podría jurar que... somos la misma persona, pero con ese algo que nos diferencia.
+Martino: ¿okey?
+Murray: no quiero incomodar, pero... mis preguntas van a ser directas, por ende, quiero preguntarte ahora mismo... ¿qué fue lo que pasó luego de abandonar esa ciudad? De irte a Tostado, como tú lo llamas... «nuevo aire».
+Martino: ...pasaron bastantes cosas... aunque... solo existe una para destacar.
+Murray: ¿podrías contarla?
+Martino: claro que sí. 
+
+Mientras tanto, detrás del telón, se encontraba Toshiba. Está preparado para entrar, pero lo detienen. 
+
+Toshiba: ¿qué haces? Es mi turno.
+-Estás equivocado, amigo, hay otro invitado.
+Toshiba: ...¿qué dices? Este es mi horario, bueno, llegué tarde, lo sé, pero Murray sabe cómo manejar eso.
+-No me hagas repetirlo.
+Toshiba: ...¿quién está ahora?
+-...¿conoces a Martino Lipschitz? 
+
+Toshiba camina lento, y se asoma cuidadosamente por el telón. Observándolo fijamente. 
+
+## Capítulo 4: Las Cosas Por Limpiar 
+
+Garilda y Toshiba corren por los pasillos del hospital. No hablan. Solo avanzan esquivando gente, puertas, carros. Entran a una habitación. Félix está en una camilla, inmóvil. Garilda se detiene de golpe. Lo mira y empieza a llorar. Se acerca, se agacha y apoya la cabeza en el pecho de Félix. Espera sentir algo. Félix no despierta. 
+
+Toshiba se queda parado unos segundos. Después se agacha, quedando a la altura de Garilda. 
+
+Toshiba: ¿y qué más pasó?
+Garilda: ...(voltea a verlo con desprecio) ¿eh?
+Toshiba: me estabas contando sobre Martino.
+Garilda: ¿eres idiota? Este no es el momento.
+Toshiba: lo sé, pero solo intento...
+Garilda: ¡no, Toshiba, no es el momento!
+Toshiba: ...pero...
+Garilda: vete.
+Toshiba: ...
+Garilda: vete, ¡vete! 
+
+Toshiba se levanta despacio. Mira a Félix una última vez. No dice nada más. Sale de la habitación. Cruza el hospital y sale a la calle. El aire le pega de lleno. Da unos pasos y se queda quieto. Algo le vuelve a la cabeza. No lo piensa demasiado. Empieza a correr. Corre por la vereda, cruza esquinas sin mirar. Una patrulla lo ve. Reduce la velocidad y empieza a seguirlo. Toshiba escucha el motor, pero no frena. Corre más rápido. El auto se detiene de golpe. Dos policías bajan. Se acercan desde lados distintos. Toshiba intenta esquivarlos, pero no puede. Lo rodean y lo agarran. 
+
+Toshiba: ¡¿qué mierda hacen?!
+-No es muy normal ver a gente corriendo desesperada a esta hora de la noche.
+Toshiba: ...¡¿qué?! ¡No! ¡Solo quería llegar rápido a casa!
+-¿Acaso su esposa está por parir? ¡Jajaja!
+Toshiba: ¡no me jodan! ¡Suéltenme, hijos de puta!
+-Bueno, ahora sí tenemos un motivo de verdad para arrestarlo... insultar a un oficial, ¡jajaja!
+Toshiba: ... 
+
+Uno de los policías lo golpea. Toshiba pierde el equilibrio. Lo esposan sin cuidado. Lo levantan del suelo y lo empujan hacia la patrulla. La puerta se cierra. El auto arranca y se lo llevan. 
+
+Se escuchan aplausos. Gritos, silbidos, risas del público. El estudio está encendido, activo. 
+
+Murray: ¡hola! ¡Hola! ¡Hola! Qué gran corte comercial, hablando de cortes, fue un corte muy corto, ¿no crees, Mlive?
+Martino: ...sí, más o menos sí.
+Murray: bueno... nos contabas, Mlive, que... bueno, había cosas pendientes que nunca llegaron a buen término.
+Martino: así es y... ¿puedes dejar de llamarme de esa forma?
+Murray: es que... es la indicada.
+Martino: ¿tú crees?
+Murray: sí, por supuesto, es más, deberías cambiar tu nombre en el documento incluso.
+Martino: sí, bueno, o sea, ya no pienso hacerlo.
+Murray: jajaja, sí... eso no te discuto... en fin, ¿en qué estábamos?
+Martino: bueno... 
+
+Septiembre, 2025 
+
+Suena el timbre del colegio, el de siempre. Los estudiantes salen desordenados, empujándose, hablando todos al mismo tiempo. Algunos se quedan en la puerta, otros se van rápido. Martino sale junto a Santillán. Caminan en dirección contraria a la de sus casas, como si ya lo tuvieran asumido. A mitad de cuadra, Santillán ve a Emilia, su pareja. Se saludan y se quedan hablando. Martino sigue unos pasos más y espera. No mira el celular. Mira hacia la salida. Regina aparece acompañada de sus amigas. Cuando lo ve, levanta la mano y sonríe: «¡Hola! Vamos». Caminan juntos, uno al lado del otro. 
+
+Regina: ¿qué tal matemáticas?
+Martino: eso mismo iba a preguntarte, yo... me saqué un uno.
+Regina: mejor que mi nota, la profesora me dijo que mi examen era para un cero, pero eso no se puede, por lo tanto... también tengo un uno.
+Martino: sí, bueno... es una nota de mierda, no sirve para nada.
+Regina: eso ya lo sé, pero... tiene una utilidad... que tus padres no te quiten el celular.
+Martino: bueno, sí.
+Regina: ...te ves un poco mal, ¿es por el uno?
+Martino: no... (suspira) siento que no... nada.
+Regina: no me dejes ahora con la intriga, habla, sin miedo.
+Martino: ...creo que me siento... solitario, no es algo nuevo, pero... no sé por qué este año parece incontrolable, ¿sabes lo que quiero decir?
+Regina: bueno... ¿qué haces para no sentirte así?
+Martino: pues, siempre hay algo que todos los días hago.
+Regina: ¿qué?
+Martino: ...no puedo decirlo.
+Regina: ...¿masturbarte?
+Martino: ¡¿qué?! ¡No! O sea, sí, pero... o sea, no importa eso.
+Regina: ¿sí te masturbas?
+Martino: ...¿tengo que responder?
+Regina: solo si quieres.
+Martino: no hablaba de eso igualmente, es... algo en lo que puedo expresarme, y creo que es justo eso, me expreso y me hago más consciente, y me siento más solo.
+Regina: ...no estás solo, lo tienes a Santillán, a Isadox, no sé qué otros amigos tienes, pero... también me tienes a mí, ¿no?
+Martino: nos conocemos desde hace un mes recién.
+Regina: sí, es verdad, ¡pero! Creo que has sido una de las mejores personas que he conocido, no sabes lo difícil que es... bueno, conocer a alguien que no hable a tus espaldas, o que no sea falso... sí, muchas de mis amigas son así, y yo aún sigo, como estúpida, siendo amiga de ellas.
+Martino: pues, yo sí hablo a tus espaldas.
+Regina: ...¿en serio?
+Martino: sí, siempre digo muchas cosas que me gustan... de tu persona, claro.
+Regina: ¿sí? ¡Pues ahora yo también haré lo mismo entonces!
+Martino: (sonrió)
+Regina: es la primera vez que te hago sonreír.
+Martino: ...
+Regina: ...(lo miró a los ojos) 
+
+Al llegar a la esquina, frenan. Se despiden con naturalidad y cada uno toma su camino. 
+
+Al día siguiente pasa lo mismo. 
+
+Suena el timbre. El colegio se vacía otra vez. Martino y Regina se encuentran a la salida sin buscarse demasiado. Caminan juntos como si fuera parte de la rutina. 
+
+Regina: ¿y bien? ¿Qué tal tu día?
+Martino: pues... siento que ya no estoy solo.
+Regina: eso es algo nuevo viniendo de ti.
+Martino: ahora estoy más feliz.
+Regina: ¿por verme?
+Martino: sí, pero también por otra cosa.
+Regina: ¿de qué? 
+
+Martino se detiene frente a una tienda. Entra solo. Sale al minuto con un chocolate en la mano, el preferido de Regina. Allí mismo se lo regala. Regina abre la boca sorprendida, ve el chocolate, sube la mirada, lo ve a Martino, luego el chocolate de vuelta. Y vuelve la mirada hacia Martino. 
+
+Regina: ...¿qué?
+Martino: ahora sí estoy más feliz.
+Regina: ...(no podía evitar la sonrisa) ¡gracias! ¡Gracias! ¡Gracias! 
+
+Regina lo abraza. Un abrazo corto, pero sincero. Después siguen caminando juntos, mezclándose con la gente que vuelve a casa. 
+
+Martino está en su cuarto, sentado en la cama. Escribe cartas. Una tras otra. No las relee demasiado. Cuando termina, son cuatro. Las junta, las dobla y las deja a un costado. Al día siguiente las guarda en la mochila y va al colegio. Cuando suena el famoso timbre, abre la mochila, las saca un segundo y vuelve a guardarlas. En uno de los pasillos, Regina pasa con sus amigas. Cuando lo ve, se ilumina y lo saluda con entusiasmo. Martino responde igual. En ese momento, Ghanei, una de las amigas, se acerca y saluda a Martino con un gesto rápido, chocan los cinco y después los puños. Regina mira la escena. Sin decir nada, le toma la mano a Ghanei y la aprieta. Ghanei suelta un «auch» casi en susurro. Las dos siguen caminando rápido, sin mirar atrás. 
+
+Martino se queda quieto. Las cartas siguen en la mochila. No encuentra el momento. En todos los recreos no vuelven a cruzarse. Regina empieza a esquivarlo. Cambia de pasillo, se queda con otras personas, mira para otro lado. A la salida, Martino camina junto a Santillán. Mira alrededor buscando a Regina. La encuentra más adelante y se acerca. Caminan juntos, pero ella casi no habla. Martino intenta sostener la charla, pregunta cosas, comenta algo del día. Regina responde poco, sin levantar mucho la vista. Llegan a la esquina de siempre. Se saludan. Martino con ganas, Regina apenas. Martino da unos pasos, mete la mano en el bolsillo y saca las cartas. Las mira un segundo. Las dobla sin cuidado, las rompe en pedazos y las tira a la basura. Sigue caminando sin volver a mirar atrás. 
+
+Diciembre, 2034 
+
+Murray: fue... una relación bastante corta, ¿no?
+Martino: sí... y no, Regina fue algo más que solo pasajero, la primera vez en mi vida que... recibía varios cumplidos de otra persona.
+Murray: ¿a qué te refieres?
+Martino: solía decirme cosas lindas, cosas que... una persona como yo no acostumbra oír.
+Murray: pues... eso suena triste.
+Martino: ...para mí suena como algo que no es importante.
+Murray: ...¿y realmente qué fue lo que pasó con Regina?
+Martino: ...(suspira) no lo sé, bueno, sí, en realidad, es complicado. Algunas veces estoy seguro y en otras, bueno, ya no sé qué palabras usar.
+Murray: ella se alejó cuando saludaste a esa chica... pero ¿por qué?
+Martino: ...no sé si Regina gustaba de mí, pero... si debo confirmar algo, es que es bastante celosa, y el hecho de que sus amigas no sean, digamos, «confiables», hace que cuando alguien le da la espalda, ella también.
+Murray: ¿qué quieres decir?
+Martino: que... Ghanei era una de sus mejores amigas, y prácticamente fue esa amiga con la que Regina y yo comenzamos a hablar.
+Murray: ...¿podrías explicarlo más a fondo?
+Martino: sí. 
+
+Junio, 2025 
+
+Regina y Martino charlaban mientras caminaban de regreso a casa. Regina se mostró en todo momento con una sonrisa pícara, como si guardara un secreto que quería decirle a todo el mundo. 
+
+Regina: hey, ¿qué opinas sobre mis amigas?
+Martino: no las conozco mucho.
+Regina: ¿y alguna que te parezca linda?
+Martino: ...repito lo mismo de antes, no las conozco mucho.
+Regina: eso no tiene sentido.
+Martino: sí lo tiene... ¿quién te parece atractivo? Un millonario, empresario con frutos inigualables, pero que a tu primera cita no llevó flores, te invitó y no pagó, incluso cuando oficialmente fueron pareja nunca te regaló nada mientras tú sí gastaste por él... ¡o! Un pobre de mierda, pero con un corazón gigantesco solo para una persona... tú.
+Regina: ...pues... el pobre me parece atractivo.
+Martino: exacto, ¿ahora ves que sí tiene sentido?
+Regina: ...¡escucha! Solo quiero decirte, aunque no puedo, pero... es algo que tengo guardado.
+Martino: ¿de qué trata?
+Regina: ...amor.
+Martino: a Ghanei le gusto, ya lo sé... Bárbara me lo contó.
+Regina: ¿en serio? Bueno, sí, es cierto y... ¿te acuerdas de aquel día que queríamos que nos escribieras una historia?
+Martino: ¿sí?
+Regina: fue un pretexto, solo fue para que... bueno, ella se acercara a ti.
+Martino: ...¿ella quería?...
+Regina: ¡conocerte! Le gustas mucho.
+Martino: ...
+Regina: bueno, es hora de despedirse. 
+
+Ambos habían llegado a aquella esquina donde se separaban. 
+
+Regina: ¿nos vemos mañana? (extendió su brazo para saludarlo)
+Martino: ...sí, nos vemos. 
+
+Martino solo se fue. Olvidándose por completo de saludarla. Martino se detiene y se sienta en un banco, cerca del supermercado Lavamark. Saca el celular y revisa redes sociales sin apuro. Entre perfiles y publicaciones aparece Ghanei. Se queda mirando un segundo más de lo normal. Para su gusto, es linda. Sonríe apenas y la sigue. 
+
+Al día siguiente, durante la formación para izar la bandera, Martino se siente observado. Mira para los costados. Cada vez que gira la cabeza hacia Ghanei, ella mira al frente, como si nada. Vuelve a pasar varias veces. Martino ya no sabe si es idea suya. Ese mismo día, cuando suena el famoso timbre, Martino y Regina se vuelven a encontrar, esta vez en el pasillo del colegio. 
+
+Regina: ¿y? ¿Te diste cuenta, verdad?
+Martino: ¿qué?
+Regina: no te hagas, ella te veía, y tú la veías.
+Martino: en realidad, nunca me sentí tan observado.
+Regina: ¿y cómo se siente?
+Martino: ¿qué? ¿Nunca lo sentiste?
+Regina: ...¿eh?
+Martino: bueno, o sea... ¿cómo es posible que una chica como tú no se sienta observada?
+Regina: (sonríe) ¿qué quieres decir con eso, Martino Lipschitz? (lo dice con un tono pícaro)
+Martino: pues... (la ve a los ojos) tienes tantos granos que es imposible no mirarte.
+Regina: ...(su sonrisa se va de inmediato) ¡¿qué?! ¡¿Tengo muchos granos?! ¡Mierda! 
+
+Regina saca su celular. Se toma varias fotos de su rostro. Pero no encuentra ningún grano. 
+
+Regina: ¡no tengo nada! ¡Mentiroso!
+Martino: ¡era una broma!
+Regina: ...¿en serio? (mira al suelo) bueno, soy a veces un poquito exagerada.
+Martino: ¿poquito?
+Regina: mejor dicho, nunca lo soy.
+Martino: (sonríe)
+Regina: (sonríe) bueno... nos vemos, no quiero perderme otro recreo.
+Martino: claro, nos vemos. 
+
+Martino se despide y se va a buscar a su grupo de amigos. En el camino se cruza con Garilda. Se detienen un momento. 
+
+Garilda: ...hola.
+Martino: ...¡¿qué?!
+Garilda: nada, solo estoy saludando.
+Martino: claro, sabes... la vida es irónica, nunca me sentí... tan visto este año, y pensar que tú...
+Garilda: ¿qué yo qué?
+Martino: ...nada, ¿sabías que ahora a Ghanei le gusto?
+Garilda: ¿okey? ¿Y qué? ¿Debo felicitarte o algo así?
+Martino: no, solo es para que veas que... bueno, personas como yo también somos importantes.
+Verro: ¿importantes solo porque una chica gusta de ellos?
+Martino: ¿quién putas te invitó?
+Verro: tu negatividad, algo me dice que estás molestando a mi amiga.
+Martino: pues... no, solo digo los hechos.
+Verro: que se pudran los hechos.
+Martino: ...con su permiso. 
+
+Martino sigue y se junta con los suyos. Ahí todo cambia. Lo felicitan, lo cargan un poco, pero bien. Ya saben que a Ghanei le gusta. Se lo hacen notar. Martino se relaja, se siente cómodo. Las escenas se encadenan. Martino contándole a Moreno, el compañero que se sienta a su lado, como si fuera un dato importante del día. Martino hablando con Isadox, exagerando un poco, riéndose. Martino y Santillán caminando juntos casi todos los días, charlando de eso y de otras cosas, mezclando temas sin orden. Camino a casa, Martino vuelve a sentarse en el banco de Lavamark. Saca el celular. Ve una notificación. Es una foto de «una sola vez» de Regina. La pantalla se enciende y se apaga de golpe. Guarda el celular en el bolsillo. Mira a los costados. No hay nadie. Mira atrás. Tampoco. Vuelve a sacar el celular y abre la foto. 
+
+Es una imagen común. Ghanei parada, sin posar, nada especial. El texto dice: «aquí estoy con tu crush». Era solo una broma, algo amistoso. Martino cierra la foto. Guarda el celular otra vez. Se queda sentado, sin sonrisa, mirando al frente. Al regresar a casa, el celular de Martino suena. Es Isadox. 
+
+Isadox: ¡cómo vas, hermano!
+Martino: ¿desde cuándo tú llamando?
+Isadox: soy humano, tengo sentimientos.
+Martino: sí, ¿qué cuentas?
+Isadox: aprendí a contar hasta cien, ¿eso te sirve?
+Martino: qué gracioso, me muero de risa (fue sarcasmo, pero aun así Martino sonreía).
+Isadox: Santillán me contó que estás saliendo con Regina y Ghanei.
+Martino: ¡¿qué?! ¡No! Solo con, bueno, con nadie, pero a Ghanei sí le gusto (en voz baja dijo, «creo»).
+Isadox: ¿y? ¿Cómo vas?
+Martino: pues... nos mantenemos lejos, ni nos conocemos.
+Isadox: la seguiste en...
+Martino: sí, ya la seguí, ¿le hablo?
+Isadox: si me preguntas eso es porque le quieres hablar.
+Martino: ...sí, es verdad. 
+
+Más tarde, Martino abre el chat y le escribe a Ghanei para empezar a hablar. No dice nada raro. Solo algo simple. Pasa el día. No hay respuesta. Pasa la noche. Nada. A la mañana siguiente, al despertarse, el celular vibra sin parar. Mensajes uno atrás del otro. Martino los lee sin levantarse de la cama. Con solo eso ya entiende cómo es Ghanei. La forma de escribir, el ritmo, lo que dice y lo que no. Todo queda bastante claro. 
+
+Chat 
+
+Martino: «hola, me han dicho que querías conocerme, cualquier cosa puedes mandar mensajes»
+Ghanei: «si, Regina me contó mucho sobre ti»
+Ghanei: «¿Podríamos hablar en persona?»
+Ghanei: «otra cosa»
+Ghanei: «Me dijeron que no te gusta salir, pero, ¿podríamos salir?»
+Ghanei: «Como amigos»
+Ghanei: «Ósea»
+Ghanei: «No somos amigos todavía»
+Ghanei: «Pero»
+Ghanei: «Me refiero a salir para charlar»
+Ghanei: «Si, básicamente como amigos». 
+
+Vuelve al colegio. Durante el día se lo cuenta a varios de sus amigos. No a todos, pero casi. Lo dice como algo importante, como una novedad que vale la pena compartir. Ese mismo día, a la salida, Martino y Regina vuelven a caminar juntos, como antes. 
+
+Regina: tengo una mala noticia.
+Martino: suelta.
+Regina: ...creo que Ghanei está perdiendo el interés por ti.
+Martino: sí, no fue bueno hablarle enseguida.
+Regina: ¿hablarle enseguida? Tardaste casi un mes entero.
+Martino: no seas exagerada... casi, una semana entera.
+Regina: es lo mismo.
+Martino: no es lo mismo, un mes solo tiene aproximadamente treinta días, lo que equivale a unas...
+Regina: ¡no importa! Tardaste, es bueno eso, mantiene el interés, pero... tampoco es tan bueno contarle a todos que ella gusta de ti.
+Martino: no entiendo.
+Regina: se enojó, porque le contaste a medio mundo, ahora todos la molestan con eso.
+Martino: ...(sonrió)
+Regina: no creo que sea adecuado sonreír.
+Martino: ¡Regina! ¿Te hiciste un corte nuevo?
+Regina: sí, ¿lo notaste? ¡Eso ya te convierte en mi preferido!
+Martino: ...
+Regina: ...me refiero a mi amigo preferido.
+Martino: sí, «amigo».
+Regina: ¡¿qué?! (se sonroja) no digas eso, jajaja. 
+
+Más tarde, Martino vuelve a sentarse en el banco de siempre, el de Lavamark. Saca el celular y mira el chat. Se queda un rato así. Decide no escribir más. Guarda el teléfono. 
+
+Levanta la vista. Piensa un segundo. Después otro. Se le ocurre algo distinto. No hablar. Escribir. Empezar de nuevo. La secuela. Un Fenómeno Vulgar 2. 
+
+Diciembre, 2025 
+
+Murray: ¿entonces?...
+Martino: ¿entonces lo entiendes?
+Murray: a ver, (suspira) Regina se apartó de ti porque...
+Martino: ¡por ese saludo! Regina, ese mismo día que me dijo que a Ghanei ya no le interesaba, ese puto día, ella se veía más contenta, y fue un detonante, empezamos a hablar más seguido, sabes... no sé si se puso celosa el día que Ghanei me saludó, pero... es mi teoría más grande.
+Murray: ¿y por qué Ghanei te saludó si... se dejaron de hablar?
+Martino: ...no lo sé.
+Murray: ...¿y nunca más se hablaron con Regina?
+Martino: no, nunca más.
+Murray: ...pues... en este programa tenemos el número telefónico de cualquiera.
+Martino: ¿a qué te refieres?
+Murray: ¿no quieres hablar con ella? ¿Otra vez?
+Martino: ...
+
+  ## Capítulo 5: Compañ-IA 
+
+Murray: ¿y? ¿Lo pensaste? ¿Quieres llamar a Regina?
+Martino: ...no, claro que no.
+Murray: bien, no voy a insistir.
+Martino: sabes... me siento cansado, ¿cuánto tiempo llevamos?
+Murray: pues... no más de dos horas.
+Martino: pero... el programa no dura más de tres horas, ¿verdad?
+Murray: no.
+Martino: ¿y cuánto tiempo nos queda?
+Murray: mira... nos queda bastante para seguir hablando, y... al final no pude hacer que pruebes las dinámicas exclusivas del show.
+Martino: bueno... entonces hagámoslo ahora.
+Murray: buena respuesta. 
+
+El público aplaude y grita de emoción. Murray se levanta y va en busca de las cartas, pasando el telón. Allí le tocan el hombro. 
+
+Murray: ¿sí?
+-Señor Murray... un joven llegó hace un par de horas.
+Murray: ¿qué joven?
+-Era el primer invitado, pero se fue rápido al saber que, bueno, si el lugar estaba ocupado por Lipschitz.
+Murray: ...¿Toshiba?
+-Creo que ese era el nombre, sí.
+Murray: pues... que se joda, no es nadie, jajaja, ¿me ayudas con esto?
+-Claro. 
+
+Murray cruza el telón empujando una mesita con ruedas. Sobre ella están las llamadas «Cartas del infarto». Las acomoda frente a Martino con una sonrisa tranquila. 
+
+Murray: estas cartas contienen preguntas... un tanto incómodas, y no, no son lo que crees, son profundas, por eso incomodan.
+Martino: ... 
+
+Murray toma la baraja y abre las cartas en abanico. Martino elige una. La mira. La lee en silencio. La pregunta es clara: «¿En qué momento te has sentido más solitario?». 
+
+Martino deja la carta sobre la mesa. Mira al frente, pero no parece estar viendo nada en particular. 
+
+Murray: ¿y bien? Eres libre de contestar, si no quieres no hay problema... aunque... Mlive no se arrodilla ante preguntas estúpidas, ¿no es así?
+Martino: ...sí...
+Murray: ¿entonces?
+Martino: sí, puedo responder.
+Murray: (sonrió) 
+
+Murray asiente, toma la mesita y vuelve a cruzar el telón para dejarla detrás de cámaras. Regresa solo y se sienta otra vez en su escritorio. Detrás del telón, el hombre que recibe la mesita voltea una carta. La pregunta es la misma. Vuelve a girar otra. Igual. Empieza a dar vuelta todas las cartas. No hay ninguna distinta. Todas preguntan lo mismo. 
+
+Octubre, 2025. 
+
+Martino está en su peor momento. Vive con su padre. Es miércoles, el día en que siempre vienen amigos de su padre a cenar. Uno a uno van llegando. Saludan, hablan fuerte, se acomodan. Martino se sienta en una de las sillas, cerca de su padre. Mira el plato, escucha conversaciones que no le interesan. 
+
+Rubenio: otro miércoles, gracias a Dios, otro plato en la mesa.
+Dorbes: ¡hey! No me agradezcas, total, que se joda el cordobés que trajo el asado, ¿no?
+Rubenio: ¡y un fuerte aplauso para Dorbes!
+Antonio: mejor dicho, agradezcan a sus mujeres que los dejan salir.
+Dorbes: justamente tenía que hablar el más pollera de todos.
+Antonio: jódete.
+Maxinium: el que tiene suerte es Rubén, él no tiene que pedir permiso a ninguna mujer.
+Dorbes: eso sí es verdad, ¿cómo se siente?
+Rubenio: ...(ojeó a Martino) se siente la libertad.
+Martino: ...(miró a su padre)
+Rubenio: siempre se quejaba cada vez que hacíamos estas juntadas.
+Dorbes: ¡qué se joda! ¡Y que se jodan las mujeres!
+Rubenio: ¡Dorbes! (la mirada cambió, una de enfado)
+Dorbes: ...perdón.
+Maxinium: Dorbes habla como si no tuviera una mujer que lo pone patas para arriba.
+Dorbes: silencio, el silencio es música para mis oídos.
+Maxinium: sí, cuando ya no sabes qué decir.
+Dorbes: (dejó de hablar)
+Maxinium: ¡Martino! Estás comiendo muy poco, come, pincha otro trozo, nosotros no medimos.
+Martino: no tengo tanta hambre.
+Maxinium: ¿él siempre es así, Rubenio?
+Rubenio: sí... él... salió diferente, dice que quiere ser escritor.
+Martino: (levantó la mirada en seguida)
+Rubenio: yo... escuchen, no se los dije, pero se los voy a decir ahora, enfrente de ustedes... para ser escritor, para trabajar, en cualquier cosa que hagas... necesitas tener... ¿quién adivina?
+Dorbes: ¡cerebro!
+Rubenio: sí, se necesitan tuercas, y... escribir, sinceramente, y esto te lo digo directamente a ti, hijo, es una estupidez, y... por más que lo sea, o no, igualmente se necesita cerebro.
+Dorbes: ¿estás diciendo que tu hijo no tiene cerebro?
+Rubenio: no, solo que... quizás no le conectan las neuronas, a veces. 
+
+Martino comió rápido. Apenas termina, se levanta y se encierra en el baño. Ahí, lejos de todos, se permite llorar. Abre la ducha. Se desnuda y deja que el agua caiga, como si eso pudiera aflojar algo. Cuando sale, se seca sin apuro y vuelve a su habitación. Se viste, se tira en la cama y se tapa casi entero. Agarra el celular y empieza a mirar sin rumbo. Entra al perfil de Ghanei. Se queda mirando la foto de perfil, detallándola más de lo necesario. Se levanta de golpe y vuelve al baño, todavía con el celular en la mano. Se sienta en el suelo y le sube el brillo a su celular. Se desabrocha la cremallera del pantalón. Comienza a tocarse mientras mira la foto de Ghanei. Luego de varios minutos, tocan la puerta. 
+
+Dorbes: ¿está ocupado?
+Martino: ...(tose fuerte)
+Dorbes: perdón, perdón... oye, ¿eres Martino, cierto?
+Martino: ¡sí!
+Dorbes: ...lo que dijo tu padre, ¿eso realmente te lastima?
+Martino: ...¿qué?
+Dorbes: es que... siempre te quedas callado.
+Martino: ...¡está ocupado!
+Dorbes: entiendo, ya no voy a molestarte. 
+
+Martino escuchó los pasos, así, volvió a lo suyo. Comenzó a transpirar. Hasta que... tomó el papel higiénico y limpió el suelo. Y volvió a bañarse. 
+
+Diciembre, 2034 
+
+Murray: en tu primera entrevista dejaste muy claro que tu padre era bastante problemático, pero... ¿lo culpas a él por lo que te has convertido?
+Martino: ¿a qué te refieres?
+Murray: todos notaron que cambiaste, eres... no sé, ¿más agresivo? El punto es... ¿quién fue el detonante para que te convirtieras en lo que hoy eres?
+Martino: ¿hablas de mi éxito?
+Murray: creo que es mucho más que eso, quería tocar este punto... tu personalidad no es igual a ninguna persona que he conocido, sí, como te dices a ti mismo, eres diferente, pero... ¿qué tal si no lo eres? Quizás eres... un fenómeno nunca antes visto.
+Martino: ¿me estás diciendo que soy un raro de mierda?
+Murray: si lo dices así... la cuestión es que (suspira) mírate, lograste todo, y... te olvidaste de todos.
+Martino: (baja la mirada)
+Murray: sabes, quizás por eso te sentías solo.
+Martino: ...
+Murray: la gente no te entiende, no te comprende, ni siquiera si haces mil entrevistas.
+Martino: ¿y entonces qué?
+Murray: creo que debes replantearte, tomar el control, si eres distinto, entonces... que la gente lo vea en todo momento, así, solo así atraerás a más.
+Martino: ...¿podemos seguir hablando normal?
+Murray: ...bien.
+Martino: ... 
+
+Octubre, 2025 
+
+Martino tiene su cumpleaños en la casa de Brahin. Van a estar Isadox, Santillán, Leftraru y Gallei. Martino camina unas cuadras hasta que, a lo lejos, ve a Isadox y Santillán. Se acercan, se saludan y los tres siguen juntos hacia la casa de Brahin. 
+
+Santillán: ¡no, no, no! ¿Este también va?
+Isadox: lamentablemente, sí.
+Martino: jódanse.
+Isadox: ¿cómo estás, amigo?
+Martino: tratando de... sobrevivir.
+Santillán: ¿a sobrevivir? ¿Es tan complicado manejar a dos novias?
+Martino: ¿qué?
+Isadox: por cierto, ¿cómo vas con Ghanei y Regina? ¿Ya hiciste trío?
+Martino: pues... no, o sea, creo que ya no soy amigo de Regina.
+Santillán: ¡y obviamente no! Son novios.
+Martino: hablo en serio, no fue una pelea, ya no sé qué pensar.
+Isadox: eso suena a problema.
+Martino: da igual... por cierto, hablemos de ustedes, es lo que importa.
+Santillán: aquí tu querido amigo Isadox se está cogiendo a varias.
+Isadox: ¡cállate, Santi!
+Santillán: ayer, a la salida, se fue con dos... «amigas», él sí tuvo suerte con el trío, ¡no como tú!
+Martino: (sonrió) claro, a todo esto, ¿saben dónde queda la casa de Brahin, cierto?
+Isadox: Santillán sabe.
+Santillán: sí, creo que sé.
+Isadox: ¡¿qué?! ¿Cómo que crees? ¿No sabes dónde es?
+Santillán: mi cerebro se guía solo.
+Isadox: la última vez que confiamos en tu cerebro terminamos embarrados.
+Martino: no recuerdo eso.
+Santillán: ¡porque no estabas! Como siempre, nunca estás.
+Isadox: ¡eso! ¿Qué es lo que haces, Martino? No te veo salir, pero siempre traes algo de dinero.
+Santillán: sí, es verdad.
+Martino: ¿no se enteraron?
+Isadox: ¿qué?
+Martino: tengo una página web, incorporé hace poco una membresía y bueno, cobro de ahí.
+Santillán: ¡hijo de puta! Gana dinero sin hacer nada.
+Martino: es más cansador de lo que crees.
+Santillán: ahora entiendo por qué no tuviste trío con Ghanei y Regina, te concentras mucho en eso, no te culpo, si ganas dinero quién no se querría concentrar.
+Martino: ¿podemos dejar de mencionarlas?
+Isadox: ¿por qué? ¿Te incomoda? ¿O hiciste algo... prohibido?
+Martino: (cambió su postura, era como si Isadox le leyera la mente) 
+
+Al llegar, Martino no espera. Se adelanta un paso y grita fuerte: «¡Policía!». Los tres empiezan a aplaudir exageradamente para llamar la atención. Se miran y se ríen. 
+
+Isadox: no grites mucho, si están los padres nos matan.
+Santillán: ¡¡Policía!! ¡¡¿Aquí venden droga?!!
+Isadox: ¡Santi! 
+
+Brahin abre la puerta. Los mira un segundo y sonríe. Los deja pasar. 
+
+Brahin: siéntanse como en casa.
+Martino: no me jodas, eso que dijiste es muy de yankee.
+Brahin: bueno, siéntense en mi pene, entonces.
+Martino: jódete. 
+
+Apenas entra, Martino se siente cómodo, como si fuera su propia casa. Camina sin pedir permiso, mira las cosas, toca objetos, revisa estantes. No lo hace con mala intención, solo con confianza. 
+
+Brahin: te tomaste muy en serio lo que dije.
+Martino: por cierto, tráeme agua, tengo sed.
+Brahin: ve y busca.
+Martino: no es mi casa.
+Brahin: sí, es verdad, pero parece que sí. Ya, ¡acompáñame! 
+
+Por el pasillo se encuentran con Gallei y Leftraru, que están jugando al ping pong. Isadox no espera invitación y se mete directo en el lugar de Gallei. Empiezan a discutir quién saca primero. Martino sigue de largo y sale al patio. Se sienta en uno de los sillones de jardín. Saca el celular y se pone a escribir, concentrado en lo suyo. 
+
+Suena el timbre. Martino levanta la vista y dice en voz baja, casi para sí: «¿había timbre? Y nosotros perdiendo el tiempo gritando y aplaudiendo». Brahin corre a abrir. Es el último invitado. Leonardo entra con naturalidad, como si conociera el lugar de siempre. Ve a Martino sentado afuera y va directo hacia él. Se sienta a su lado, en uno de los sillones. 
+
+Leonardo: ¡Martino! ¿Cómo estás? Explícame, ¿por qué no nos volvimos a ver?
+Martino: probablemente porque hay gente a la que no le gusta salir mucho.
+Leonardo: ¿no te gusta salir? Eso es raro de ti.
+Martino: ¿raro? Todos me conocen de esa forma.
+Leonardo: los ignorantes, ellos te conocen de esa forma, pero... cada vez que te veo fuera de tu casa te sientes feliz, no me lo niegues, tengo pruebas.
+Martino: ¿pruebas?
+Leonardo: ¡cumpleaños de Isadox! Te grabé, y eres más alocado que todos nosotros juntos.
+Martino: ¿me grabaste? ¿Me estás jodiendo?
+Leonardo: no te enfades.
+Martino: ...(suspira) Isadox me contó que tenías novia, ¿cómo vas con eso?
+Leonardo: no duró mucho, nunca dura, al menos en mi vida.
+Martino: ...¿y? ¿Alguna admiradora?
+Leonardo: ninguna, bueno, que yo sepa.
+Martino: me sorprende.
+Leonardo: ¿por qué lo dices?
+Martino: el año pasado tuviste tres novias, todas terminaron para la mierda, este año en teoría tu racha se rompió, con una sola, pero, por lo que he hablado, muchas chicas están interesadas en ti.
+Leonardo: ¿en serio? Bueno... te soy sincero, y... te lo voy a contar solo a ti, creo que... no me siento cómodo, tuve cuatro novias, pero... nunca me sentí bien, me sentía vacío, al poco tiempo dejaban de gustarme, no sé, es raro... ¿como tú?
+Martino: ¡¿por qué siempre soy el raro?!
+Leonardo: no te enojes, no lo digo con mala intención, es algo bueno, no ser como los demás y aparentar para gustar... sí, hasta una persona como yo puede reflexionar.
+Martino: ...
+Leonardo: Martino... ¿nunca te sentiste como que no perteneces a algo?
+Martino: varias veces.
+Leonardo: ¿tú has tenido una sola novia, no?
+Martino: sí.
+Leonardo: ¿y no te sentiste, aun así, sólo?
+Martino: ...sí.
+Leonardo: ¿nunca pensaste en... no sé, probar cosas nuevas?
+Martino: ...¿eh? ¡Para! ¿Qué quieres decir?
+Leonardo: no sé... a veces no somos conscientes de lo que nos gusta, y solamente nos gusta porque eso mantiene a una sociedad que no habla a tus espaldas.
+Martino: ...¿eres gay?
+Leonardo: ¡¿qué?! ¡No! Solo digo... no importa.
+Martino: pues ahora me siento incómodo, lo mejor sería que te vayas.
+Leonardo: ¡Martino! He visto varias veces cómo te acercas a tus amigos.
+Martino: ...(lo mira con confusión) sí, sin duda perdiste la cabeza.
+Leonardo: ¡escúchame! Una vez te vi que te acercaste demasiado al rostro de Santillán, tanto fue que pensé que le darías un beso.
+Martino: ¿y eso qué? Son bromas, ¿acaso no bromeas de esa forma con tus amigos? Es la típica.
+Leonardo: sí, claro que también bromeo con eso, pero no lo hago tan seguido... siempre estás haciendo algo «cuestionable», algo que te pone en la piel... ya sabes, de un marica.
+Martino: tu puto padre es una marica.
+Leonardo: ¡acéptalo, Martino!
+Martino: ¿aceptar qué? ¿Que no soy marica?
+Leonardo: no... que quizás no te conoces del todo.
+Martino: ...yo sé quién soy, sé perfectamente quién voy a ser.
+Leonardo: sí, pero... ¿es realmente lo que quieres hacer?
+Martino: ¡sí! Sin dudar.
+Leonardo: si te ves confiado y seguro, entonces no tengas miedo.
+Martino: bien, pero no me vuelvas a juzgar.
+Leonardo: no te estoy juzgando... mira... voy a mostrarte algo. 
+
+Leonardo toma su celular. Se dirige directamente a una página web. Pornografía erótica gay. 
+
+Martino: ¡espera! ¿Cómo que no eres gay? Ves... eso...
+Leonardo: solo quiero que sepas que... este contenido me satisface más, pero... no soy gay, ¿bien? Y otra cosa, no le cuentes a nadie sobre esto.
+Martino: ya veremos qué sucede... bueno, cada quien con sus gustos, ¿no? Si te gusta el pene, ¡jajaja!
+Leonardo: (sonríe) mira, yo no digo que veas si eres o no, pero... quizás es momento de empezar a pensar quiénes somos realmente, y no hablo solo de sexualidad.
+Martino: ... 
+
+Leonardo se acercó a él suavemente y lo besó. Luego se levantó y se dirigió a la sala donde se juega al ping pong. 
+
+Martino: ...(guarda su celular) 
+
+Se recuesta en el sillón mirando las estrellas. Repitiendo varias veces en sus pensamientos: «yo sé quién soy», «ahora lo tengo más claro». Sonríe y canta en voz baja. 
+
+Diciembre, 2025 
+
+Murray: ¿te besaste con un hombre?
+Martino: no me mires así, no lo hubiera permitido, pero... estar solo, ya no sabes en lo que puede convertirte.
+Murray: ...¿en gay?
+Martino: no... no soy gay.
+Murray: bueno, tampoco importa, Mlive puede hacer y ser lo que quiera, al final siempre será... poderoso, ¿no es así?
+Martino: ...sí. 
+
+Octubre, 2025 
+
+Martino cena en silencio con su padre. El televisor murmura noticias viejas, risas enlatadas, nada que importe. El cubierto choca con el plato como si fuera un error. Rubenio lo mira de reojo, una, dos veces más. 
+
+Rubenio: ¿todo bien en el cumpleaños?
+Martino: ...sí.
+Rubenio: ...¿eres estúpido?
+Martino: ...¿eh?
+Rubenio: ¿por qué no me dijiste nada? El miércoles te hablé de una forma... bueno, ya sabes, y no dijiste nada, te fuiste... Dorbes me dijo que estabas llorando en el baño.
+Martino: no estaba llorando.
+Rubenio: ¿y qué hacías?
+Martino: ...sí, sí estaba llorando.
+Rubenio: ...¿siempre me mientes?
+Martino: ...
+Rubenio: yo nunca te mentí, siempre te dije la verdad, sí, quizás no te guste la verdad... pero, ya sabes, sinceramente, no creo en ti, hijo... ¿cuántas materias te llevas? ¿Tres? No... te llevas más de cinco.
+Martino: ...
+Rubenio: hijo... eres un desastre, sabes... si piensas que no tengo corazón, haces mal, ya te hubiera echado de esta casa.
+Martino: esta casa es de mi madre.
+Rubenio: ...¿Marisa? ¿Te hablas con ella?
+Martino: sí, claro que sí.
+Rubenio: ¿y a ella sí le cuentas la verdad?
+Martino: ...
+Rubenio: no sé por qué piensas que no soy un buen padre, te di techo, estuve días sin comer para que tu puto estómago estuviese lleno... siempre soy el malo, ¿no?
+Martino: ...
+Rubenio: algún día de estos voy a llamar a Dorbes, bueno, no, mejor a Maxinium, Dorbes es bastante estúpido... y le voy a decir que me lleve hasta Tostado, voy a patear la puerta, voy a entrar a esa casa de mierda que tiene tu hermana, hablando de tu hermana, no me quiso pagar la puta operación de este ojo de mierda... voy a volver a asfixiar a Marisa.
+Martino: ...(su mirada se desvió automáticamente hacia Rubenio)
+Rubenio: ...levanta los platos. 
+
+El silencio vuelve a acomodarse entre ambos. Martino termina primero, junta los platos y va hacia la cocina. 
+
+Rubenio: siéntate.
+Martino: ...
+Rubenio: antes de la separación hablé con Marisa y... esta casa, todo, quedará para ti si en algún momento, ya sabes, si ella muere, y si yo muero... esto será tuyo, eso fue lo que decidí, no fue idea de ella, solo mía.
+Martino: ...
+Rubenio: bueno... eres tan inútil que... no creo que puedas tener tu propio hogar, así que... quédate con esto y ya, ni lo intentes, no sirves.
+Martino: ... 
+
+Martino veía la botella de vino, fijamente, sin ver otra cosa. Su vista se volvía nublada. Una pequeña lágrima comenzó a caer, de su mejilla hasta caer en la mesa. No espera respuesta. Se da media vuelta y se va rápido a su cuarto. Cierra la puerta, se sienta en la cama y mira la pared, la nada misma. El tiempo pasa lento, parecía que Martino estaba en cámara lenta. Agarra el celular y scrollea sin interés hasta que entra en un foro extraño, nombres que no parecen reales, fotos que no explican nada. 
+
+Lee mensajes inconexos, confesiones, promesas. Pero, en medio de todo, encuentra un link que destaca entre todos: creación de imágenes y videos eróticos con inteligencia artificial. Entra, pero primero prueba, casi por curiosidad técnica. Cambia las palabras, ajusta parámetros y cada vez los resultados no dejan de sorprender. Vuelve a intentar, ya con conocimiento, entiende cómo funciona. Empieza a crear más cosas, una detrás de otra, como si el proceso en sí fuera lo importante. Se levanta y va al baño, cierra con llave y se sienta en el suelo, apoyando la espalda contra la puerta. 
+
+El celular ilumina su cara desde abajo. Los videos que creaba eran imposibles, no de describir, sino que eran imposibles de que existieran en otras páginas pornográficas convencionales. No eran ilegales, pero sí fuertes, muy fuertes. 
+
+Martino colocó su mano por debajo de su pantalón, en su entrepierna. Subió el volumen, escuchando solo los gemidos de aquellos videos, gemidos que parecían más de dolor, de agonía. Temblaba, sudaba, se cansaba de un brazo, hacía trabajar al otro. 
+
+Dejó el celular a un lado. Martino, desde ese día, dejó de verse en los espejos, al menos por todo un mes entero. Solo quería sonreír, una vez más. 
+
+## Capítulo 6: En Ida Y Vuelta 
+
+Se escucha el ruido seco de la celda al cerrarse. Toshiba está sentado en la cama, una cama sucia, incómoda. Mueve la pierna sin parar. Casi no duerme. Pasa toda la noche ahí, despierto, con ojos que a veces se cerraban, pero siempre volvía a desvelarse. 
+
+A la mañana siguiente lo dejan libre. 
+
+Vuelve a su casa. Al entrar nota el lugar vacío, más de lo normal. Va directo a la heladera. Hay una cerveza, la mira un segundo, pero la deja; en su lugar, agarra un energizante. Se sienta en el sofá y empieza a tomarlo despacio. Prende la televisión: «¡Bienvenidos todos a otro show de Murray Franklin!». 
+
+Toshiba levanta la mirada y se queda fijo mirando la pantalla. Hagamos un paréntesis: 
+
+El show de Murray Franklin siempre empieza a las diez de la noche y termina cerca de la medianoche. A veces se estira un poco, pero nada más. El de ayer duró más de tres horas. Tres horas y media. Y ahora, sin explicación, el programa está arrancando a la mañana. Nueve en punto. 
+
+Cerramos paréntesis. Se escucha la puerta abrirse. Es Brian, quien mira a Toshiba sin sorpresa. Lo odia con la mirada. 
+
+Brian: ...¿qué pasa contigo, Toshiba?
+Toshiba: (suspira) intenté llegar temprano.
+Brian: ¿intentaste? Pues... fallaste, como siempre.
+Toshiba: ...
+Brian: dime, con toda sinceridad... cuando la secretaria de Murray te invitó a su programa, ¿por qué crees que lo hizo?
+Toshiba: porque soy interesante, era una oportunidad para crecer, hasta que llegó... el puto de Martino.
+Brian: no... no querían darte una oportunidad... según las leyes del programa, sí o sí, Murray está obligado a invitar como mínimo a tres invitados... invitó a Martino, y a dos fracasados que no los conoce ni su madre, para que cuando sean reemplazados por Martino... no generen ningún impacto negativo en el programa.
+Toshiba: ...mentira... es una puta mentira.
+Brian: el tercer invitado fue Cashesho, ¿lo conoces?
+Toshiba: nunca oí hablar de él.
+Brian: exacto.
+Toshiba: ... 
+
+En la televisión, Murray presenta al invitado: otra vez, Martino. Toshiba grita, se levanta del sofá y arroja la lata de energizante contra el televisor. La pantalla parpadea, pero sigue encendida. En ese momento suena el celular. Toshiba lo mira un segundo y atiende. 
+
+Toshiba: ¿sí?
+Garilda: ¿cómo estás?
+Toshiba: ...bien.
+Garilda: no suenas para nada bien.
+Toshiba: ...
+Garilda: bueno... solo llamaba para disculparme, no debí gritarte (suspira) Félix está bien, pronto podremos irnos.
+Toshiba: ...me alegra, oye... necesito hablar, estoy harto de guardar mis pensamientos.
+Garilda: bueno... podríamos encontrarnos esta tarde, ¿te parece bien un café?
+Toshiba: (mira la lata de energizante) supongo. 
+
+Corta la llamada. Brian vuelve a aparecer, ahora con una laptop en las manos. Se la pone delante sin pedir permiso. En la pantalla se ve el álbum. Los números no paran de subir. Los comentarios tampoco paran: «El mejor álbum, adoro a los gemelos». «Soñadores Errantes es un buen nombre de banda, pero les queda mejor "El Dúo-Elo"». «¿Alguien se acuerda del tercer cantante? ¡Jajaja!». 
+
+Toshiba aprieta la mandíbula. 
+
+Toshiba: ...¿«El Dúo-Elo»? Es un pésimo nombre.
+Brian: ¡claramente lo es! Pero ellos se dieron cuenta de algo, no eres nadie, no porque el mundo sea una mierda, sino porque no haces nada para cambiarlo.
+Toshiba: cada vez me duele más la cabeza cuando me hablas.
+Brian: detestas las verdades, Toshiba, las detestas.
+Toshiba: ...
+Brian: sabes... a veces pienso que eres... no sé, la versión de Martino, pero más estúpida, bueno, mejor dicho, todo lo contrario del pensamiento lógico que él tiene.
+Toshiba: ¿y tú qué mierda sabes de él?
+Brian: medio mundo entero vio su primera entrevista, adivina, yo también.
+Toshiba: ...jódete, Brian.
+Brian: bien. Por cierto, Brec te expulsó definitivamente de la banda, cualquier queja... ponla en el buzón y reza para que la leamos.
+Toshiba: ...(se sienta) 
+
+Reiralda está sentada en una parada de autobuses. Mira la calle sin apuro, como si no estuviera esperando nada. A su lado se sienta otro anciano. No se miran al principio, pero el silencio dura poco. 
+
+-Disculpa... eres la que sale en ese programa, ¿cierto?
+Reiralda: ...sí, el programa de mi nieto.
+-Murray Franklin... ¿sucede algo?
+Reiralda: ...nada.
+-puedo notar cuando una persona no está bien.
+Reiralda: ...
+-es difícil llevar la fama, y es difícil acercarse a quien comenzó con todo.
+Reiralda: ¿a qué te refieres?
+-solo digo que... para nadie es fácil llevar la fama, y es complicado incluso acercarse a quien la tiene, la fama destruye, pero también concede aquello que no podemos ignorar.
+Reiralda: ...pues, no creo que el problema de mi nieto sea la fama.
+-¿y entonces?
+Reiralda: algo más... 
+
+Marzo, 1993 
+
+Murray Franklin tiene 9 años. Se despierta en medio de la noche. No sabe por qué, pero algo lo sacó del sueño. Escucha ruidos abajo. Voces alteradas. Gritos cortados. 
+
+Sale de la cama con cuidado y abre la puerta de su cuarto. 
+
+Baja las escaleras en silencio, apoyando el pie despacio en cada escalón. El corazón le late fuerte. Antes de llegar al final, escucha un disparo. Seco. Fuerte. La puerta principal se cierra de golpe. Murray baja corriendo. Su padre está en el suelo. No entiende lo que ve. Se queda quieto un segundo, como congelado. Luego se acerca. Lo llama. No responde. Ve la sangre en el pecho, la camisa rota. Empieza a temblar. Llora, pero sin ruido, como si no supiera cómo hacerlo bien. Lo sacude un poco, le habla rápido, le promete cosas que no entiende. Se queda ahí, sentado en el piso, hasta que el cuerpo se enfría y el miedo ya no cambia nada. 
+
+Diciembre, 2034 
+
+-Entiendo... la pérdida de su padre lo hizo descender a escalas inimaginables, ¿verdad?
+Reiralda: (suspira) quizás, no lo niego, pero... no solo presenció su muerte. 
+
+Junio, 1994 
+
+Murray tiene 10 años. Abre la puerta del baño; primero ve un banquito tirado. Al levantar la mirada, observa a su madre. Se queda parado en la entrada sin gritar. Solo la mira, tratando de entender otra escena que no debería existir. 
+
+Diciembre, 2034 
+
+-Murray, desde pequeño, vio a sus padres morir, ambas formas fueron terribles.
+Reiralda: sí, con la muerte de su padre me dediqué a cuidarlo como podía... y a soportar todas sus cosas.
+-...¿cosas? ¿Cosas como qué?
+Reiralda: antes de la muerte de sus padres él ya venía haciendo cosas inusuales, pero... eso se intensificó. 
+
+Octubre, 1997 
+
+Reiralda entra al cuarto de Murray. Las paredes tienen garabatos pintados y el suelo también. Colores mezclados, sin orden, rayas y círculos. Encuentra maquillaje que no es suyo, es de Reiralda. Osos de peluche alineados sobre la cama, que tienen una sonrisa exagerada, pintada con pintalabios, de oreja a oreja. Reiralda respira hondo. No toca nada al principio. 
+
+Diciembre, 2034 
+
+-¿Usaba maquillaje?
+Reiralda: ...sí, bueno, nunca lo vi ponérselo, pero algunas veces se encerraba en el baño, y el baño estaba lleno de pinturas.
+Reiralda: igual, no te confundas... era muy inteligente. 
+
+Agosto, 1998 
+
+Murray está en una evaluación, respira un poco y lee rápido. Tacha una opción, luego otra y se levanta antes que todos. Camina hasta el escritorio del profesor, deja el examen y se inclina un poco: «hay una pregunta en la que te equivocaste, las tres opciones son erróneas». Va al baño como si nada, mientras el profesor toma el examen, algo molesto. Revisa la pregunta y lee las opciones. Suelta la hoja y suspira. Murray tenía razón. 
+
+Diciembre, 2034 
+
+Reiralda: su inteligencia lo llevó a triunfar, más de lo que me esperaba. 
+
+Enero, 2018 
+
+La gente grita el nombre de Murray. Él está de pie frente a una multitud que lo aclama. Saca un encendedor tipo Zippo del bolsillo y lo abre con ese sonido metálico seco. Se agacha y enciende un fuego artificial. El cohete sube y explota en el aire. Forma una estrella de fuego que dura solo un segundo, pero alcanza para que todos la vean. Murray levanta los brazos y grita: «¡Feliz año nuevo!!». 
+
+Diciembre, 2034 
+
+-¿Tienes teorías?
+Reiralda: solo una.
+Reiralda: creo que nunca importó la muerte de sus padres, mucho menos su soledad... el detonante fue algo peor, mucho peor.
+-...¿qué?
+Reiralda: entiendo lo fundamental... ser visto, ser destacado, quizás el Murray que creía que existía... quizás nunca existió, nunca existió Franklin como ese niño inocente y dulce.
+-...(levanta la mirada y se inclina levemente)
+Reiralda: era como ver a otra persona, una persona que quiere y siempre busca más, pero sin perder el contacto con la audiencia, es un maldito showman hecho y derecho, pero... más sucio, más oscuro.
+Reiralda: como si perdiera esa personalidad tierna, necesitaba verse distinto, diferente... y lo fue, y el maquillaje también ayudó, su inteligencia, todo de él.
+-...¿y así es como...?
+Reiralda: como tuvo éxito... sí. Pero mi mayor miedo es otro, logró contactarse con su... «ídolo», y ahora lo está entrevistando.
+-...¿Martino Lipschitz?
+Reiralda: sí... no quiere ser como él, quiere apropiárselo.
+-...¿por qué?
+Reiralda: porque vio en él justo lo que buscaba, otra persona diferente, cuyo atuendo, y el modo en que se maquilla, lo hacen ver un personaje, lo es, pero Murray a veces lo entiende, y en otras no... por eso... se hace llamar... Mlive.
+-¿Mlive? ¿El pseudónimo de Martino? Su... nombre artístico.
+Reiralda: ...(asiente con la cabeza) cuando escucho el nombre... me siento más identificado que nunca.
+Reiralda: mi único miedo es... perderlo para siempre, y no hablo de la muerte. 
+
+Toshiba entra a la cafetería con la cabeza llena de cosas. El lugar está medio vacío, todavía es temprano. Elige una mesa al fondo, se sienta y apoya los brazos, moviendo la pierna sin darse cuenta. Mira la puerta cada pocos segundos. Cuando finalmente se abre, levanta la vista de golpe, era Garilda. Toshiba le hace una seña rápida con la mano y ella camina hasta la mesa, sentándose frente a él. 
+
+Garilda: ¿cómo estás?
+Toshiba: iré al grano, mis compañeros me echaron de la banda.
+Garilda: ...lo siento...
+Toshiba: ...
+Garilda: perdón, no soy buena en estos momentos.
+Toshiba: no importa, yo tampoco.
+Garilda: te escucho.
+Toshiba: ¿qué?
+Garilda: me citaste para hablar, te escucho.
+Toshiba: (suspira) son... cosas mías que... no podría contarlas a Brian o a Brec.
+Garilda: entiendo.
+Toshiba: ...tampoco estoy seguro de contártelo, pero... no sé, siento que eres... confiable, y eso que no nos conocemos demasiado.
+Garilda: ...
+Toshiba: bueno... hay algo que siempre me persigue, tengo sueños, fantasías, mejor dicho, con... con esto. 
+
+2019 
+
+Toshiba y Zoé se llevaban bien, muy bien. Eran de esos amigos que siempre están juntos sin planearlo. En los recreos hablaban de cualquier cosa, caminaban por el patio, se reían sin motivo. En las actividades al aire libre siempre terminaban en el mismo grupo. Incluso en el comedor escolar, que era ruidoso y caótico, buscaban sentarse juntos. 
+
+Esa mañana estaban ahí, en el comedor, con las bandejas delante. Zoé hablaba animada, Toshiba la escuchaba con atención, respondiendo a medias porque le gustaba más verla hablar que decir algo propio. 
+
+Zoé: dime la verdad, el vestido era horrible, según yo... era bastante encandilado.
+Toshiba: ¿y eso qué significa?
+Zoé: pues... intentaba llamar la atención de tal forma que... solo la hacía sentir peor.
+Toshiba: (sonríe) siempre habrá uno o una que quiera brillar, pero... ilumina tanto el estadio que... no deja ver el partido.
+Zoé: ...¿estoy hablando con Toshiba? ¿O con mi padre?
+Toshiba: ¿en serio?
+Zoé: muy en serio, me recuerdas a él... él y sus metáforas.
+Toshiba: ...¿no crees que debería conocerlo?
+Zoé: (levanta la mirada) sí, y a mi madre.
+Toshiba: claro.
+Zoé: mi madre ya te conoce.
+Toshiba: (comienza a toser)
+Zoé: ¡hey! ¿Estás bien?
+Toshiba: (toma agua) ...sí.
+Zoé: ten cuidado al comer.
+Toshiba: sí, bueno, a veces tengo mucha hambre... ¿cómo que tu madre me conoce?
+Zoé: sí, bueno, le hablé de ti.
+Toshiba: ...
+Zoé: ¿por qué miras así? Tranquilo, ella está encantada de conocerte, no son personas que juzguen.
+Toshiba: ¿ya les habías presentado a otro compañero antes?
+Zoé: sí... pero... él no dio una buena impresión, aunque él... tampoco era del todo bueno.
+Toshiba: ...
+Zoé: tranquilo, no dejaré que te digan nada que no te guste, aunque... dudo mucho que lo hagan.
+Toshiba: ...(sonríe)
+Zoé: ya vuelvo. 
+
+Zoé se levanta para buscar más comida. Toshiba asiente y se queda esperándola, jugando con el borde de la bandeja. En ese momento, Isadox se acerca y se sienta sin pedir permiso, apoyando los codos en la mesa como si el lugar ya fuera suyo. 
+
+Isadox: míralo al pillín, ¿cómo vas?
+Toshiba: algo me dice que voy a conocer a su familia.
+Isadox: ¡muy bien! A todo esto, ¿no vas muy rápido?
+Toshiba: ¿de qué hablas?
+Isadox: bueno... no eres el único.
+Toshiba: ...¿eh?
+Isadox: (suspira) no eres su único amigo.
+Toshiba: ... 
+
+Toshiba gira un poco la cabeza y ve a Zoé más lejos, hablando con otro chico. No parece nada raro, pero algo le aprieta el pecho. Vuelve la mirada hacia Isadox. Isadox lo mira fijo y hace ese gesto incómodo, levantando los hombros, como diciendo «y bueno». Luego se levanta y se va, dejándolo solo. 
+
+Zoé no vuelve a sentarse con él ese día. Ni ese, ni los siguientes. Siguen cruzando palabras, saludos rápidos, alguna frase suelta, pero ya no es lo mismo. Ella pasa más tiempo con ese otro chico. Toshiba lo nota, aunque no diga nada. Los días siguen pasando así, sin una pelea clara, sin un final concreto, solo con distancia. 
+
+Diciembre, 2034 
+
+El ruido vuelve de golpe. Las voces, las luces, el movimiento constante. Toshiba parpadea, como si recién despertara de un recuerdo largo. Está de nuevo en el presente, con todo lo que eso implica. 
+
+Toshiba: ...y eso es lo que puedo contarte, con todo y sus detalles.
+Garilda: ella... ¿qué tan especial era?
+Toshiba: para que te des una idea, buscaba por internet chistes, chistes muy malos, pero que me sacaban carcajadas.
+Garilda: roles invertidos, ¿eh?
+Toshiba: ...¿qué?
+Garilda: casi siempre es el hombre quien hace los chistes.
+Toshiba: sí, yo tenía en ese momento una risa... dejémosla en «peculiar» (sonríe), cuando yo me reía, ella reía, ambos reíamos y podíamos estar toda la mañana así.
+Garilda: (sonríe)
+Toshiba: también solía acercarse a mí, bueno, los dos nos acercábamos con el pretexto de... bueno, era como un juego, nació como un juego, luego se volvió un poquito íntimo... yo le decía, o ella me decía, que tenía un grano en el rostro y se acercaba a mí, siempre decíamos la misma frase, «¡espera! Tienes un grano... sacaré mi lupa». No sacaba nada, con el dedo índice y el pulgar formaba un círculo, se lo ponía en el ojo y veía mi rostro, acercándose más y más.
+Garilda: ¿cómo terminaba eso siempre?
+Toshiba: ...«¡no! No tenías nada, fue mi imaginación, ¡pero tu rostro! Está... bien cuidado».
+Garilda: eso es lindo.
+Toshiba: era estúpido.
+Garilda: quizás, pero cualquier cosa es estúpida si... estás ciego de amor, ¿no?
+Toshiba: exacto... oye, Garilda, te lo voy a tirar y veo qué opinas.
+Garilda: bien, te escucho.
+Toshiba: ¿qué tal si empezamos algo?
+Garilda: ¿a qué te refieres?
+Toshiba: un proyecto, ¡algo! Trabajar juntos, ser socios.
+Garilda: ¿y en qué?
+Toshiba: bueno, deberíamos verlo, pero... yo sé que tienes talento, y puedo aprender de ti.
+Garilda: tú eres un buen cantante.
+Toshiba: ¿sí?
+Garilda: te defiendes.
+Toshiba: ...¿qué dices? ¿Combinamos nuestros talentos y... comenzamos algo grande?
+Garilda: ...¿cómo Martino haría?
+Toshiba: no... como nosotros lo haríamos.
+Garilda: (sonríe) 
+
+La camarera se acercó a ellos. 
+
+-¿Y bien? ¿Qué van a pedir?
+Toshiba: yo un café y mi amig... mi socia.
+Garilda: (volteó a verlo enseguida con una sonrisa y mirada pícara)
+Toshiba: mi socia quiere un café también.
+Garilda: capuchino.
+Toshiba: ...capuchino, ella es de gustos altos.
+-ya veo, jajaja.
+Garilda: dicen que el capuchino aquí es exquisito.
+-bueno, no lo sabrás si no lo pruebas. ¿Algo más?
+Toshiba: ¿qué nos recomienda?
+-tenemos galletas con chips de chocolate.
+Toshiba: ¿te parece bien, socia?
+Garilda: sí.
+Toshiba: y nos las encargamos también.
+-muy bien, ¿nada más?
+Toshiba: nada más, por ahora. 
+
+La camarera se fue, con ganas de quedarse a hablar con ellos. 
+
+Toshiba: ¿y qué dices?
+Garilda: ...
+Toshiba: ¿trabajamos juntos?
+Garilda: ...bueno, cuenta conmigo. 
+
+Ambos se estrecharon la mano.
+
+  ## Capítulo 7: Continuemos, Aunque Nos Duela 
+
+Félix despertó en la cama del hospital con la garganta seca y la cabeza pesada. Tardó unos segundos en reaccionar. Se sentó despacio, apoyó los pies en el suelo y respiró hondo antes de ponerse de pie. La pierna le dolía y no tenía fuerza suficiente, pero igual avanzó. Se vistió con calma, concentrado en no perder el equilibrio y en terminar lo antes posible. 
+
+Salió de la habitación y caminó por el pasillo del hospital cojeando, con pasos irregulares y lentos. No miró a nadie. Al cruzar la puerta de salida, el aire frío lo hizo frenar un segundo, pero siguió. Llegó hasta su auto, se sentó, cerró la puerta y encendió el motor. Condujo sin apuro, con la vista al frente y la mente en silencio. 
+
+Cuando llegó a la casa, apagó el auto y se quedó quieto. Miró la fachada durante varios segundos, como si necesitara ese tiempo antes de entrar. Bajó, abrió la puerta y pasó al interior. La casa estaba a oscuras. Solo entraban algunos rayos de luz por las ventanas, lo justo para distinguir los muebles. Se sentó en el sofá. Sobre la mesa seguía el medio sándwich que había dejado antes de irse. Lo miró, pero no lo tocó. Agarró el control y encendió la televisión. 
+
+Estaban transmitiendo el programa de Murray Franklin. Martino hablaba frente a cámara. Félix lo observó con la mandíbula apretada y una expresión de rechazo clara. No apartó la vista. En ese momento, los recuerdos empezaron a aparecer. 
+
+Marzo, 2032 
+
+Félix estaba en una pelea de boxeo. El lugar estaba lleno y el ruido era constante. Frente a él, su rival se movía rápido, midiendo la distancia. Félix avanzó primero, lanzó un par de golpes y recibió otros. El intercambio fue corto y violento. El rival encontró un espacio y conectó un golpe directo a la cara. Félix perdió estabilidad, retrocedió y cayó. Intentó levantarse, pero el segundo golpe llegó antes. Esta vez no pudo sostenerse. Cayó de espaldas y quedó inmóvil. El conteo no importó. Todo se apagó. 
+
+Abrió los ojos más tarde. Las luces lo encandilaron. Escuchó voces cerca. Garilda apareció frente a él, agachada, con el rostro tenso y los ojos atentos a cualquier movimiento. Lo llamó por su nombre. 
+
+Garilda: ¿estás bien?
+Félix: ...lo siento, perdóname.
+Garilda: ¿por qué?
+Félix: por hacerte perder tiempo, quizás sí era mejor ir a ese puto restaurante.
+Garilda: (sonríe) no importa, ambos amamos esto.
+Félix: te fallé, perdí la pelea, ya sabes que... puede que no haya oportunidades ahora.
+Garilda: ...lo importante está en nosotros, olvidemos las oportunidades.
+Félix: perdón, perdón, ¡perdón! Perdí...
+Garilda: no perdiste, ganaste, eso se demuestra con toda tu vida, ganaste al superar a tus padres, ganaste por haber aguantado esos años de abuso, y ¿sabes qué más? Ganaste porque les enseñaste que tú no eres como ellos, por más que guardabas mucho resentimiento, jamás hiciste nada para dañarlos, eso es lo que es un ganador.
+Félix: ... 
+
+Ella se acercó y lo besó, sin decir nada más. 
+
+Diciembre, 2034 
+
+El recuerdo se cortó de golpe cuando escuchó la puerta abrirse. Félix volvió al presente. Garilda estaba entrando a la casa. 
+
+Garilda: ¿Félix? ¿Qué haces aquí?
+Félix: ¿por qué no fuiste al hospital a verme?
+Garilda: ...¿de qué hablas?
+Félix: ...quiero que me seas sincera, por favor.
+Garilda: ...
+Félix: ¿tuviste algo con ese tal... Lipschitz?
+Garilda: ¿Lipschitz? ¿Martino Lipschitz?
+Félix: ¡responde!
+Garilda: ¡no! Fuimos amigos en el pasado, cuando éramos jóvenes.
+Félix: ¿y qué pasó? ¿Fueron pareja? Según lo que le dijiste a Toshiba... lo sigues amando.
+Garilda: ¿qué? Nunca fuimos nada más que amigos, ¿y de dónde sacaste eso?
+Félix: ¡no me mientas! ¡Los escuché hablando!
+Garilda: en ningún momento dije que lo amaba.
+Félix: Garilda... los escuché, no puedes defenderte con nada.
+Garilda: ¿escuchaste todo lo que hablamos?
+Félix: ...no.
+Garilda: ¿y entonces? ¿Qué putas sabes?
+Félix: ¡escucha! ¿No hubo nada? ¿Y... no lo amas?
+Garilda: (suspira) ¿cómo puedo amar a alguien que nunca fue mi pareja?
+Félix: ¿y entonces por qué hablaste tanto de él con Toshiba?
+Garilda: ...bueno... en realidad sí hubo un par de cosas con él, pero no románticas.
+Félix: ...¿cómo qué?
+Garilda: es complicado.
+Félix: ...
+Garilda: y bien.
+Félix: ...
+Garilda: mira, yo nunca te mentí, siempre te dije la verdad y no te oculté nada.
+Félix: ¡y lo de Martino qué!
+Garilda: ¡quiero olvidarlo! ¿Bien?
+Félix: ...¿qué pasó con él? Habla.
+Garilda: ...(baja la mirada) perdón. 
+
+Ella avanzó hacia la cocina, pero Félix se levantó y le tomó el brazo con fuerza, deteniéndola. 
+
+Garilda: ¿qué mierda haces?
+Félix: ...¿qué pasó?
+Garilda: ...
+Félix: ¿no confías en mí?
+Garilda: ...basta, Félix.
+Félix: ...¿por qué te fuiste al café con Toshiba?
+Garilda: ¡¿y ahora qué tiene eso?!
+Félix: ¡nuestro primer encuentro fue un café!
+Garilda: ¡¿y qué?!
+Félix: ¿te besaste con él?
+Garilda: ¡ya! No busques cualquier estupidez para culparme.
+Félix: ... 
+
+La soltó y subió las escaleras sin mirar atrás. Entró al cuarto y se sentó en la cama, con la espalda encorvada y los codos apoyados en las piernas. Garilda llegó unos segundos después, cerró la puerta y se sentó a su lado. 
+
+Garilda: ...
+Félix: eres especial en mi vida, Garilda.
+Garilda: ...
+Félix: tengo miedo de perderte, no voy a perderte, ¿verdad?
+Garilda: ...
+Félix: ...¿aún me amas?
+Garilda: ...(levantó la mirada) ya no sé cómo se siente el amor, pero, sea como sea que se sienta, creo que no es nada igual a lo que siento ahora contigo.
+Félix: ...
+Garilda: ...(le extendió el brazo) ese anillo no es de casada, ¿lo sabes, no?
+Félix: ...sí. 
+
+Félix estiró la mano, tomó el anillo de Garilda y se lo quitó del dedo sin apurarse. Ella no reaccionó. Se levantó, bajó las escaleras y salió de la casa. Afuera, el aire estaba pesado. Caminó unos pasos, se detuvo junto a un arbusto y vomitó. Se quedó quieta, respirando fuerte. Luego murmuró, casi sin voz: «capuchino de mierda». Algo mareada, se levanta y llama por teléfono. 
+
+-¡Amiga! ¿Cómo estás?
+Garilda: ¿puedo quedarme en tu casa esta noche?
+-(suspira) ¿pasó algo con Félix? ¿Otra vez?
+Garilda: ...esto es diferente.
+-...bueno, sí, puedes venir, ya llamaré un taxi, ¿dónde estás?
+Garilda: aquí en la casa.
+-bien. 
+
+Toshiba estaba sentado frente a la computadora portátil, con varias pestañas abiertas. Miraba una y otra vez posibles ideas de negocio: servicios digitales, inversión rápida, propuestas que prometían resultados inmediatos. Ninguna le cerraba. Algunas le parecían poco realistas, otras directamente inútiles. Cerró varias ventanas sin leer demasiado y apoyó la espalda en el sofá. 
+
+Se levantó y fue hasta la cocina. Abrió la heladera y buscó un energizante. Lo destapó, tomó un trago largo y volvió al living. Se sentó otra vez, acomodó la computadora sobre sus piernas y siguió buscando, ya sin mucho entusiasmo. Entre los resultados apareció una noticia destacada. 
+
+20 años del desastre de Scroge. 
+
+El título le llamó la atención. Hizo clic. 
+
+La nota hablaba de Scroge, un empresario que había sido referente en el sector tecnológico a comienzos de la década anterior. Scroge era el CEO de TotalCopy, una empresa dedicada a la gestión y protección de datos digitales, especializada en sistemas de respaldo masivo para corporaciones y gobiernos. Durante años, TotalCopy fue considerada una de las compañías más seguras y rentables del mercado. 
+
+Todo cambió con una decisión tomada por el propio Scroge. Según la versión oficial, autorizó una actualización del sistema central sin pruebas suficientes. La falla provocó la pérdida irreversible de millones de archivos críticos pertenecientes a clientes internacionales. Demandas, juicios y una caída inmediata del valor de la empresa terminaron por destruirla. Sin embargo, la nota incluía testimonios de personas cercanas a Scroge. Exsocios, empleados y un familiar coincidían en algo inquietante: el error no había sido un descuido. Scroge sabía exactamente lo que iba a pasar. Había forzado la actualización, ignorado advertencias internas y firmado las autorizaciones necesarias. Algunos sostenían que buscaba provocar el colapso para cobrar seguros, otros creían que se trató de una forma de cerrar una etapa de su vida que ya no soportaba. 
+
+El resultado fue el mismo. TotalCopy desapareció. Scroge quedó aislado, perdió su prestigio y, pocos meses después, fue encontrado muerto en su departamento. La causa nunca fue del todo clara. 
+
+Toshiba cerró la noticia. Se quedó mirando la pantalla apagada unos segundos. Pensó en todo eso con calma. Una leve sonrisa se le dibujó en la cara, breve, casi automática, como si algo acabara de encajarle. Volvió a navegar entre noticias hasta que otro titular lo detuvo. 
+
+Garilda: en el núcleo de la atención. 
+
+Era imposible no abrirla. La nota hacía referencia a la reciente entrevista de Martino Lipschitz. En ella, Martino había hablado de aspectos íntimos de su vida, de errores personales y decisiones que nunca antes había hecho públicas. La repercusión fue inmediata. La entrevista marcó un antes y un después en su exposición mediática y lo posicionó aún más como una figura central. Pero no todos salieron ilesos. 
+
+Según el artículo, una de las personas más afectadas fue Garilda Calcagnoli, quien había sido amiga cercana de Martino durante su adolescencia. En redes sociales, seguidores y fanáticos comenzaron a señalarla directamente, acusándola de haber sido violenta con él en el pasado. 
+
+La nota recopilaba testimonios anónimos. Relataban escenas en pasillos de la escuela, donde Garilda le gritaba delante de otros compañeros, lo trataba de inútil y lo ridiculizaba por su forma de hablar. Otros describían momentos en los que lo insultaba en reuniones grupales, levantando la voz, marcándole errores mínimos, empujándolo a callarse cuando intentaba responder. También se mencionaban discusiones en espacios públicos, donde ella lo enfrentaba con tono agresivo, sin importar quién estuviera mirando. 
+
+Sin embargo, el mismo artículo aclaraba que ninguna de esas acusaciones había sido comprobada. No existían denuncias formales ni registros que confirmaran esos hechos. Además, Martino no había mencionado nada de eso en su entrevista. Por el contrario, se había responsabilizado a sí mismo por muchas situaciones de su pasado y evitó señalar directamente a terceros. 
+
+Toshiba cerró la nota. Dejó la computadora a un lado y tomó su celular para comenzar una llamada con Garilda. 
+
+Garilda: justo la persona con la que quería hablar.
+Toshiba:...Garilda.
+Garilda: no sabes lo que pasó... (suspira) nunca me sentí tan extraña como hoy.
+Toshiba: Garilda, escúchame.
+Garilda: ...
+Toshiba: ...¿esto era lo que tanto ocultabas?
+Garilda: ¿qué?
+Toshiba: lo estoy viendo, lo estoy leyendo de nuevo... Garilda, ¿te acusaron injustamente?
+Garilda: ...¿encontraste la noticia?
+Toshiba: sí.
+Garilda: ...¡bien! ¡Sí! Eso quiero olvidar, tú no tienes ni idea.
+Toshiba: entonces... ayúdame a entender.
+Garilda: ...nada de lo que dicen es verdad.
+Toshiba: ¿es al revés?
+Garilda: pues no sé, por un lado sí y por el otro no, pero eso no importa, la cuestión es... la gente es mediocre, como Martino decía, la gente no sabe pensar.
+Toshiba: ...¿estás diciendo que sus seguidores inventaron todo eso solo para defenderlo?
+Garilda: ...los fans defienden a sus ídolos, sin ser conscientes de que ellos no son dioses.
+Toshiba: ...¿y qué pasó cuando ocurrió esto?
+Garilda: la gente empezó a acosar. Lo más duro fue que comienzan a acercarse a personas que no tienen nada que ver, a mi familia, destruyeron ventanas, el auto de mi padre... y... un profesor llegó a rechazar a mi hermana con solo saber que era mi hermana.
+Toshiba: ...
+Garilda: cuando algo pesa... no tienes otro remedio que intentar olvidar, pero las demás personas no lo olvidan, y Martino nunca habló al respecto, no le importó, quizás no lo sabía, puede ser un hecho, pero... era algo tan ligado a él que es imposible que no lo supiera.
+Toshiba: ...bueno, creo que como socios no debemos ocultarnos nada, y ser transparentes en todo, guardemos solo aquello que... ya sabes, sí o sí debe estar guardado en nuestro interior.
+Garilda: entiendo.
+Toshiba: y... no sé qué decirte... bueno, tú tenías algo para decirme, ¿no?
+Garilda: sí, bueno, es sobre Félix, terminamos... pero lo más extraño fue el hecho de que... todo se perdió en corto tiempo, estábamos juntos de lo más bien y... todo se perdió cuando tú... nada.
+Toshiba: ¿cuándo yo aparecí?
+Garilda: ...
+Toshiba: ...perdóname. 
+
+La llamada se cortó. Toshiba lanzó el celular contra el suelo. Pequeñas piezas volaron. Toshiba gritaba mientras golpeaba el sofá. Al cansarse, se sentó en el suelo y tomó un sorbo de lo poco que quedaba del energizante. 
+
+## Capítulo 8: Atentamente, Soy Yo 
+
+2009 
+
+Luanisia tenía nueve años y todavía llevaba la pulsera del hospital en la muñeca. Apenas salió, empezó a correr. No miró atrás. Cruzó calles, esquivó gente y siguió sin frenar hasta llegar a la casa de Rubenio, un amigo de un amigo de su padre. Cuando tocó la puerta, estaba agitada y con la ropa desordenada. Al abrir, encontró a Rubenio y al otro hombre sentados a la mesa, en medio de la cena. Ambos la miraron sorprendidos. 
+
+Luanisia: ¡Papá!
+Rubenio: (giró la cabeza)
+Luanisia: ¡ya va a nacer! 
+
+Rubenio no dudó demasiado. Se levantó, tomó las llaves y salió con ella. Luanisia se subió al auto sin decir nada más. Durante el trayecto, Rubenio manejó rápido, atento al camino, mientras ella miraba por la ventana, sin moverse. Al llegar al hospital, bajaron casi al mismo tiempo. Caminaron por los pasillos con apuro, mirando los números de las puertas. Entraron a una habitación equivocada, pidieron disculpas y salieron. Siguieron buscando hasta que dieron con la correcta. 
+
+Marisa estaba acostada en la cama. Se la veía débil, con el cuerpo cansado, pero tenía a un bebé en brazos. Era Martino. Luanisia se acercó despacio, viendo sus ojos sin decir ni una palabra, solo mirando. 
+
+2013 
+
+Martino tenía tres años. Corría por el patio mientras llovía. El suelo estaba mojado y el agua le empapaba la ropa, pero no le importaba. De repente, el viento se levantó fuerte, moviendo todo a su alrededor. Martino se quedó en medio del patio, levantó los brazos y siguió corriendo, sin miedo, disfrutando el momento. 
+
+2016 
+
+Años después, con seis años, estaba en el living jugando solo. Se movía de un lado al otro, hablaba en voz alta y cambiaba el tono constantemente. Era el protagonista de una película, después el villano, luego un personaje secundario. Se respondía a sí mismo, inventaba escenas y continuaba sin parar. 
+
+2017 
+
+En otra tarde distinta, Martino estaba sentado frente al televisor junto a Luanisia. Veían una película de terror. Ella miraba la pantalla con atención. Martino también, aunque por momentos cerraba los ojos y luego los volvía a abrir, como si no quisiera perderse nada. 
+
+2018 
+
+Martino viajaba en el asiento trasero del auto, mirando por la ventana sin prestar demasiada atención a nada. Sus padres iban adelante, charlando de cosas simples, y a su lado estaba su hermana, Luanisia, distraída con su propio mundo. Cuando llegaron a la ciudad, en la provincia de Santiago del Estero, bajaron del auto con ese cansancio típico de los viajes largos y caminaron directo a un restaurante cercano. 
+
+El lugar era sencillo, con mesas de madera y gente entrando y saliendo. Mientras esperaban, Martino se apartó un poco y la vio. Una pintora estaba terminando un retrato de una niña. No parecía alguien común. Tenía muchos anillos en los dedos, pulseras apiladas en ambas muñecas, y el cabello recogido de una forma extraña, con manchas visibles de tintura si uno miraba con atención. El maquillaje estaba corrido, mal hecho, algo que, según se escuchaba murmurar, a la madre de la niña no le gustaba nada. 
+
+Martino se acercó sin pensarlo demasiado. La pintora lo notó de inmediato. 
+
+-¡Hola! ¿Cómo te llamás?
+Martino: ...
+-eres de pocas palabras, ¿no?
+Martino: (solo la miraba)
+-¿te hago un retrato?
+Martino: ...sí.
+-bien, siéntate. 
+
+Él se sentó en un banquito pequeño frente a ella y esperó a que terminara. Pensó que se iba a cansar, que en algún momento perdería el interés, pero no pasó. Ver cómo movía el pincel no lo aburría, al contrario, lo mantenía atento, como si algo ahí lo tuviera atrapado sin explicación clara. 
+
+Cuando la pintora terminó, levantó la vista y le sonrió. Sus dientes eran amarillentos, gastados. Sin decir mucho, dio vuelta el cuadro. 
+
+Martino se quedó mirando. La pintura mostraba su rostro. La mitad izquierda tenía la piel azulada, un ojo bien marcado y el cabello oscuro. La mitad derecha era un cráneo expuesto, delineado con un rosa brillante que contrastaba demasiado. El cuello era largo, casi estirado de más. A la izquierda, una mano con dedos alargados se alzaba, como si estuviera señalando algo fuera del cuadro. Vestía una camisa oscura y el fondo era gris, plano, sin detalles. 
+
+Martino no entendía. A la niña la había pintado normal, viva, casi luminosa. En cambio, ahí, viéndose a sí mismo, no había nada de eso. Solo algo más pesado, más oscuro. Se quedó mirándolo, intentando encontrar una razón. 
+
+Marisa llegó de golpe, lo tomó de la mano y agradeció a la pintora sin detenerse demasiado. Tiró de Martino para llevárselo, casi a la fuerza, alejándolo del cuadro y del banquito, como si quisiera cerrar rápido ese momento. 
+
+La pintura quedó atrás, apoyada contra la pared, observándolo sin estar ahí. 
+
+Diciembre, 2034 
+
+Martino abrió los ojos. Se levantó de la cama y caminó descalzo hasta el baño. Mientras se preparaba, el celular empezó a sonar. Era una llamada. Salió desnudo del baño y atendió. 
+
+Martino: ¿sí? (dijo, con voz cansada)
+-¡hola! Espero que tengas un bellísimo día.
+Martino: ve al grano.
+-bueno... te llamábamos, otra vez, para preguntar si no quieres pasarte una vez más por el programa de Murray Franklin.
+Martino: ...¿otra vez? ¿No tienen a otros invitados?
+-¡verás! En realidad...
+Martino: (suspira) 
+
+Cortó abruptamente y volvió al baño. Abrió la ducha y el sonido del agua llenó el lugar. Al salir, el celular volvió a sonar. 
+
+Martino: ¿otra vez?
+-perdón por molestarlo, y... bueno, solo queremos una respuesta.
+Martino: ¿a ver, cortar la llamada sin decir más nada no responde a tu pregunta?
+Martino: a ver, no, no estoy bien.
+-¡entendido! Sin embargo, ¿podríamos programar otra fecha? ¿Te parece el siete de enero? Todas las personas después de la fiesta están súper felices.
+Martino: ...no.
+-¡bien! ¿Pero algún mes? ¿Año, quizás? ¡Jajaja!
+Martino: ¡dije que no! ¡Jódete tú y el puto programa! 
+
+Martino cortó con rabia. Tomó el celular, subió las escaleras y entró a otra habitación. Abrió un baúl, puso el teléfono adentro y lo cerró con un candado. Bajó otra vez. Se sentó en el sofá y encendió el televisor. Seguía con la toalla puesta. No se había vestido. La televisión seguía encendida, pero Martino no la veía, digamos que en realidad veía otras cosas, algo que volaba por su cabeza: 
+
+Diciembre, 2025 
+
+Martino y su madre, Marisa, llegaron a la nueva casa en Tostado con esa mezcla rara de cansancio y alivio que aparece cuando una mudanza termina. La casa era de dos pisos, limpia, ordenada, y el barrio tenía algo tranquilo, casi apagado, como si nadie tuviera apuro por nada. No era fea, tampoco llamativa, simplemente correcta, y eso ya era bastante. Martino subió directo a su cuarto, dejó la mochila en el piso y empezó a acomodar la ropa sin pensar demasiado, doblando y guardando como por inercia. Mientras buscaba algo entre los cierres abiertos de la mochila, sus dedos tocaron un objeto que no encajaba con el resto. Se detuvo. Lo sacó con cuidado. Era un regalo. Se quedó quieto unos segundos, sorprendido en silencio, porque no recordaba ningún cumpleaños, ninguna fecha, nadie le había regalado nada últimamente. 
+
+Decidió abrirlo sin apuro. Era una caja de madera, hecha a mano, pintada de negro, prolija pero simple, con una sola palabra escrita arriba: «Living», el nombre de su página web. Sonrió, aunque no demasiado, más por reflejo que por emoción real. Al levantar la tapa encontró dulces, sobre todo chocolates, y un frasco típico de mermelada con pequeñas cartas dobladas dentro. Sacó los dulces, cerró la caja y decidió dejarla arriba del ropero, como si todavía no fuera el momento de volver a abrirla. En ese movimiento, algo cayó al piso con un sonido seco. Un bolígrafo Montblanc, su preferido. Al levantarlo, lo miró un segundo, se lo colocó entre las orejas y llevó los chocolates a la heladera. 
+
+Después se recostó en la cama, mirando el techo, dejando que el silencio de la casa lo rodeara sin molestarlo demasiado. 
+
+Marisa: ¡Martino!
+Martino: (se levantó apresurado)
+Marisa: no te duermas, recuerda que debes ir a comprar el jugo luego.
+Martino: ...sí, lo sé.
+Marisa: ¿qué tienes entre las orejas?
+Martino: ¿qué? ¡Ah! Es un bolígrafo.
+Marisa: ¿puedo ver?
+Martino: (le extendió el brazo, sin ganas de levantarse aún de la cama)
+Marisa: ...es bellísimo, pero... ¿lo compraste tú?
+Martino: no, es un regalo.
+Marisa: ¿regalo? ¿De quién? ¡Déjame adivinar! ¡De Regina, cierto!
+Martino: ...no, yo... bueno, me dejé de hablar con ella.
+Marisa: ...¿y entonces?
+Martino: en realidad no sé, solo apareció en mi mochila.
+Marisa: ¿alguien la dejó ahí?
+Martino: sí.
+Marisa: ¿tienes alguna idea de quién fue?
+Martino: ...claro que sí.
+Marisa: ¿quién?
+Martino: a una persona a la que le debo mis disculpas.
+Marisa: ...¿Isadox?
+Martino: (suspira) no, con él está todo bien.
+Marisa: bueno, entonces ¿quién?
+Martino: ...no importa, solo quiero... respirar.
+Marisa: bien (le devolvió el bolígrafo) ¡no te olvides del jugo! 
+
+Marisa se fue al rato, y Martino volvió a quedar solo. Se recostó otra vez, cerró los ojos lentamente, sin intención real de dormir, pero cuando los abrió de nuevo ya era otra cosa. Se había quedado dormido. Se levantó con pereza, el cuerpo incómodo, como si el descanso no hubiera servido de mucho. Miró alrededor y notó que ya era de noche. La luz que entraba por la ventana era mínima, apenas suficiente para entender el paso del tiempo. 
+
+Salió de la casa, se estiró, haciendo crujir la espalda, y empezó a caminar sin rumbo fijo. El aire era fresco, distinto al de la ciudad anterior, más liviano. Llegó hasta la tienda más cercana y tomó un sobre de jugo de una góndola medio vacía. Al ir a pagar se topó con Yasai, una mujer mayor, aunque no superaba los cincuenta, con una mirada atenta y una forma de observar que parecía saber más de lo que decía. 
+
+Yasai: ¿eres de?
+Martino: ...de muy cerca de aquí.
+Yasai: sí... estuviste bien, no hace falta aclararlo mucho, Tostado siempre va a estar apegado con Ban...
+Martino: ¿cuánto vale?
+Yasai: ...1500
+Martino: justo, gracias, nos vemos.
+Yasai: ¡espera!
+Martino:...
+Yasai: tenemos ofertas.
+Martino: ...okey, bye.
+Yasai: ¿eres hijo de Marisa?
+Martino: ...(movió la cabeza)
+Yasai: ¿la casa de dos pisos?
+Martino: ...sí.
+Yasai: ella me contó de ti, así que ¿sueles gastar mucho en las tiendas?
+Martino: ...
+Yasai: sí, es obvio que quiero que también gastes aquí... y mucho, pero... también decirte que ella y yo nos hicimos buenas amigas, y si quieren algo, solo pídeme, no te cobraré nada.
+Martino: ¿en serio?
+Yasai: totalmente en serio.
+Martino: ...gracias.
+Yasai: y... ¡dile que tenemos pan dulce! Para estas fiestas nunca fallan, ¿verdad?
+Martino: da igual si fallan o no, el espíritu navideño se perdió.
+Yasai: ...nos vemos.
+Martino: ... 
+
+Volvió a la casa con paso tranquilo. Adentro todo estaba en silencio. Marisa había salido. Revisó el celular y encontró un mensaje suyo: «tengo trabajo, pero ya tienes la comida hecha». Giró la cabeza y recién entonces notó el olor que venía de la cocina: eran sorrentinos. Comió sin apuro, sentado solo, dejando que el día se acomodara dentro suyo. 
+
+Al terminar, el celular vibró otra vez. Era un mensaje de Isadox: «¿ya estás en nuevo aire?». Martino respondió afirmando. Sin que pasara ni un segundo, llegó la respuesta: «ten cuidado, las chicas de allí son... son peligrosas». Martino escribió: «jajaja, ya sé por qué lo dices». Dejó el celular sobre la mesa y sonrió, esta vez un poco más sincero, como si esa advertencia absurda le confirmara que, al menos, algo seguía siendo familiar. 
+
+Diciembre, 2034 
+
+Martino todavía estaba acomodando el plato cuando escuchó que tocaban la puerta. El sonido fue claro, sin insistencia, como si quien estuviera del otro lado supiera que alguien iba a abrir. Se levantó despacio, caminó hasta la entrada y giró la llave. Al abrir, se encontró con Estefanía. No parecía nerviosa, tampoco demasiado confiada, estaba parada con naturalidad, como si esa visita hubiera sido algo obvio. 
+
+Martino: ¿Estef?
+Estefanía: ¿qué sucede? Y por qué... ¿estás desnudo si te quitas la toalla?
+Martino: ¿eh? ¿Qué putas quieres?
+Estefanía: venía a visitarte.
+Martino: bueno, como ves, estoy vivo, puedes irte.
+Estefanía: ¿puedo pasar?
+Martino: ...(suspira) no.
+Estefanía: por favor.
+Martino: ...bien, pasa. 
+
+Después de eso, se sentaron en la sala. Martino se dejó caer en el sillón, todavía tratando de entender de dónde venía esa visita y por qué no le resultaba tan extraña. Estefanía se acomodó frente a él, cruzando las piernas, mirando alrededor de la casa con curiosidad tranquila, como quien observa sin juzgar. 
+
+Estefanía: ¿por qué siento que no parezco bienvenida?
+Martino: ...me sorprendió verte, o sea... no esperaba a nadie y... tampoco quería ver a nadie.
+Estefanía: oye, Martino, cuando dices esas cosas de... ya sabes, ser tú, solo tú, no querer a nadie en tu vida y solo seguir adelante con tus proyectos... ¿realmente lo dices porque tienes razón y es lo que sientes o... intentas ocultar otras cosas?
+Martino: me parece que nadie te invitó.
+Estefanía: responde, por favor, ¿no me tienes confianza?
+Martino: la última vez que te tuve confianza nos peleamos gravemente.
+Estefanía: sí, pero lo superamos, somos amigos, ¿no es así? Los amigos superan todo.
+Martino: ...
+Estefanía: y... ¿entonces? ¿Vas a responder?
+Martino: ...(bajó la mirada) creo que no es tu asunto.
+Estefanía: Martino... vamos, soy toda oídos, sé que no es fácil, pero...
+Martino: ¡basta! ¿Sí? Basta. 
+
+Al rato, Estefanía se levantó y fue hasta la cocina. Le dijo que iba a preparar algo para comer, algo simple, nada complicado. 
+
+Martino asintió y aprovechó el momento para abrir su computadora. Se sentó en la mesa, apoyó los codos y escribió su propio nombre en Google, casi por costumbre, casi como una prueba. En la pantalla apareció todo junto, sin filtro: quién era, lo que hacía, los proyectos nuevos y los viejos, artículos que hablaban bien y otros que no tanto, menciones a polémicas pasadas que él creía superadas, pero que seguían ahí, quietas, esperando a ser leídas otra vez. 
+
+Se quedó mirando la pantalla más de lo que pensaba, leyendo titulares que parecían hablar de otra persona, alguien parecido, pero no del todo igual. En ese momento sintió que alguien lo observaba. Estefanía se había dado vuelta desde la cocina y lo miraba en silencio, apoyada en el marco de la puerta. 
+
+Estefanía: Martino... ¿no sientes que a veces... no sé, quisieras acabar con todo?
+Martino: ¿por qué lo dices?
+Estefanía: ...porque siento que estás... solo.
+Martino: toda mi vida, ¿sí? ¿Y qué? ¡Mira todo lo que hice! ¡Y lo voy a hacer! No se necesita a nadie a tu lado, a nadie.
+Estefanía: ¿y puedo preguntarte... por qué recibiste regalos?
+Martino: ¿eh?
+Estefanía: Isadox te hizo un regalo, Santillán también, y por sobre todo... Garilda, ellos se tomaron la molestia de hacerte un pequeño obsequio.
+Martino: sus putos problemas.
+Estefanía: ...Garilda te regaló esa caja de madera, ¿nunca te preguntaste...?
+Martino: ¡sí! Ella me regaló y yo... no he sido muy bueno con ella.
+Estefanía: no, eso no... ¿no piensas que si te regalan es porque de alguna forma eres importante? Y no hablo de importancia de egocentrismo, hablo de la importancia de tener gente a tu lado, de... ya sabes, ellos, tú, nadie piensa en una persona si esa persona no fue algo con ellos.
+Martino: ...¿de qué mierda hablas?
+Estefanía: ellos te recordaron porque tú te acuerdas de ellos, un... recuerdo mutuo, y créeme cuando te digo que nadie piensa en una persona si esa persona no es nadie, no tiene sentido que digas que no importan las personas, porque sí te importan, eso se demuestra con los regalos que te han dado.
+Martino: ...repito lo de antes, ¿por qué no te vas?
+Estefanía: ¿ves? Intentas negarlo.
+Martino: no... no es negación, sinceramente no me gusta tu presencia aquí.
+Estefanía: ...si en algún momento... quieres hablar, yo voy a estar en todo momento para escucharte.
+Martino: ¿crees que soy estúpido? Sé lo que buscas, escribir esa mierda de libro que seguro venderá millones.
+Estefanía: ¡¿qué dices?!
+Martino: sabes de lo que hablo, yo te cuento y tú lo narras, no pienso darte contenido gratis.
+Estefanía: ¿ah, no? ¡Pues eso es lo que siempre me has hecho! ¡Has escrito trillones de libros que me involucran a mí y a mi vida! ¡Lo has hecho con todos!
+Martino: ¡vete!
+Estefanía: ...¿sabes qué, Martino? Ahora entiendo por qué nadie te saludaba en tu cumpleaños, ahora entiendo por qué te la pasas solo en cualquier festividad, no sabes nada de las personas, y cuando sabes... las usas.
+Martino: ...eso es mentira.
+Estefanía: no dije literal, Martino, fueron metáforas, espero que lo entiendas. 
+
+Estefanía se sacó el delantal y se marchó furiosa, cerrando la puerta con fuerza.
+
+  ## Capítulo 9: Toc, Toc, ¿Quién Es? 
+
+Garilda estaba en la cocina de la casa de su amiga, preparando un café sin demasiada atención, más por costumbre que por ganas. Apoyó la taza sobre la mesada justo cuando tocaron la puerta. No fue un golpe fuerte, fue ese toque breve que no avisa nada bueno ni malo. Caminó hasta la entrada sin apurarse, abrió, y al verlo se quedó rígida, como si el aire se le hubiera ido del cuerpo. Era Murray Franklin, parado ahí como si fuera lo más normal del mundo. 
+
+Garilda: ...
+Murray: hola, seguro me conoces, mi nombre es Murray Franklin, sí... del show todo para todos.
+Garilda: ...perdón, yo... no sé qué decir, pensé que eras mi amiga, estoy vestida muy mal, perdóname.
+Murray: no me importa eso, solo... vengo para hablar.
+Garilda: ...claro. 
+
+Después de unos segundos incómodos, ambos se sentaron en la sala. Garilda miró el café que tenía en la mano, dudó, y decidió dejarlo sobre la mesa para empujarlo hacia Murray, como un gesto automático, casi para ganar tiempo. 
+
+Murray: tu nombre es Garilda Calcagnoli, ¿no?
+Garilda: sí, ¿a qué se debe la visita?
+Murray: conociste a Martino.
+Garilda: ...(asintió con la cabeza)
+Murray: por eso... bueno, esta noche haré el tercer programa con él, sí, bastante repetitivo, seguro eso piensas... y, bueno, sería mejor llamar a una amiga de su pasado, ya seguro te la sabes, cómo funciona, eso eleva totalmente las... «miradas».
+Garilda: ...pues, no sé qué decirle yo... no estoy hecha para estas cosas.
+Murray: yo tampoco y mírame, solo es para disfrutar, podrías hacer las paces y finalmente arreglar las cosas.
+Garilda: ¿y tú qué sabes de mí?
+Murray: digamos que... 
+
+No llegaron a acomodarse del todo cuando volvieron a tocar la puerta. Garilda se levantó otra vez, algo molesta, y al abrir se encontró con Toshiba. Él sonrió al verla, pero su mirada se fue directo a la sala. Al ver a Murray sentado, la sonrisa se le borró de golpe. Entró sin pedir permiso y se sentó frente a él, con una tensión que llenó el espacio. 
+
+Toshiba: usted, Murray Franklin.
+Murray: ¿lo conozco?
+Toshiba: eres una puta mierda.
+Murray: (tomó la taza de café, haciendo ruidos de sorbos)
+Toshiba: ¡usted me llamó al programa!
+Murray: yo no invito a nadie, eso se encarga mi secretaría.
+Toshiba: ¡lo que importa es que me invitaron y quedé renegado! Les importa una mierda.
+Murray: cualquier queja, ponla en el buzón de quejas.
+Toshiba: ...vete a la puta mierda. 
+
+La puerta se cerró. Garilda volvió y se sentó junto a Toshiba, sin decir nada, observando cómo la situación se volvía cada vez más pesada. Toshiba se levantó, se acercó un poco más a Murray y siguió insultándolo, sin medir palabras ni consecuencias. Murray también se puso de pie, y en un movimiento seco le dio un golpe en la cara. Toshiba cayó al piso. Murray miró a ambos al levantarse. 
+
+Murray: ambos están invitados al programa, y ahora sí, Toshiba, ahora sí es en serio, lo lamento y... nos vemos esta noche. 
+
+Murray se fue, cerrando la puerta con fuerza. 
+
+Por otro lado, Martino estaba en su habitación. El celular sonaba, insistente, pero estaba guardado en el baúl con candado, así que no lo escuchó. Terminó de vestirse con calma, como si nada lo apurara. Otra vez tocaron la puerta. Fue a abrir y se encontró con Murray. 
+
+Martino: ...¿Murray?
+Murray: hola, no te quitaré mucho tiempo, y... seguramente mi secretaría fue bastante molesta al llamarte una y otra vez.
+Martino: sí... bastante.
+Murray: así que... vine personalmente a invitarte al programa.
+Martino: (suspira) mira...
+Murray: sé lo que vas a decir, te entiendo, te invité dos veces al programa y... sí, no es muy bueno que digamos, pero generaron billones de rating, aunque... yo no busco eso, me importas tú, suena raro, pero... ya sabes que soy un gran fan de todo lo que haces... iré al grano, Garilda y Toshiba se van a presentar.
+Martino: (levantó la mirada) ¿qué?
+Murray: lo hice por ti, solo es una vez más.
+Martino: ...una vez más... sí, una última vez, ¿eh?
+Murray: claro... una última vez.
+Martino: ... 
+
+Murray se fue. Martino cerró la puerta, aunque no lo hizo del todo bien y quedó apenas abierta. Se sentó en el sofá y, sin buscarlo, recordó las palabras de Estefanía: «¿no sientes que a veces quisieras acabar con todo?». Sonrió, como si esa frase le resultara cómoda. Encendió la computadora y entró a su propia página web. 
+
+Recordó cuando Living era apenas un proyecto torpe, algo pequeño, casi amateur, hasta que empezó a crecer y a transformarse en eso que muchos llamaban... «¡El Netflix de los libros!». No era solo una web para leer, era una plataforma pensada para otra época. Ya no se trataba únicamente de literatura, sino de un espacio nuevo, híbrido, donde las historias se vivían de otra manera. El concepto de digital-visual book había cambiado las reglas: leer, sí, pero también mirar, escuchar, interactuar. Un capítulo podía llevarte a un cortometraje, a un juego, incluso a un álbum entero. La literatura dejó de verse como algo viejo o pesado y pasó a mezclarse con el entretenimiento moderno. Nadie hablaba demasiado del riesgo que eso implicaba. 
+
+Martino llamó a Luther, su programador de confianza. 
+
+Luther: ¡qué pasa, socio! Tenemos aquí una duda con mi pareja, ¿Living comenzó con la «i» por equivocación o fue planeado?
+Martino: ¿eh? En realidad te llamo para algo importante.
+Luther: oh, okey, espera...
+Martino: ...
+Luther: muy bien, desactivé el altavoz, dime.
+Martino: es sobre una nueva actualización para la página.
+Luther: ¡no se diga más! ¿Cómo se llaman las nuevas historias?
+Martino: no, Luther... es sobre algo distinto.
+Luther: ¿distinto? ¿Y ahora qué más vas a hacer? ¿Escribir chistes?
+Martino: (suspira) no... es peor.
+Luther: ... 
+
+Cuando la llamada terminó, cerró la pestaña, apagó la computadora y se acomodó mejor en el sofá. Sonreía, tranquilo, como alguien que cree tener todo bajo control. 
+
+Reiralda estaba sola en el jardín. Las flores alrededor eran hermosas, demasiado incluso, pero ella no parecía verlas. Miraba al frente, sin enfocar nada en particular, como si estuviera pensando en algo que no terminaba de tomar forma. No se movía, no hacía nada, simplemente estaba ahí, dejando que el tiempo pasara sin apurarlo. 
+
+Nos desplazamos con Murray. Se arreglaba frente al espejo. Se peinaba con cuidado, repasando cada detalle como si fuera un ritual. Observaba su reflejo con atención, acomodando el cabello una y otra vez, buscando algo que solo él parecía notar. Su expresión era seria, concentrada, como si supiera que en unos minutos todo iba a cambiar. 
+
+Toshiba estaba frente a la puerta del cuarto de Garilda. Tocó una vez, esperando. Garilda abrió y lo miró en silencio. 
+
+Garilda: ¿sí?
+Toshiba: es esta corbata de mierda... ¿me ayudas?
+Garilda: ... 
+
+Garilda se acercó para ayudarlo con la corbata. Ajustó el nudo con calma, con una cercanía que no decía nada pero lo decía todo. Toshiba levantó la cabeza, quedándose quieto mientras ella terminaba. 
+
+Martino estaba frente al espejo, probándose ropa. Se quitaba un traje, se ponía otro, los miraba desde distintos ángulos, pero ninguno lo convencía. No era un problema de talla ni de estilo, simplemente sentía que nada encajaba con lo que estaba por pasar. Al final se quedó quieto, mirando su reflejo sin decidirse del todo. 
+
+Entonces, los aplausos empezaron a escucharse. Primero lejanos, después más fuertes. El grito del público llenó el lugar. El telón se abrió y Murray apareció ante todos. La gente estaba eufórica. Murray bailó apenas, sin exagerar, siguiendo el ritmo de la música con movimientos mínimos. El bullicio se fue apagando de a poco. 
+
+Murray: ¡qué puto programa tenemos el día de hoy! Creo que batiremos récords, un... ¡jonrón! Tres invitados, dos desconocidos, aunque una de ellas no lo es tanto, gracias a Martino, si no, no sería nadie si no fuese por él. 
+
+Murray se sentó y dio la bienvenida a sus primeros invitados: Toshiba y Garilda. El telón se abrió otra vez. Las luces los enfocaron de lleno. Garilda se mostró incómoda, Toshiba claramente molesto. Se sentaron en el sofá. 
+
+Murray: ¿cómo están, chicos? ¿Qué te pasó en la mejilla, Toshiba?
+Toshiba: ...
+Murray: parece grave, ¿alguien te golpeó?
+Toshiba: ...solo algo sin importancia.
+Murray: claro, bien, hola, Garilda, ¿cómo te sientes ante la fama y no tener la vida... aburrida que tienes?
+Garilda: ¿de qué hablas?
+Murray: esta chica de aquí soportó abusos por una avalancha de fans que defendían a Martino, ¡y no solo eso! También sufrió por la pérdida de Félix, su novio.
+Garilda: ¿por qué lo dices como si estuviera muerto? Nos separamos porque... porque ya no daba para más la relación.
+Murray: ...¿no te enteraste? Mi querida abuela Reiralda me dijo que él había fallecido, mejor dicho... se suicidó.
+Garilda: ...¿qué?
+Murray: mi abuela tiene muchos contactos, si no mal recuerdo, me dijo que se enteró por un tal viejo de la estación de autobuses.
+Garilda: ...
+Toshiba: ... 
+
+Murray anunció a su invitado final. El telón volvió a abrirse y apareció Martino. Se sentó en uno de los sofás, a veces mirando de reojo a Garilda. Ambos se miraban serios, aunque intentaban disimularlo. Nadie decía nada todavía. 
+
+Murray: ¡Martino! ¿Cómo estás? Otro programa más, ¿eh?
+Martino: sabes, ya empezaba a extrañarte.
+Murray: (sonrió) ¿sí, verdad? ¿Quién no extrañaría este set... este... show?
+Martino: sí, lo extrañaba, al final del día... Mlive extraña todo lo que tenga que ver con el espectáculo, ¿no?
+Murray: ¿Mlive?
+Martino: sí... tú lo dijiste, me queda mejor.
+Murray: ¡jajaja! Tienes toda la razón.
+Martino: sabes... tengo una sorpresa para ti.
+Murray: ¿ah, sí?
+Martino: un chiste.
+Murray: bien, te escucho.
+Martino: toc, toc.
+Murray: ¿quién es?
+Martino: ¡soy yo, Murray! Mlive, vengo a decirte que mi vida se acabó.
+Murray: ...no entiendo.
+Martino: ¿no quieres revisar tu celular?
+Murray: ... 
+
+De pronto, todos empezaron a revisar sus celulares. La audiencia también. La noticia estaba en todos lados: Martino cerraba su página web Living y confirmaba su retiro definitivo de la fama. El silencio fue total. Nadie hablaba, pero todos estaban sorprendidos. Murray parecía olvidar cómo seguir con el programa. El rating subía, pero él se sentía cada vez peor. Quería gritar, pero se contenía. Martino miraba al frente con una sonrisa tranquila. Toshiba también sonreía. 
+
+Toshiba: fue una muy buena decisión, ¡jajaja!
+Martino: Toshiba, mejor cállate, puto idiota.
+Toshiba: ... 
+
+Garilda estaba decepcionada, pero al mismo tiempo entendía a Martino. No lo aprobaba del todo, pero sabía que había algo más detrás de esa decisión. 
+
+Murray se levantó. Caminó hacia el centro del set con pasos lentos, algo inestables. Se detuvo en el medio. 
+
+Murray: creo que... ¡vamos a un corte comercial! ¿Bien?
+Martino: ¡vamos, Murray! Un corte comercial suena excelente. 
+
+Luego se dio vuelta y miró a Martino. Se quedaron observándose. Uno con rabia acumulada, el otro con una calma que resultaba provocadora. 
+
+Murray: ¿cómo putas pudiste hacer esto? Eres un...
+Martino: ¡un maldito genio! Estoy harto de esto, Murray, ¿tú no?
+Murray: ...¿sabes qué? No importa, otras personas tomarán tu lugar, ¡yo! Yo lo voy a tomar, sí, me apropiaré de ti, de tu marca, ¡todo!
+Martino: mira, aunque te cambies el nombre de tu documento a Mlive o Martino, no importa, no eres yo, ¿sabes por qué? ¡Porque yo soy diferente!
+Murray: ...¡vete a la puta madre!
+Martino: sí... eso mismo hice, ¡jajaja! 
+
+Martino empezó a reírse. Al principio sonó como una risa nerviosa, fuera de lugar, pero en segundos se volvió algo imposible de controlar. Se inclinaba hacia adelante, se agarraba el estómago, le faltaba el aire, como si su propio cuerpo no supiera cómo frenar. No era una risa alegre, era desesperada, rota, completamente desbordada. Las luces del estudio comenzaron a parpadear. Primero fue un fallo leve, casi técnico, pero enseguida se volvió constante. El sonido empezó a distorsionarse, los micrófonos chillaban, la música de fondo se mezclaba con ruidos metálicos que ardían en los oídos de todos. Nadie entendía qué estaba pasando. Algunos del público se tapaban las orejas, otros se levantaban de sus asientos sin saber a dónde ir. 
+
+Las luces explotaron una por una. No fue todo de golpe, fue progresivo, como si el estudio se estuviera apagando a la fuerza. Cada estallido iluminaba el set por un segundo antes de dejarlo más oscuro. Chispas, humo, gritos. El fuego comenzó a extenderse por las cortinas, por el piso, por los decorados. El set entero se encendía, devorado sin apuro. Y en medio de todo eso, Martino seguía riéndose. 
+
+No miraba a nadie, no intentaba escapar. Su risa atravesaba el caos, más fuerte que el fuego, más constante que las alarmas. Mientras las llamas consumían el estudio, él permanecía ahí, riéndose como si, por fin, todo tuviera sentido. 
+
+## Capítulo 10: Todo Final, Es Extraño 
+
+Martino caminaba por el pasillo del Hogar San Gabriel, un lugar de cuidado de ancianos que olía a limpieza reciente y a tiempo detenido. Avanzaba despacio, mirando las puertas cerradas, escuchando ruidos bajos que no terminaban de ser conversaciones. Al fondo, una habitación dejaba escapar una luz clara desde una ventana. Entró. 
+
+Ahí estaba su padre, Rubenio, sentado en una silla de ruedas. Al notar su presencia, se puso de pie con esfuerzo y quedó mirando hacia la ventana, sin darse vuelta, como si supiera que Martino estaba ahí pero no necesitara confirmarlo. 
+
+Martino: hola, papá, pasaron muchos años, ¿no? Ni un solo mensaje de mi parte. No vine a disculparme (lo mira).
+Rubenio: ...(no puede hablar, solo balbucea, aunque eso le duela)
+Martino: sí, como pensaba... te dejé sin palabras. (Suspira) me siento como este cuarto, gris, oscuro, una puta mierda... ¿sabías que me invitaron dos veces al programa de Murray? Seguro ni lo conoces. Escribí un final sobre eso, no tiene trama, ni nada más, solo es un final, en el relato como Murray invita a Garilda y Toshiba, sí, investigué sobre él, no lo conoces, ¿verdad? No importa. La cuestión es que también me invita a mí, vamos al programa todos y justamente todo se va a la mierda, yo reía como estúpido y el set se enciende en llamas. La cuestión es... quizás así funciona mi cabeza, cuando todo va normal, se descontrola, incluso lo que aparenta ser normal es más raro, mucho más raro.
+Rubenio: ...(balbucea más fuerte)
+Martino: ...no sé, cambié, o no, creo que no ameritó un cambio, bueno, no lo sé. Como yo mismo diría... no ameritó un arco final para mi propio personaje. En fin, alguna vez deseé tener la vida de Garilda. Sabes, siento que Toshiba, no sé, como si fuera mi doble, pero más estúpido, bueno, mejor dicho... fracasado. Y Murray, bueno, a veces me sentí identificado con él. No te quito más tiempo. 
+
+Martino lo observó unos segundos más. Luego giró, caminó hacia la puerta y la abrió. Antes de irse, sin mirarlo, dijo: 
+
+«¿Recuerdas, papá, cuando me dijiste que no sería un escritor? Bueno, tenías razón, no soy nadie, nadie para nadie. Gracias, papá, por mostrarme la realidad de las cosas». 
+
+Salió y cerró la puerta lentamente. Rubenio quedó inmóvil. Una lágrima se le escapó sin hacer ruido y cayó al suelo. El gris del piso se transformó en un punto muy pequeño de azul. El polvo se limpió apenas con esa lágrima. 
+
+La escena se rompió en el tiempo. 
+
+2025 
+
+Martino estaba en un salón de clases, sentado con Garilda, Moreno, Álvarez y Santillán. El ambiente era el de siempre, mesas desordenadas, mochilas en el piso, miradas cansadas. 
+
+Martino: ¡tengo otro chiste!
+Álvarez: ¡no! ¿Otra vez? (decía mientras miraba al suelo casi riendo)
+Moreno: mejor no sigas, el silencio es un buen chiste.
+Santillán: ¡a ver! Lanza el chiste, ¿qué más da?
+Garilda: ¿podemos volver al juego? Estábamos bien con las cartas.
+Martino: bueno, está bien, ya no más chistes, pero... sí decirles que... yo... los quiero.
+Moreno: ¿a quién putas le importa?
+Santillán: yo te odio.
+Álvarez: ...me caes bien.
+Garilda: qué malos que son.
+Martino: ¡jajaja! No me esperaba otra cosa de ustedes. 
+
+El timbre sonó fuerte y todos salieron sin ningún orden. En la salida se cruzó con Isadox. Se saludaron de manera simple, sin frenar demasiado. A lo lejos vio a Regina: «¡Hey, Regina!». Regina respondió: «¡Martino! ¡Hola!». Siguió caminando junto a Isadox. 
+
+Isadox: ¿y? ¿Cómo vas con esa página web?
+Martino: ...pues... siento que debo estar más activo en eso, pronto lo voy a estar, se vienen cositas.
+Isadox: ...¿y... te vas a ir a vivir a Tostado? Perdón, ¿a Nuevo Aire?
+Martino: sí, bueno, eso creo.
+Isadox: ¿se lo has dicho?
+Martino: ¿a quiénes?
+Isadox: ¿a Santillán? ¿Garilda... Leftraru... Brahin? ¡A todos, pues!
+Martino: no, solo a ti... por ahora. 
+
+The End
+</script> 
+
+<script>
+(function(){
+  var TITLE = 'Eternamente Vivo 2';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } } 
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box'); 
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  } 
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  }); 
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e} 
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  } 
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false; 
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  } 
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  } 
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  } 
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list'); 
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); } 
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  }); 
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); }); 
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  }); 
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  }); 
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  } 
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200); 
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
