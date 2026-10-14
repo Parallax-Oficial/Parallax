@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Familia Rani — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+**1989**
+
+Norman: ¿qué dices? ¿Eh?
+Laurieta: ... ¿lo podré ver?
+Norman: quizás podría hacer algo
+Laurieta: ...
+
+**1991**
+
+Norman: ¿cómo estás?
+Salievo: ... las quiero de una puta vez
+Norman: sí, pero... tienes un pequeño inconveniente
+Salievo: ...
+Norman: tendrás que estar aquí dentro
+Salievo: ... ¿y... las tendré para toda mi vida?
+Norman: sí, para siempre, hasta tu muerte
+Salievo: ...
+
+Norman lo llevó a la prisión. Las celdas estaban alineadas, una junto a otra, era una prisión panóptico. Sacó un manojo de llaves y lo encerró en la C-180.
+
+Salievo: ¡hey!
+Norman: ...
+Salievo: tráelas
+Norman: bien
+Salievo: ¡y otra cosa!
+Norman: ...
+Salievo: quiero unos cigarrillos
+Norman: ... bien.
+
+Norman se marchó. Salievo se sentó y observó la celda: la cama, el baño, un lavadero y algunos libros. Golpeó la pared y escuchó golpes de vuelta. Sonrió ante la compañía silenciosa.
+
+Norman: ¡aquí tienes!
+Salievo: ya era hora
+Norman: y tus cigarros.
+
+Le entregó también una caja pesada. Salievo la abrió y encontró unos tacones rojos. Se los colocó y dejó escapar una risa áspera de satisfacción. Entonces se recostó en la sucia y repugnante cama, mirando el techo con telarañas. Bajó su mano hasta sus pantalones. Cerró los ojos e imaginaba bailando con aquellos tacones. Su cuerpo sentía mariposas y su energía se reflejaba en los movimientos rápidos de su mano, jalando su pene repetidas veces. Se detuvo, inhaló y mostró una sonrisa delicada. Al igual que la cama, su pantalón ahora se encontraba viscoso.
+
+**1989**
+
+Laurieta, acompañada por Norman, descendió por el pasillo húmedo que conducía a la celda C-180. El aire olía a hierro y humedad antigua. Frente a la puerta de metal, su voz se quebró.
+
+Laurieta: ¡Salievo!
+Salievo: ... ¿Lau?
+Laurieta: ¡Salievo!
+Salievo: ¡Lau!
+
+Ambos lograron tocarse las manos a través de una estrecha abertura oxidada. Las yemas se rozaron como si bastara ese mínimo contacto para restaurar años de distancia.
+
+Laurieta: ¡no sabes cuánto te extraño!
+Salievo: dime, por favor, que ella... ella está bien
+Laurieta: ... ¿quién?
+Salievo: Elizabeth... ella... ¿cómo está?
+Laurieta: bien, pero no importa ella. Lo que importa es que tú estés bien.
+Salievo: ... ¿lo tienes?
+Laurieta: sí, sí... aquí lo tengo... mierda.
+Salievo: ¡¿qué sucede?!
+Laurieta: por favor, no te enojes.
+Salievo: ¡hija de puta! ¡Yo sabía que lo ibas a perder! ¡Inútil de mierda!
+
+El grito de Salievo rebotó en los muros como un golpe seco. Su furia se desató con un temblor que parecía arrancarle el aire; golpeó la puerta, el suelo, su propio pecho. El metal respondió con un eco que dolía.
+
+Laurieta retrocedió, trastabillando, como si el suelo mismo la empujara hacia atrás. El miedo la hizo temblar, pero más aún, el amor que todavía la ataba a él. Entonces se volvió hacia Norman, con el rostro encendido y la voz partida.
+
+Laurieta: ¡por favor! ¡Enciérrame!
+Norman: ... ¿qué?
+Laurieta: ¡enciérrame!
+
+Norman la miró con desconcierto, luego asintió. No pidió explicaciones. Solo cumplió el pedido, girando la llave que selló algo más que una puerta. Laurieta fue encarcelada en la C-120.
+
+## Capítulo 1: Rosa
+
+Un año había pasado. En la vieja casa de los Rani, la abuela Glassy seguía ocupándose de su nieta Elizabeth, aguardando todavía la visita de su hija Laurieta. Los días, cada vez más iguales, se volvían una espera sin calendario.
+
+Cuando Glassy llamó a la policía para denunciar la desaparición de Laurieta, recibió una noticia que desfiguró el aire del comedor: su hija había sido trasladada automáticamente a la prisión Rosales Borja. La mujer, incrédula, lo repitió frente a su nieta con una serenidad que parecía prestada, como si contara algo ajeno. Elizabeth no lloró, solo comenzó a escribir. Cada semana enviaba una carta al penal; nunca recibió respuesta.
+
+El pueblo, mientras tanto, no olvidaba.
+
+En las calles, los murmullos llevaban el nombre de Salievo con una mezcla de rabia y repulsión. Nadie necesitaba repetir lo que había hecho: el secuestro, el encierro, las noches interminables en que dos muchachas del pueblo —Cordija Montes y Bárbara Carrioj— dejaron de parecer humanas. Bastaba pronunciar su apellido para que el aire se volviera espeso.
+
+Encendió la cámara, sonrió y repitió la frase: "esto es increíble, me... me excita" unas seis veces. Salievo, entonces, mostró unas botas, un par de botas para el frío, y otras que eran tacones muy malos, tacones pobres. Acercó esos tacones a su nariz y los olió, inhalando profundamente, volviendo a repetir la frase. Se apartó de la cámara y por fin encuadró a ambas chicas amarradas en sillas desgastadas. Se quitó los pantalones y se agachó, lamiendo los pies desnudos de ambas mujeres.
+
+Elizabeth cargaba ese peso sobre los hombros. Sus maestros le hablaban con frialdad, sus compañeros la miraban como si temieran contagiarse de algo invisible. Las burlas eran pocas, pero los silencios eran muchos más. Hasta que un día, las manos que la empujaban en el recreo ya no buscaban juego ni crueldad: buscaban castigo. Y así, sin haber hecho nada, la niña aprendió que el pecado también puede heredarse.
+
+Glassy se quedó un momento más frente a la pared del comedor. Allí estaban las fotos de sus padres. Una imagen de su madre en el jardín de la casa vieja, sosteniendo un canasto con ropa recién lavada. Una foto de su padre sentado en un sillón, con la pierna cruzada y un periódico abierto frente al pecho, la mirada fija en algo que ya no estaba. Otra, más pequeña, mostraba a los dos juntos en la plaza del pueblo, la sonrisa apenas insinuada. Glassy las repasó con los dedos cruzados sobre el vientre. No pensaba en nada; solo las veía.
+
+Caminó hacia la puerta del sótano. La madera crujió como siempre. Bajó los escalones con cuidado. La luz era mínima. Al llegar al final, apartó cajas y viejos muebles hasta que encontró un archivador de metal. Lo abrió y sacó un montón de cartas. Eran de Laurieta, todas dirigidas a Salievo:
+
+"No entiendo por qué me haces esperar, pero me gusta que lo hagas, puedo imaginarte de formas que no creo que quieras que te imagine. Siento algo raro cuando pienso en que puedo molestarte y al mismo tiempo complacerte. Es confuso y me hace sentir viva."
+
+"Tus órdenes no me asustan. Al contrario, espero cada castigo como si fuera un regalo, quiero tus gritos, tus insultos, perderme en tu entrepierna. Me encanta eso, tomar mi cabello con fuerza y luego todo lo demás. Estoy atrapada en esto y no quiero salir, siempre estarás para mí."
+
+Glassy dejó caer las cartas. Se apoyó en la pared del sótano, sin moverse. Nunca imaginó que la relación de su hija fuera así, tan torcida y silenciosa, tan lejos de cualquier amor que ella pudiera reconocer.
+
+Mientras revisaba otra caja, sintió un movimiento detrás de ella. Giró lentamente. Allí estaba un hombre, viejo, delgado, la piel marcada por arrugas profundas y la ropa raída. Sus ojos tenían un brillo extraño, que no era ni amable ni cruel. Solo estaba.
+
+Glassy: ... Marcone... mira esto, nuestra hija, ¿tú la recordabas así?
+Marcone: no... fue tu culpa y lo sabes
+Glassy: ...
+Marcone: imagina que estas cartas llegaran al pueblo, no puedo tocarte pero te juro que voy a matarte
+Glassy: ... quiero que estés conmigo
+Marcone: lo estoy
+Glassy: no de esta forma...
+
+Glassy bajó la mirada, viendo cucarachas ir de un lado a otro. Al levantar la vista, Marcone ya no estaba. Glassy, sin revisar más, solo se marchó. Subió la escalera del sótano sin mirar atrás. El aire de la casa olía a lo de siempre: a cocina, a algo viejo. Entró en la cocina y la vio.
+
+Elizabeth estaba de pie junto a la mesa, con un cuchillo en la mano. No estaba cocinando; lo sostenía como si lo necesitara para algo.
+
+Glassy: ¿Elizabeth?
+
+Ella soltó el cuchillo de golpe y lo dejó caer sobre la madera de la mesa. Se volteó y dejó ver una cara que mostraba sorpresa. Glassy se acercó despacio. Miró el cuchillo, la mano de Elizabeth vacía y la mirada de la nieta que no quería hablar.
+
+Glassy: ¿qué hacías con eso?
+
+Elizabeth negó con la cabeza. Hizo un gesto para apartar la pregunta, como si quisiera ordenar algo invisible sobre la mesa.
+
+Elizabeth: nada
+
+Elizabeth corrió, subiendo las escaleras para encerrarse en su cuarto. Nuevamente, Marcone volvió a hacerse presente.
+
+Marcone: ¿lo ves? ¿Ves en lo que la convirtieron?
+Glassy: no tiene la culpa de nada
+Marcone: de tal palo tal astilla, esa niña me preocupa, un día de estos va a apuñalarte
+Glassy: ¡basta! ¡Vete!
+Marcone: ... cuídate.
+
+Marcone retrocedió sin despegar la mirada de Glassy. Desapareció entre las sombras de la cocina-comedor.
+
+## Capítulo 2: La Cárcel Rosa
+
+Los hombres terminaban de pintar las celdas. Era un rosa fuerte, intenso. Las brochas recorrían las paredes, de arriba abajo, con movimientos repetidos. Todo estaba recién pintado. Había olor a pintura en el aire.
+
+Uno de los hombres que se encontraba en la C-180 se agachaba de forma erótica varias veces para alcanzar la parte baja de la pared. Cada vez que lo hacía, se inclinaba más para llamar la atención de Salievo. Él estaba sentado a un lado, lo miraba y sonreía sin decir nada, solo disfrutaba, mientras tocaba su pene suavemente.
+
+—¿Crees que ya he terminado?
+Salievo: ... te falta un poco por allá
+—¿Sí?... es verdad
+Salievo: ve y píntalo
+
+En ese momento, Norman entró fumando un cigarro, compartiendo uno con Salievo.
+
+Norman: ya es suficiente, tú, vete de una vez
+Salievo: cómo te gusta dejarme insatisfecho
+Norman: no jodas... eso es un asco
+Salievo: para ti
+Norman: en fin... Laurieta quiere verte, te necesita
+Salievo: ... dile que estoy ocupado
+Norman: pues... decirle que estás ocupado no ayuda, y en este lugar claramente eso no es una excusa
+Salievo: ... bueno, solamente dile que no quiero, no pienso tener sexo con ella
+Norman: claro... por cierto, tengo algo de que hablarte
+Salievo: escúpelo
+Norman: para mañana los presos dejarán de comer gratis, bueno, depende de si literalmente se están muriendo de hambre
+Salievo: ¿qué? Y... ¿y cómo mierda es eso?
+Norman: tendrás que pagar desde ahora y en adelante
+Salievo: ¿y de dónde mierda crees que voy a sacar el dinero?
+Norman: muchos presos ahora empezaron pequeños trabajos aquí, esos hombres que pintaban eran presos
+Salievo: ¿presos?...
+Norman: sí, si querés cooperar vas a ganar dinero, también puedes cobrar en otras cárceles ayudando, o... también en las calles del pueblo
+Salievo: ... mierda...
+Norman: aunque, ¿sabes qué otra cosa puedes hacer?
+Salievo: ... ¿qué?
+Norman: ... lo hablé con los demás administradores y dicen que no tienen problema en que algunos presos se prostituyan
+Salievo: ¿y tú piensas que me voy a dejar coger?
+Norman: no, al menos tú no... pero... hay otra persona que sí
+Salievo: ...
+
+Guzmán avanzó por el pasillo central, con las manos detrás de la espalda y una expresión que parecía medir el aire. Cada paso suyo sonaba hueco. Los presos lo seguían con la mirada, algunos con curiosidad, otros con odio tranquilo.
+
+El nuevo administrador, apenas llegado hacía unas horas, se detenía en cada celda apenas unos segundos, como si le bastara un vistazo para entenderlo todo. Los hombres adentro se movían poco, apenas un gesto, una palabra cortada por la desconfianza.
+
+El color rosa brillaba bajo las luces blancas. Guzmán pasó la mano por una pared recién pintada y la retiró enseguida, marchándose. La observó un momento.
+
+Guzmán: rosa... ¿quién fue el idiota?
+
+Norman, que lo acompañaba, evitó contestar. Guzmán siguió su recorrido. Se detuvo frente a un grupo de presos que hablaban bajo, y los miró con la lentitud de quien ya está cansado de todo.
+
+Guzmán: mierdas, esa es la definición que les queda... les queda muy bien, son mucho peor de lo que yo podía imaginarme. No son lo que esperaba.
+Norman: ¿y qué esperaba?
+Guzmán: ... psicópatas de verdad.
+
+Nadie se movió, excepto un preso, que no se contuvo ante lo que Guzmán dijo.
+
+Florido: así que no somos mucho para ti
+Guzmán: ... no intentes intimidarme, nadie logra intimidarme
+Florido: ¿seguro? No serías tan hablador si estuvieras aquí dentro
+Guzmán: ... Norman...
+Norman: ¿sí?
+Guzmán: abre la celda
+Norman: ... ¿qué?
+Guzmán: ya me oíste.
+
+El cerrojo giró. Norman le cedió el paso y Guzmán entró como si nada, como si fuese su propio hogar. Sin mostrar expresión que delatara mucho de él, se acercó a Florido:
+
+Guzmán: te pareces a mi hijo, él... tenía muchos problemas y... tengo que preguntarte, ¿conoces las correas con púas filosas para perros?
+Florido: ... ¿de qué hablas?
+Guzmán: bueno... hay otros collares, en los que las púas están por dentro del collar; tiras de la correa y al perro le duele. Si el perro hace un movimiento que no debería, es tan fácil como tirar de la correa para corregirlo.
+Florido: ...
+Guzmán: la cuestión es que muchos dicen que esas correas son crueles; yo pienso que las otras correas son crueles, porque generan perros desobedientes... verte a ti, igual a mi hijo, con sus putas manías, me hace desear tanto golpearte una y otra vez por haberme desobedecido
+Florido: estás loco, hijo de puta...
+Guzmán: ¿loco? ¿Yo? Pensé que... ustedes se conocen a sí mismos, así van a ver quiénes son los verdaderos locos
+Florido: ...
+Guzmán: en fin, desde ahora te llamaré hijo, y si no me respetas o me desobedeces... bueno, tiraré de la correa
+Florido: ...
+
+Florido dio un pequeño paso, retrocediendo. Guzmán le acarició la cabeza mirándolo a los ojos y luego volvió con Norman, quien volvió a cerrar la celda.
+
+Guzmán: ...
+Norman: ¿está bien?
+Guzmán: ... sí, creo que ya vi lo suficiente
+Norman: antes de que se vaya, quisiera que conociera al nuevo
+Guzmán: bien, pero que sea rápido.
+
+Norman lo guió hacia la C-180. Salievo permanecía recostado, fumando, mirando la suciedad de encima. Norman golpeó la puerta y Salievo, sin levantarse, gritó:
+
+Salievo: ¡¿sí?!
+Norman: ¿qué haces?
+Salievo: ¡viviendo mi libertad! ¡Jajaja!
+Guzmán: no me jodas, ¿voy a perder mi tiempo con un comediante asesino?
+Salievo: ¿quién es ese que se escucha?
+Norman: ¡escucha, Sali! Es el nuevo administrador del pabellón, y quería conocerte.
+
+Norman, luego de pensarlo un momento, se levantó con pereza y se acercó a la puerta, pegando su oído a ella.
+
+Salievo: ¿qué quiere ese?
+Norman: solo quiere conocerte. Señor Guzmán, él es Salievo.
+Guzmán: ¿Salievo? Es... ¿un nombre ruso?
+Salievo: sí, viene de Saliev
+Guzmán: muy interesante, gusto en conocerte, pero debo irme
+Salievo: bien
+Norman: antes quiero llegar a un acuerdo
+Guzmán: ¿acuerdo?
+Salievo: ...
+Norman: mire, la esposa de Salievo está aquí y es la única mujer de Rosales
+Guzmán: ¿y eso qué?
+Norman: bueno, pues... ¿usted no tendría problema en que esa mujer sea vendida?
+Guzmán: ... ¿prostituirla?
+Norman: sí, justamente eso
+Guzmán: ¿y cuál es el objetivo?
+Norman: es solamente para que el señor Salievo gane dinero
+Guzmán: ... ¡jajaja! Es el primer chiste que me hace gracia desde que vine a este pueblo, ¡jajaja!
+Norman: ...
+
+Salievo no evitó lanzar sus insultos, aunque los dijo en voz baja.
+
+Guzmán: sencillamente es un chiste, ¿no?
+Norman: ... no, los presos deben ganar dinero
+Guzmán: exacto, y lo harán con un trabajo honesto, uno que logré cambiar en este pueblo de mierda y en esta cárcel
+Norman: ...
+Guzmán: en fin, mi tiempo se agotó, espero que tengas un buen día, Norman.
+
+Luego de hablar, Guzmán llegó a la salida del pabellón. Sin mirar atrás, caminó por el terreno baldío que separaba la cárcel del pueblo. Sus pasos eran firmes, seguros, y el sonido se perdió entre el viento que cruzaba las paredes rosas. Nadie lo siguió. Nadie dijo nada. Solo quedó el murmullo de la cárcel y el olor a pintura recién puesta flotando en el aire.
+
+## Capítulo 3: Demanda a Puesto Rosa
+
+Florido permaneció sentado en su celda, mirando la pared frente a él. Pensaba en Guzmán, en la manera en que recorría las celdas y los juzgaba a todos sin pestañear. Tocó la pared una vez, después otra, con un ritmo seco y constante. Al principio fue casi automático, pero pronto notó que los golpes no quedaban en silencio.
+
+Del otro lado, un preso escuchó el sonido y respondió con un toque propio. Así comenzó un intercambio sencillo, repetido, que conectaba celda con celda. Cada golpe viajaba de muro en muro, hasta llegar al último, la celda con el único teléfono fijo del pabellón.
+
+El preso que tenía acceso al teléfono tomó el auricular y marcó el número de Norman. Informó, en pocas palabras, que Florido quería verlo. No era un mensaje largo ni adornado; solo la información necesaria.
+
+Norman llegó al pabellón y se dirigió directo a la celda C-134. No hubo saludo ni demora. Entró y cerró la puerta tras de sí.
+
+Norman: ¿qué necesitas?
+Florido: ... primero quiero saber si me darás lo que quiero
+Norman: ¿y qué es lo que quieres?
+Florido: ... prométeme que vas a darme eso
+Norman: ...
+Florido: ¡prométemelo!
+Norman: ¡bien, bien! ¡Sí! Lo prometo
+Florido: quiero un puto cuchillo
+Norman: ... ¿qué?
+Florido: ¡no! No dudes, solo ve y tráeme un puto cuchillo
+Norman: ... si no me dices para qué lo quieres, no pienses que te daré un cuchillo, tú que mataste a tus padres
+Florido: ...
+Norman: habla
+Florido: ¿sabes por qué maté a mis padres?
+Norman: ...
+Florido: ellos iban a matarme, sigo escuchando sus voces, sus insultos, ¡gritos!... nadie me entendía, yo era la víctima... yo... defecaron en mi rostro, me obligaban a vestirme de mujer, se reían... no podía hacer nada, solo debía... obedecer
+Norman: ... ya entendí, quieres matar a Guzmán
+Florido: ...
+Norman: perdóname, Flor, pero... eso va contra mis reglas
+Florido: ¿reglas? ¿Me hablas de reglas ahora? ¡Ofreces tu ayuda a todos los presos! ¡Eres cómplice de todos! ¿Y me dices que esto va contra tus reglas? Hiciste cosas peores que todos nosotros... ¡que todos!
+Norman: ...
+
+Norman se retiró sin decir más, dejando a Florido sentado, tranquilo y con la mirada fija en el suelo. El movimiento de los internos seguía su curso: algunos trabajaban en tareas asignadas, otros se apoyaban contra las paredes o caminaban de un lado a otro. El silencio era interrumpido solo por órdenes de guardias o pasos que resonaban en los pasillos.
+
+Más tarde, un hombre ingresó a la prisión. Caminó sin vacilar, con pasos medidos, y se dirigió directamente a la celda C-120. Allí se hospedaba Laurieta. No hubo registro innecesario, ni saludos formales, ni presentación. El hombre cruzó la puerta y cerró detrás de sí. Se presentó ante una celda con luces rojas, una cama diferente a las demás celdas; estaban limpias, te seducían con tan solo acostarte un minuto. La celda se había convertido en una habitación exclusivamente para intimar.
+
+Laurieta: hola...
+—mierda... esta cárcel sí que explota, ¡jajaja!
+Laurieta: ...
+—vamos, empieza
+Laurieta: ...
+—¡que te desnudes! Ponte en cuatro y gatea lentamente hacia mí
+Laurieta: la verdad es que... me gusta algo diferente
+—¡no me importa! ¡Soy el que paga! Y harás todo lo que diga, eres mi zorra ahora
+Laurieta: ... sí, tu zorra.
+
+El hombre se levantó sin mirar a Laurieta. Se abotonó la camisa, tomó su abrigo del suelo y salió por la puerta sin cerrarla del todo. Laurieta quedó sentada al borde de la cama, quieta. El aire del cuarto era espeso, sin ventilación. Se cubrió el rostro con las manos y, después de unos segundos, empezó a llorar. No fue un llanto largo ni desbordado, sino uno breve, como si solo necesitara dejar salir lo justo para seguir respirando. Cuando terminó, se secó las lágrimas con el dorso de la mano, acomodó el cabello y respiró profundo. El silencio volvió a ocupar la celda.
+
+Durante los días siguientes, Laurieta trabajó con una constancia casi mecánica. El trato estaba claro: el servicio, la ganancia, el reparto. Una parte para ella, la otra para Salievo. Norman se encargaba de los números y de las entregas. Todo pasaba con la naturalidad de un negocio bien estructurado, incluso dentro del desorden de la prisión. Las visitas aumentaban. Algunos clientes eran guardias, otros venían de afuera, disfrazados de funcionarios o proveedores. Nadie hacía demasiadas preguntas. Laurieta no hablaba con ellos más de lo necesario. Su voz era mínima, casi funcional.
+
+Mientras tanto, Salievo comenzaba a recibir paquetes pequeños, uno tras otro. Dentro, siempre lo mismo: un solo tacón. Un par, jamás. Tacones de distintos tamaños, colores, materiales. Todos pertenecían a mujeres del pueblo, todas muertas en las últimas semanas.
+
+No había nota ni explicación. Solo el zapato. Salievo los guardaba con cuidado en una caja de madera bajo su cama.
+
+De noche los sacaba, los alineaba y los observaba por largos minutos sin tocarlos; se masturbaba seguido con cada uno. A veces se dormía mirándolos, y soñaba con rostros, chicas que no recordaba haber visto nunca, y sentía que ellas lo tocaban, incluso su pene. Al despertar, volvía a guardarlos, con una calma que no encajaba con el horror de lo que significaban.
+
+Los días se sucedían sin cambios hasta que un nuevo prisionero llegó al pabellón. Venía de Texas. Se hacía llamar Elijah.
+
+Su entrada fue distinta a la de otros. Caminaba con soltura, hablaba con un tono particular y parecía tener una seguridad que irritaba a algunos. Desde el primer día dejó claro que venía a superar a Laurieta, a ocupar su lugar. No lo dijo con violencia ni soberbia, sino con convicción.
+
+Norman, sorprendentemente, lo ayudó. Le consiguió una celda cómoda, le explicó cómo funcionaban los "acuerdos" internos y le abrió espacio en el mismo negocio.
+
+El efecto fue inmediato. Elijah empezó a recibir más clientes, incluso algunos que habían sido habituales de Laurieta. Su trato era distinto, más provocador, más directo. Pronto su nombre se escuchó en todo el pabellón. A Salievo eso le molestó desde el primer día. Veía en él una competencia innecesaria y en Norman una traición. Habían armado algo juntos, y ahora ese equilibrio se desarmaba por culpa de un extranjero con acento y modales de actor.
+
+Laurieta, en cambio, sintió algo parecido a la tranquilidad. Las demandas bajaron, los días se volvieron más largos y menos agotadores. Por primera vez en meses, dormía sin interrupciones.
+
+Aun así, no podía ignorar la voz de los otros presos, que mencionaban a Elijah cada vez más. El boca a boca hizo su trabajo. Algunos decían que Laurieta era única, que nadie podía reemplazarla; otros, que el nuevo la superaba con facilidad.
+
+Las comparaciones corrieron rápido, tanto dentro como fuera de la prisión.
+
+El rumor del boca a boca llegó hasta Elijah, y eso lo irritó. No soportaba quedar segundo. Empezó a trabajar más, a forzarse, a competir incluso cuando nadie lo retaba. Era una guerra muda entre ambos, que solo los guardias y los presos más atentos notaban. Salievo, cada vez más furioso, empezó a tomar distancia de Norman. Lo veía como un traidor, como alguien que disfrutaba viendo a su "invento" caerse. Las discusiones entre ellos se hicieron frecuentes. A veces eran breves, otras terminaban con portazos.
+
+Un día, Salievo habló con Florido.
+
+Florido lo escuchó con paciencia, como si nada le sorprendiera. Le dijo que tal vez lo mejor era hablar directamente con Elijah. Que ese hombre tenía algo especial, una forma de calmar los ánimos. Que si se sentaban frente a frente, tal vez las cosas cambiarían. Salievo, al principio, se burló de la idea. Pero con el paso de las horas, la curiosidad lo ganó.
+
+Norman fue quien lo acompañó al encuentro. Caminaban juntos por el pasillo largo, iluminado a medias. El sonido de sus pasos resonaba en el cemento.
+
+Al llegar, Norman abrió la puerta de la celda C-121. No dijo nada. Salievo entró sin mirar atrás. La puerta se cerró detrás de él con un golpe seco. El silencio se mantuvo unos segundos. Luego, dentro, se oyó una voz leve, casi amable. Después, nada más. El pasillo quedó vacío, y Norman se alejó sin volverse a mirar.
+
+Elijah: ... ¿y tú? Pensé que hoy era mi día de descanso
+Salievo: ... hijo de puta
+Elijah: ¿perdona?
+Salievo: eres un puto maricón, te dejas coger con otros hombres, eso es un asco
+Elijah: ... ven, siéntate allí
+Salievo: ...
+Elijah: cuéntame, ¿qué te sucede?
+Salievo: ¿por qué? ¿Qué te motivó a venir aquí?
+Elijah: ... no nací para estar segundo, nací para ser el primero, el primero en todo, y una sucia como Laurieta no puede ganarme
+Salievo: ... esa sucia es mi esposa
+Elijah: ¡jajaja! Si fuera tu esposa, haría todo para que te sintieras satisfecho, pagaría millones para operarme... ser mejor que en el pasado
+Salievo: ...
+
+Elijah le sonrió dulcemente, se desabrochó la camisa dejando ver unos pechos medianamente grandes.
+
+Salievo: ...
+Elijah: mis ojos están aquí
+Salievo: ... ¿qué mierda es eso?
+Elijah: ¿qué? ¿No quieres probar?
+Salievo: ... tengo algo para ti
+Elijah: ... ¿tacones?
+Salievo: quiero que te los pongas
+Elijah: ¡ah! Ya entendí, ¡jajaja!
+
+Elijah tiró la camisa y se desnudó por completo. Salievo intentó bajarse los pantalones, pero Elijah lo detuvo:
+
+Elijah: ¡no! De eso me encargo yo.
+
+Lo hizo mientras lo miraba con algunas risas de por medio. Salievo tocó sus pechos con mucha suavidad. Elijah retrocedió y se colocó ambos tacones.
+
+## Capítulo 4: Control Rosado
+
+Elizabeth permanecía en el aula cuando todos ya se habían marchado. El reloj marcaba las cinco y el sonido del pasillo vacío le resultaba más cómodo que las risas del recreo. Escribía sin apuro, con la cabeza inclinada y la letra firme, como si anotar sus pensamientos fuera la única forma de no perderse en ellos. Tatiano entró sin avisar. Se apoyó en el marco de la puerta, riendo. Caminó hacia ella.
+
+Tatiano: ¿qué mierda haces?
+Elizabeth: ...
+Tatiano: te hablé, responde
+Elizabeth: ¿acaso no lo ves?
+Tatiano: sí, lo veo muy bien... estás tranquila con un padre asesino que violó a dos mujeres
+Elizabeth: ...
+Tatiano: ¿tú también serás una asesina? ¿Vas a matarme? ¿A matar a los maestros? ¿O serás como tu madre? ¡Una puta!
+
+Elizabeth no respondió. Cerró su cuaderno, lo guardó con calma, se levantó y salió del aula sin mirarlo. El patio estaba casi vacío. El único árbol del colegio proyectaba una sombra delgada sobre el cemento. Elizabeth se sentó allí, buscando aire. No había viento. Solo el zumbido constante del calor.
+
+Tatiano volvió a aparecer. No le bastó con las palabras. Se acercó, tomó su cuaderno del suelo y lo arrojó lejos. Después la empujó, riendo como un idiota. Elizabeth se levantó rápido y empezó a correr. No gritó, no pidió ayuda, solo corrió hacia el aula. Tatiano fue detrás, casi divertido, como si persiguiera a un animal pequeño.
+
+Al entrar, Elizabeth buscó en su mochila. No dudó. Tomó el cuchillo que su madre usaba para los almuerzos y se giró justo cuando Tatiano la alcanzó. Él la sujetó del cuello, intentando frenarla. La fuerza del impulso hizo que el cuchillo se hundiera en su costado. El silencio que siguió fue más fuerte que el grito. Tatiano se aferró a su camisa, tambaleó y cayó. Elizabeth lo miró sin saber si debía soltar el cuchillo o sujetarlo más fuerte. Durante unos segundos, nadie entró. Nadie vio nada. Solo ella y el cuerpo, quietos, en el aula donde hacía un rato había estado escribiendo en paz. Elizabeth dejó el cuchillo en el suelo, se apoyó contra la pared y respiró hondo. No lloró. No dijo una palabra. Solamente se marchó.
+
+La maestra entró al aula con paso apurado. Había oído un ruido, un golpe seco. Al cruzar la puerta, lo vio. Tatiano estaba en el suelo, el cuerpo torcido, el rostro sin color. El cuchillo brillaba cerca de su costado. No gritó al principio. Corrió hacia él, lo tomó entre los brazos y llamó a gritos pidiendo ayuda. Otro maestro apareció desde el pasillo y juntos levantaron el cuerpo. La sangre manchaba el piso, pero nadie se detuvo a mirarla. Salieron de prisa, cargando a Tatiano hasta el coche del instituto para llevarlo al hospital.
+
+El aula quedó abierta. Minutos después, varios maestros llegaron. Revisaron los bancos, las mochilas, los cajones y cada parte del lugar. Nadie entendía nada. No había testigos, no había explicaciones, solo el cuerpo ausente y las marcas en el piso. Entre los pupitres, una mochila abierta destacaba entre las demás. Era la de Elizabeth. Dentro no había cuadernos, solo papeles desordenados y el hueco que dejaba el cuchillo faltante. Uno de los docentes miró a los demás y negó con la cabeza, sin decir palabra.
+
+Afuera, Elizabeth seguía sentada junto al árbol. Miraba al suelo, con la ropa arrugada y las manos quietas sobre las rodillas. Una maestra salió y la vio. Caminó despacio hacia ella, con una expresión contenida. Se sentó a su lado sin decir nada. Permanecieron así un rato, respirando el aire pesado del final del día. La maestra miró de reojo las manos de Elizabeth. No estaban manchadas, pero temblaban apenas.
+
+—¿Cómo estás, Eliza?
+Elizabeth: ...
+—... lo siento por todo lo que pasó con tu familia, es una pena
+Elizabeth: ... estoy harta de que la gente me consuele
+—... te entiendo
+Elizabeth: no... no entiendes
+—yo también perdí a mis padres
+Elizabeth: ¡no me importa! ¡Quiero estar sola!
+—¡Elizabeth!... ¿apuñalaste a Tatiano?
+Elizabeth: ...
+
+Elizabeth abrió la boca para responder, pero no supo qué decir. Intentó irse, pero la maestra la detuvo tomándola de la mano, repitiendo la pregunta.
+
+Elizabeth: ... yo... no quise, fue un error
+—... ¿quisiste matarlo?
+Elizabeth: ... ¿qué? Fue un error, ¡un puto error!
+—...
+
+La maestra se giró y se marchó caminando con pisadas firmes. Elizabeth fue llevada a la dirección sin oponer resistencia. Caminaba despacio, con la mirada baja, mientras dos maestras la acompañaban a los costados. No lloraba ni hablaba. El director, al verla entrar, cerró la puerta y pidió que esperara adentro. Se quedó de pie, observando a la niña sentada frente a su escritorio, las manos cruzadas sobre el regazo, inmóvil.
+
+Pasaron unos minutos hasta que el teléfono sonó. El director habló brevemente y luego colgó. La abuela estaba en camino. Glassy llegó con paso firme, vestida de prisa, con el rostro tenso. Saludó con un movimiento seco de cabeza y se sentó frente al escritorio. No preguntó nada al principio. El director comenzó a hablar con un tono medido, explicando lo ocurrido, el ataque, el cuchillo, el muchacho en el hospital. Glassy escuchaba, o al menos eso parecía. Pero su atención se fue apagando de a poco. La voz del director se volvió un murmullo lejano, un zumbido constante. Giró la cabeza hacia la esquina de la oficina, y lo vio.
+
+Marcone estaba allí, de pie, inmóvil, observando a Elizabeth. Su figura se distinguía con claridad, el gesto sereno, los ojos fijos en la niña. Glassy sintió que el aire se volvía más pesado. El director seguía hablando, sin notar nada. Glassy apenas respiraba. Marcone, sin moverse, le devolvió la mirada. No sonreía, ni mostraba enojo.
+
+Marcone: te lo dije, tu nieta es peligrosa, tiene los genes de sus padres
+Glassy: ...
+Marcone: te va a matar cuando tenga la oportunidad, haz lo que debas hacer o vas a morir antes de lo que deberías
+Glassy: no... es mi nieta, mi nueva hija
+Marcone: ¡no! Ella no es tu nieta, no es mi nieta, ¡es una puta asesina!
+Glassy: ...
+Marcone: deshazte de ella
+Glassy: ...
+
+Glassy bajó los ojos, evitando mirarlo de nuevo. El silencio se apoderó del despacho. Nadie dijo nada más. Solo el reloj del escritorio marcaba los segundos, uno detrás de otro, sin prisa. Se levantó y gritó su nombre: «¡Elizabeth!». La tomó de la muñeca con fuerza y, sin saludar, se fue furiosa con la niña.
+
+La casa estaba en silencio cuando regresaron. El sol apenas se filtraba por las ventanas y el aire olía a encierro. Glassy entró detrás de Elizabeth, con el rostro apagado y las manos temblorosas. Apenas cerró la puerta, el silencio se rompió. Empezó a gritarle sin medir palabras, con una voz que se quebraba entre el enojo y la desesperación. La llamó inútil, malcriada, enferma, todo lo que su boca encontraba. Le dijo que había deshonrado su casa, que no tenía perdón, que había traído la desgracia de nuevo. Caminaba de un lado a otro sin detenerse, buscando palabras que dolieran más que las anteriores.
+
+Le impuso un castigo, luego lo cambió por otro, y otro más. Dijo que no saldría, que no comería, que no hablaría con nadie. Después, cansada, se arrepintió de todo y murmuró que no la castigaría, pero que igual iba a pagar, de alguna forma, lo que había hecho. Elizabeth quiso escapar a su habitación. Subió los primeros escalones apurada, pero Glassy fue detrás. La alcanzó en la puerta y la sujetó del brazo. La volvió a insultar, ya sin fuerza, como si cada palabra la desgastara más. Y de pronto, le pegó. Una vez, y otra. Con furia, con llanto, sin pensar.
+
+Elizabeth cayó al suelo sin decir nada. Glassy seguía gritando, sintiendo detrás de ella una mirada que la observaba en silencio. Giró apenas la cabeza. Marcone estaba en la sombra del pasillo, viéndola, sin expresión. Glassy se apartó, respirando con dificultad. Salió de la habitación y cerró la puerta de golpe. Dio unos pasos hacia la escalera, llevando una mano al pecho. El aire no le alcanzaba. Su cuerpo se tensó, el dolor subió hasta el cuello, y sin un grito, cayó por los escalones. El sonido seco del golpe fue lo último que se oyó en toda la casa.
+
+Elizabeth salió de la habitación y la vio, a su abuela desplomada en el suelo. Bajó las escaleras despacio, sin dejar de mirar el cuerpo de su abuela. Glassy seguía ahí, tendida en el suelo, con los ojos abiertos y el rostro sin expresión. Parecía mirar algo que ya no estaba. Elizabeth se acercó, la tocó varias veces en el hombro, susurrando apenas una palabra.
+
+Elizabeth: ¿abuela?...
+
+No hubo respuesta. Repitió el llamado una y otra vez, con la misma voz baja, cada vez más débil. Luego se detuvo. La miró un largo rato y se levantó. No lloró. Solo respiró hondo y giró hacia el pasillo. El silencio de la casa era tan profundo que podía oír sus propios pasos. Fue directo al sótano. Al abrir la puerta, un olor fuerte le golpeó el rostro. Bajó igual, cubriéndose la nariz con la manga. Allí todo parecía más viejo que antes. Hurgó entre cajas, trapos y papeles hasta que notó algo extraño: una pequeña tabla suelta en el suelo. Se arrodilló y, con esfuerzo, la levantó.
+
+Debajo había un hueco, y dentro, un pequeño baúl cubierto de polvo. Lo sacó y lo abrió. Dentro había fotografías. En ellas, dos chicas jóvenes: Cordija Montes y Bárbara Carrioj. Sonreían, posaban, se las veía radiantes, como si la vida aún no hubiera tenido tiempo de tocarles la piel. Elizabeth las miró una por una, reconociendo los nombres que el pueblo aún susurraba.
+
+Debajo de las fotos encontró una cinta VHS. No tenía etiqueta. Subió con ella entre las manos, dejando la madera abierta. En la sala, el cuerpo de Glassy seguía en el mismo lugar. Elizabeth lo miró por un instante, sin acercarse, y siguió hacia el televisor. Insertó la cinta y presionó "play". La pantalla parpadeó. Primero se escuchó una respiración, luego una voz masculina. Su padre. La cámara lo mostraba conversando con las dos chicas, en distintos lugares: una cocina, una calle, un parque. Las trataba con cuidado, con una amabilidad forzada. A medida que el video avanzaba, las escenas se volvían más tensas, más oscuras. Las risas se apagaban. Las chicas ya no sonreían. El escenario final era un sótano, el mismo de la casa. Su padre les hablaba con una calma terrible, como si les estuviera explicando algo importante. Luego, la imagen se cortaba. Elizabeth se quedó mirando la pantalla vacía. La cinta seguía girando, pero ya no había sonido. Su reflejo se veía en el vidrio del televisor, quieto, iluminado apenas por la luz gris del aparato. No dijo nada. Solo se sentó en el suelo, con las fotos aún en las manos, mientras afuera la noche caía sin ruido. Volvió a ver a su abuela y notó un charco de sangre esparcirse.
+
+## Capítulo 5: Ambiente Tenso, Ambiente Rosa
+
+Guzmán regresó a la prisión después de varias semanas fuera. El aire en los pasillos parecía distinto desde su ausencia, aunque nadie se atrevía a comentarlo. Su entrada fue silenciosa, sin guardias que lo escoltaran ni advertencias previas. Cruzó el portón principal con una expresión firme, pero sin las manos cruzadas detrás. Norman lo esperaba en el primer corredor, con una mezcla de respeto y ansiedad. Intentó saludarlo, pero Guzmán siguió caminando sin detenerse. Su paso marcaba autoridad, aunque en sus ojos no había ni orgullo ni satisfacción.
+
+Durante la semana, los gestos se repitieron con una precisión incómoda. En la reunión administrativa, Norman se acercó con informes. Guzmán le quitó los papeles de la mano sin mirarlo, los hojeó apenas y los dejó sobre el escritorio sin decir nada. Norman esperó una respuesta, pero solo obtuvo silencio.
+
+Norman: ¿no dirá nada?
+Guzmán: ... si esperas una respuesta de mí, sería mejor ir a descansar
+Norman: dígame, ¿por qué presiento que usted está tratando de tirarme a la basura?
+Guzmán: solamente los presos van a la basura; si quieres ir con ellos, considérate un cómplice
+Norman: ... sé lo que está haciendo, ya lo ha hecho antes con otro administrador
+Guzmán: ¿y por qué lo habré hecho? ¿Nunca lo pensaste?
+Norman: ...
+Guzmán: te quedan tres días aquí, será mejor que te despidas de tus amigos, amigos psicópatas, por cierto
+Norman: ... no puedo irme, no voy a dejarlos
+Guzmán: no los dejes si no quieres, pero tendrás que vivir igual que ellos... en una puta celda, y ya sé dónde podrías quedarte... ¿la C-134 no te gusta?
+Norman: ... se va a arrepentir
+Guzmán: en esta vida solo me arrepiento de una cosa, y fue haber tenido un hijo.
+
+Por las noches, Guzmán realizaba inspecciones personales. Recorría los pabellones con paso lento, revisando las celdas, las cámaras y los pasillos vacíos. Detenía su mirada en cada esquina, observando sin intención aparente. Los guardias se miraban constantemente sin entender mucho de las acciones de Guzmán.
+
+Mientras tanto, Salievo había comenzado a deteriorarse. Su rostro estaba más pálido y sus brazos más delgados. Pasaba gran parte del tiempo dentro de la C-121, acostado, en compañía de Elijah.
+
+Elijah: ¿te quedarás ahí sin hacer nada? Acabaste muy rápido
+Salievo: ...
+Elijah: ¿estás seguro de que no quieres seguir tocando?
+Salievo: ... ¿algún día dejas de pensar en sexo?
+Elijah: solamente en los días de lluvia
+Salievo: ... ¿y qué tiene la lluvia?
+Elijah: es demasiado ruido, y mis clientes no pueden escuchar mis gemidos y gritos
+Salievo: ... supongo que es momento de irme
+Elijah: ¿puedo preguntarte algo?
+Salievo: ¿qué?
+Elijah: si no eres gay... ¿por qué te excito tanto?
+Salievo: ... me cansé de la carne femenina
+Elijah: tengo tetas, ¿eso no te cansa?
+Salievo: ... quizás estoy cansado de mi esposa
+Elijah: ¿qué hizo ella?
+Salievo: todo mal... debía dejar morir a Elizabeth y nació... no debía enviarme cartas mientras estaba en la milicia y lo hizo... me comí todos los putos insultos, leían esas cartas y solo se imaginaban a una mujer desquiciada... quería ocultarme bajo tierra
+Elijah: ¿y eso te parece mucho?
+Salievo: ... toda su familia está loca, me enamoré de ella porque era diferente a su familia, pero resultó ser igual... vi en ella lo que no debía, y así se enamoró de mí al punto de ser un amor... un amor imposible de soltar
+Elijah: ¿por eso mataste a esas dos chicas?
+Salievo: ... ellas tenían algo que mi esposa no... pies hermosos, bellos, que solamente resultaban en querer besarlos y lamerlos todo el tiempo... ella también tenía pies hermosos, pero dejó de tenerlos... se arruinó el cuerpo al tener a su hija, eso no puedo perdonarle... no puedo.
+
+Salievo salió de la C-121 y caminó despacio por el pasillo, y se cruzó con un hombre que acababa de llegar, un visitante que venía a ver a Elijah. Salievo lo interceptó.
+
+Salievo: ¿a dónde vas?
+—... ¿te importa?
+Salievo: es mejor que respondas
+—... voy a ver a Elijah
+Salievo: ¿eres uno de sus clientes?
+—sí
+Salievo: sabes... él no es tan bueno, no mueve las caderas como debería, te recomiendo ir a la celda 120, es una mujer... tiene algunas arrugas, pero... no se sienten al tocar
+—detesto las arrugas.
+
+Salievo lo detuvo con un gesto brusco. El hombre intentó apartarse. Salievo insistió, su voz se quebró entre enojo y cansancio. Le reclamó sin detenerse, y al recibir una respuesta altiva del visitante, lo empujó. El golpe fue torpe, pero suficiente. El hombre perdió el equilibrio, cayó por la baranda y su cuerpo golpeó el suelo del nivel inferior. El sonido fue seco, breve. El guardia de la torre, que lo había visto todo, bajó de inmediato. Revisó el cuerpo sin encontrar signos de vida, levantó la cabeza y vio a Salievo quieto, sin intención de escapar. Lo esposó y lo llevó por el pasillo. A mitad del camino se cruzaron con Guzmán, que regresaba de una inspección. Se detuvo frente a ellos unos segundos. Observó a Salievo sin decir palabra, luego al guardia, y ordenó que lo encerraran en su celda. No preguntó nada. Siguió caminando hasta perderse en la oscuridad del corredor. Norman estaba más atrás, había visto la escena desde la distancia. Permaneció inmóvil. Sabía que algo se estaba rompiendo, aunque no podía entender qué.
+
+Norman caminó sin prisa hacia la C-134. Llevaba en el rostro una calma falsa, de esas que se aprenden con los años en prisión. Abrió la puerta sin anunciarse. Apenas dio un paso adentro, Florido se lanzó contra él. Lo empujó con fuerza, haciéndolo chocar contra la pared. La respiración de ambos se mezcló por un instante. Florido lo sujetó del cuello del uniforme.
+
+Florido: si no me consigues el cuchillo, te juro que te mato con mis propias manos
+Norman: tranquilízate, cambié de opinión
+Florido: ...
+
+Florido lo soltó, sin entender. Norman se acomodó la ropa.
+
+Norman: aquí lo tengo
+Florido: ... ¿por qué cambiaste de opinión?
+Norman: solo asegúrate de matarlo como se debe
+Florido: ...
+
+Salió de la celda sin mirar atrás, dejando a Florido con una mezcla de duda y expectación. El pasillo estaba vacío. El eco de sus pasos era lo único que quedaba en ese tramo del penal. Mientras caminaba, Norman encendió un cigarrillo, dio dos caladas y lo apagó antes de llegar al siguiente bloque. Sabía que algo se movía dentro de esa estructura, algo que no tenía que ver con reglamentos ni con vigilancia.
+
+En otra parte de la prisión, Laurieta estaba en otro encuentro íntimo con un cliente, moviéndose sensualmente para él; sin embargo, sus pensamientos no estaban en la situación. Pensó en su hija, Elizabeth. En su voz, en los pocos recuerdos que aún le quedaban sin torcer. Decidió acabar con el "servicio", cosa que enfureció a su cliente. Se fue hasta la reja. Llamó a los guardias con un tono contenido, sin gritar. Al principio no la escucharon, pero insistió. Dos de ellos se acercaron. Les dijo que quería hablar con Norman. No explicó por qué, y los guardias, acostumbrados a pedidos absurdos, igual hicieron el llamado. Minutos después, Norman apareció. Se paró frente a la celda, la observó sin decir nada. Laurieta le habló con un aire distinto, más humano, más dolido. Le pidió ver a Elizabeth. Norman pareció dudar, como si aquella solicitud lo incomodara. Le respondió sin prometer nada, pero tras un breve silencio cambió el gesto. Dijo que tal vez podía ayudarla a salir de ahí, que su caso era distinto, que no había cometido ningún crimen. Laurieta lo miró, incrédula pero esperanzada.
+
+La conversación quedó interrumpida por un ruido seco de botas. Guzmán se acercó. El ambiente cambió de inmediato. Norman enderezó la espalda, Laurieta dio un paso atrás. Guzmán se detuvo frente a la celda y observó la escena con una expresión fría.
+
+Guzmán: ¿qué sucede aquí?
+Norman: quiero llevar a esta madre con su hija
+Guzmán: ¿te estás burlando de mí? Está presa
+Norman: sí, pero... ella no cometió ningún delito
+Guzmán: ¿y entonces qué hace aquí?
+Norman: ella decidió entrar a la prisión
+Guzmán: claro... o sea que si un niño viene y te dice de broma que quiere entrar aquí, ¿ustedes dejarían que se quede? ¿Por más que estaría en un lugar lleno de putos psicópatas?
+Norman: ...
+Guzmán: libera a esta mujer y llévala a donde no pueda seguir viendo su rostro
+Norman: ... claro.
+
+Laurieta y Norman salieron de la prisión. Caminaron juntos por el pasillo. Los guardias fingieron no verlos. El trayecto fue silencioso. El aire del exterior parecía distinto, más denso. Cuando llegaron a la casa, Norman notó algo extraño. La puerta no tenía cerradura, apenas colgaba del marco. Entraron. El interior estaba completamente vacío. Las paredes blancas, sin muebles, sin cuadros, sin huellas de vida. Laurieta caminó por cada habitación, moviendo las manos como si esperara encontrar algo que ya no existía. Norman, en cambio, se detuvo frente a un pequeño mueble empolvado. Sobre él, un portarretrato olvidado. Lo tomó y observó la fotografía con detenimiento. Una familia entera posaba con una rigidez casi teatral. Reconoció a Laurieta, más joven, al hombre que debía ser su padre, y a una niña pequeña que apenas sonreía. Detrás, grabado en el marco de madera, un nombre: Lavievo Rani. El apellido lo golpeó. Lo conocía. Había escuchado las historias en el pueblo, los rumores sobre aquel asesino que marcó una época. Ahora entendía la reserva, el miedo, el silencio. La familia de Laurieta descendía de él. Laurieta seguía revisando la casa, sin notar que Norman ya sabía más de lo que debía. Él dejó el retrato en su sitio y salió unos pasos al patio. Encendió un cigarrillo y miró el cielo, con una expresión que oscilaba entre la pena y la duda.
+
+Mientras tanto, en la prisión, Guzmán recorría el pabellón sin guardias. Llegó hasta la C-134 y abrió la puerta sin previo aviso. Florido estaba sentado, tallando algo con un trozo de metal. Guzmán entró despacio, sacó un arma y le apuntó directo al pecho. Florido levantó la mirada, sin miedo, solo con cansancio.
+
+Florido: ...
+Guzmán: ... lamento esto, hijo... pero es lo único que puedo hacer, no has sido un buen hijo
+Florido: ¿de qué mierda hablas, loco de mierda?
+Guzmán: cada vez que te veo no dejo de pensar en él... ¿eres él?
+Florido: ... ¿tu hijo?
+Guzmán: eres una puta desgracia... igual que él
+Florido: ...
+Guzmán: no voy a mentir... siempre soñé con esto, eres una desgracia para mí, para tu madre
+Florido: eres igual de loco que todos nosotros, no soy tu hijo
+Guzmán: ¡ya lo sé!... ¡es la única forma de liberarme!
+Florido: ...
+
+Lo siguiente fue rápido. Florido se abalanzó sobre él con el cuchillo escondido entre las manos. El arma se disparó, pero el sonido se perdió entre los ecos del concreto. Hubo un forcejeo breve, torpe, con movimientos secos y respiraciones agitadas. Guzmán intentó dominarlo, pero Florido no se rindió. Ambos cayeron al suelo, uno buscando sobrevivir, el otro aferrado a una rabia que venía de muy lejos. El ruido atrajo a los guardias. Cuando llegaron, se oyó un disparo. Guzmán se levantó totalmente ileso, viendo a los guardias, quienes le apuntaban; uno de ellos se acercó y le colocó las esposas, llevándolo lejos de la prisión.
+
+Desde la C-180, Salievo vio toda la situación con claridad. Guzmán fue escoltado por los pasillos del penal sin decir una palabra. Llevaba las manos esposadas y el rostro hundido en un gesto de furia contenida. Los guardias lo empujaban con prisa, intentando evitar las miradas de los presos que se asomaban por las rejas. Al llegar al patio exterior, uno de ellos abrió la puerta trasera del auto. Guzmán se detuvo y, con voz firme, exigió su derecho a una llamada. Los hombres se miraron entre sí. Dudaron, pero finalmente lo llevaron a un teléfono fijo. Guzmán marcó un número que conocía de memoria. Norman respondió.
+
+Guzmán: escúchame, tengo poco tiempo, pero puedo pagarte una cantidad muy grande, y no serás despedido
+Norman: ¿qué pasó?
+Guzmán: ven rápido a la prisión
+Norman: pero... estoy con Laurieta, que no encuentra a su hija
+Guzmán: ¡eso no importa! ... ven, rápido, libera a Salievo y juntos vayan a la casa de mi hijo, ya sabes la dirección, ¿verdad?
+Norman: sí, ¿por qué?
+Guzmán: ...
+
+Devolvió el teléfono sin agradecer y subió al vehículo. A varios kilómetros de allí, Norman dejó a Elizabeth en su casa. Le dijo que no saliera, que esperara tranquila. Luego encendió su coche y partió de inmediato hacia la prisión. La noche lo envolvía todo. Al llegar, cruzó sin dificultad los portones. Abrió la celda de Salievo y le indicó que lo siguiera.
+
+Salievo: ¿qué pasa?
+Norman: es Guzmán, me llamó para que fuéramos a la casa de su hijo
+Salievo: ¿quedaré libre?
+Norman: sí, quiere que tortures a su hijo
+Salievo: ¿y qué gano haciendo eso?
+Norman: a su esposa... Guzmán dijo que tiene los pies más hermosos que ha visto en toda su vida
+Salievo: ...
+
+Salieron por la puerta principal, subieron a un auto gris y se marcharon sin mirar atrás. En la ruta, un silencio espeso los acompañó. A la distancia, otro vehículo se desplazaba en dirección contraria. Dentro de él, Guzmán iba junto a un oficial, esposado, mirando fijo por el parabrisas. Reconoció el coche que venía al frente. Norman estaba al volante. A su lado, Salievo, con la mirada perdida. Por unos segundos, ambos autos se alinearon. Guzmán y Norman cruzaron una mirada fugaz, seca, suficiente para entender que la historia no terminaba allí. Después los caminos se bifurcaron. Uno siguió hacia el norte, el otro hacia el sur.
+
+**1985**
+
+En una tarde silenciosa, Glassy tejía una bufanda en la sala de estar. Frente a ella, Elizabeth jugaba en el suelo, distraída, rodeada de juguetes. Laurieta estaba sentada a un costado, conversando con su madre con un tono sereno, como si nada hubiese pasado. La casa tenía un aire de rutina, una paz artificial.
+
+Afuera se escuchó el ruido de una camioneta vieja acercándose por el camino de tierra. El motor se detuvo. La puerta se abrió y se cerró de golpe. Salievo entró sin decir una palabra, pasó junto a las tres sin mirarlas, con el rostro cansado y los zapatos sucios.
+
+Laurieta: ¡hey!
+Salievo: ... ¿qué quieres?
+Laurieta: ¿qué haces todo el día en el sótano?
+Salievo: es un trabajo, no te metas
+Laurieta: ¿puedo ayudarte?
+Salievo: no... no sigas jodiendo mi paciencia.
+
+Caminó hasta la puerta del sótano, la abrió, y bajó lentamente los escalones. La luz del día se apagaba detrás de las ventanas. Glassy siguió tejiendo, sin levantar la vista. Elizabeth seguía jugando. Laurieta, inmóvil, observaba la puerta del sótano entreabierta. Nadie dijo nada.
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'La Familia Rani';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
