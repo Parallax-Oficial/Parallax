@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Divina Comedia — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+Abrí los ojos. Me sentía algo mareado. Veía apenas una luz que provenía de arriba. Cuando mi visión se aclaró, me encontraba en un lugar totalmente a oscuras con esa única luz que parecía un foco que apenas funcionaba. Sentía que ese brillo quemaba mi piel.
+
+Al verme, noté que estaba completamente desnudo. Mi barba desapareció, mi pene y vello púbico también. Luego, escuché una voz y un par de golpes como si estuviese en un tribunal.
+
+Cuantonio: en 1966 has sido condenado a muerte por tus viles pecados. Ahora, te enfrentas a la divina justicia.
+
+Solo escuché la voz: en algunas palabras sonaba más fuerte y en otras apenas oía. Grité por ayuda torpemente, luego pregunté: ¿quién fue? Con una calma que contrastaba con mi grito de auxilio.
+
+Cuantonio: por encima está la divina luz. Proviene del paraíso, ¿te mereces ir allí?
+
+Entonces entendí, estaba muerto. Coloqué mi mano sobre mi pecho y no sentía mi corazón palpitar. Otra vez pregunté: ¿puedo ir al paraíso?
+
+Cuantonio: ¿recuerdas tus pecados?
+
+No recordaba ni mi nombre, apenas algo de mi vida. Tampoco recuerdo nada de mi muerte, tampoco sabía si había sido un delincuente o un pecador. Pero por lo que me decía, era obvio. Volví a preguntar: ¿qué pecados cometí? Y ¿cuál es mi nombre?
+
+Cuantonio: te mereces el infierno, pero, por primera vez, estoy en duda: tu pecado fue obedecer para desobedecer. ¡Y!, puedes llamarte como quieras.
+
+Mi padre se llamaba Pascal. Él me enseñó poesía, entendí que quería volcarme de lleno a la literatura lírica. Ese sería mi nombre, el indicado, honrar a mi padre.
+
+Pascal: llámame Pascal.
+Cuantonio: serás afortunado, Pascal, lo primero que digas será tu condena divina.
+
+Sin pensarlo dije... y literalmente lo dije sin pensar.
+
+Pascal: quiero ir al parásito.
+Cuantonio: buena elección.
+
+Había confundido la palabra "Paraíso" con "Parásito". ¿Estaba tan ocupado en otras cosas en mi mente? ¿O estaba asustado? Eso ya no importaba. Comenzó a reírse con fuerza, parecía a propósito, burlándose de mí. Caí hasta desarmarme, eso era lo que se sentía.
+
+## Capítulo 1: Amada Poesía
+
+Al levantarme, me pegó un aire que atravesaba la piel. Noté que el suelo era muy acogedor, irónicamente, era tierra seca. Al voltearme, vi a un hombre que señalaba con su dedo, apuntando directo al río Aqueronte. Intenté preguntar, pero me había olvidado cómo hablar, o quizás, no podía por más que lo intentara. En ese lago, se aproximaba otro hombre, Caronte, que conducía una balsa.
+
+Me subí, Caronte sonrió y me condujo al mismo lugar de donde había salido. Unas puertas grandes abrieron paso. El viaje no fue tan largo. Al llegar, bajé de la balsa y una enorme campana sonó. Tuve que subir unas escaleras algo extrañas, no parecían hechas para humanos. En la cima me recibieron un estrado de jurados con bolsas en sus cabezas que me vieron con detenimiento.
+
+Minos: ¿y este?! Nadie avisó nada de uno nuevo.
+Glata: ¿acaso eso importa? Estamos aquí para castigar.
+Minos: ... no les parece que es ingenuo? No lo veo asustado como los demás... no parece que haya cometido pecados.
+Cardazu: ¡siempre hay varias opciones! (Gritó con una voz aguda) Podemos enviarlo al horno, si no tiene miedo... su carne puede ser diferente a lo que nos tienen acostumbrados.
+Glata: ¡eso nunca! No soy como los de tu clase... yo jamás comeré de la basura. (Se abrochó el traje elegante).
+Cardazu: ¡¿clase?! ¡Mash! ¡Fash! (Rechinó los dientes).
+Minos: solo démosle cualquier castigo, después de todo... quien entra aquí no sale completo.
+
+En ese momento, sin saber cómo, hablé en voz alta.
+
+Pascal: ¿puedo salir de aquí?
+
+Mi pregunta fue escuchada, pero de una forma incómoda. Era como si estuviera en una junta de empresarios para entregarles café a todos, y pregunté si el café está bueno. Nadie en ese momento iba a responderme, no formaba parte de la junta, ni mucho menos, tenía un rango como ellos. Esa misma situación es la mejor forma de vincular a esta.
+
+Minos: ...
+Cardazu: ... ¿seguro que no quieres enviarlo al horno?!
+Glata: ... ¡dicta el maldito castigo!
+Minos: quizás Cardazu tenga razón... mandémoslo al puto horno.
+
+Fue inevitable no pensar en la poesía. La palabra horno fue perfecta en mi cabeza. No sabía si ellos podían escuchar mis pensamientos. Pero Glata me miró fijo y preguntó: "¿acaso te gusta la poesía?". Pensé en dos cosas: quizás me vendría un castigo peor o fue una pregunta porque realmente le interesa.
+
+Pascal: sí.
+Glata: adelante.
+Pascal: ...
+Cardazu: ¡¿qué mierda haces?!
+Glata: lo que los tuyos no hacen... hacer arte. Este individuo puede sorprenderme. Adelante.
+
+Miré al suelo, recordé a mi padre y mis ganas de mostrarle al mundo mi talento. Esta situación no era como me la imaginaba, pero servía para cumplir ese deseo.
+
+"En tierras de sueños, donde la luna es un faro, un hombre perdido busca respuestas, un camino claro.
+La mente de su padre, un laberinto de maravillas, lo guía a través de paisajes que la razón no alcanza a explicar.
+En bosques de cristal, donde las sombras danzan, busca la sabiduría de un padre, su voz que se desvanece.
+En montañas de niebla, donde los vientos susurran secretos, escucha el eco de risas, de historias que nunca cesan.
+En ciudades de humo, donde los edificios se desvanecen, encuentra fragmentos de recuerdos, pedazos de un espejo roto.
+Pero en medio del caos, de la confusión y el dolor, encuentra un destello de amor, un fuego que arde sin cesar.
+
+Y en ese fuego, encuentra la respuesta,
+la llama que ilumina su camino, su corazón.
+Y se da cuenta de que el sentido no está en los lugares, sino en el amor que queda, en el recuerdo que perdura.
+La vida es un horno que nos hace fuertes, donde el fuego nos forja, nos hace resplandecer".
+
+Respiré profundo, quería seguir recitando, pero Glata empezó a aplaudir.
+
+Glata: ¿lo ves? Incluso un horno hace cosas majestuosas, él lo entendió.
+Cardazu: ... ¡¿qué?!
+Glata: ¿no crees que debemos hacer algo diferente?
+Minos: ... ¿cómo que?
+Glata: podría ser de los preferidos, no tenemos a ningún poeta hasta ahora.
+Minos: ... ¿cuál es tu sueño, individuo?
+Pascal: ... desde que murió mi padre, siempre quise hacer poesía y mostrarla al público.
+Glata: quizás ahora tengas una oportunidad. ¿Qué dices?
+Pascal: ... me encantaría (no parecía tan emocionado)
+Glata: no te preguntaba a ti.
+Pascal: ...
+Glata: ¿qué dices?
+Minos: ... ¿quién lo duerme?
+Cardazu: ¡yo!
+
+Cardazu se abalanzó hacia mí. Se veía como una persona, pero tenía rasgos inhumanos: garras y pelaje en sus brazos. Se quitó la bolsa de su cabeza y empezó a asfixiarme con la misma.
+
+En ese momento me sentí tranquilo y aliviado, aun así, seguía moviéndome de forma inquieta. Escuchaba pisadas, seguramente, lo mismo que me estaba arrastrando. Sentí un golpe y me quitaron la bolsa. Observé que estaba encerrado, cuatro muros y solo podía ver nubes negras. Tenía hambre y sed, irónicamente, mis órganos habían desaparecido.
+
+## Capítulo 2: Recuerdo Vivo
+
+Me llevaron a un palacio, muy idéntico a los de siempre: lujoso y elegante. Allí, Glata me presentó a otros vanidosos. Me saludaron con una educación nunca antes vista.
+
+Glata: él es un poeta.
+Salomón: ¿poeta? Eso es admirar.
+Pascal: ... gracias.
+Salomón: ¿y? ¿Estás trabajando en algo nuevo?
+Pascal: ...
+
+En ese momento pensé de forma inteligente, pícara y con clase.
+
+Pascal: lamentablemente es imposible pensar en cosas nuevas si te sientes atrapado en cuatro muros de concreto.
+Salomón: entiendo... ¡Glata!, desde ahora este individuo comenzará a vivir en mi hogar.
+
+No tenía que imaginarme su hogar. Bastaba con ver el palacio en donde me encontraba. Al terminar la gala, Salomón me guió hasta su "hogar". Esa palabra era grande: un hogar no necesita de mucho.
+
+Salomón: tendrás tu propio lugar de trabajo.
+Pascal: gracias y... ¿cómo te llamas?
+Salomón: ... mi nombre es Salomón.
+Pascal: claro...
+
+Mi propio escritorio estaba lleno de libros. Algunos de los más famosos. Incluso en este mismo lugar saben de la buena literatura. Nunca tuve algo así, era como cumplir mis propios sueños. Solo había un pequeño detalle que me faltaba, un detalle que no es importante. O al menos sí lo es para mí.
+
+Salomón jamás me molestaba. Casi nunca estaba, por lo que entendí, Salomón siempre era el primer invitado para las galas. Recordé que años atrás, una de mis amigas, de quien me había enamorado perdidamente, también era la primera invitada en todas las fiestas.
+
+Esta chica, de nombre Soyla, me había escrito poemas varias veces, mostrando lo orgullosa que estaba de que yo estuviera a su lado. No podía dejar pasar la oportunidad, también le escribía poemas. Pero no era el único, a otras personas, amigos míos, también les parecía atractiva. Irónicamente, la vida es una comedia, quizás por eso no a todos nos gusta, este infierno también es irónico... entonces... ¿la realidad se inspiró de este infierno?
+
+"En un mundo de sombras, donde tropezaba, una chica torpe, tímida, insegura se encontraba.
+Sayla, su nombre, un susurro en el viento, buscaba su lugar, sin saber qué hacer con el tiempo.
+Un amigo leal, con palabras de poeta,
+la hizo sentir segura, como una flor en la grieta.
+Poemas de amor, que la hacían soñar,
+pero pronto, cartas llegaron, sin saber quién las enviaba a mandar.
+De sus amigos, con intenciones ocultas,
+Sayla se sintió confundida, sin saber qué ruta.
+Pero en la confusión, un destello de luz,
+la hizo ver su valor, su belleza, su virtud.
+No era el poeta, quien la hacía sentir viva, con sonrisas.
+Era su compañero, torpe e ingenuo,
+quien no la notaba, pero la hacía sentir en su seno.
+Sayla, la irónica, la que no se esperaba,
+respondió con sorpresa, a la expectativa creada.
+No fue un poema de amor, ni una carta apasionada, sino una sonrisa, una mirada, una vida compartida.
+El premio mayor, se lo ganó el torpe,
+quien no la hacía sentir bien, ni la notaba.
+Sayla, la insegura, la tímida, la torpe,
+encontró su lugar, en la indiferencia del ingenuo".
+
+En medio de la escritura escuché un ruido de la puerta. Me levanté de mi escritorio y bajé las escaleras. Me encontré con él, era Cardazu, esta vez logré ver su cuerpo completo. Una bolsa en la cabeza, pezuñas en lugar de piernas y manos peludas con garras.
+
+Llevaba una bolsa en su espalda, me oyó, pero huyó al notar mi presencia. Corrí rápidamente hacia la entrada, pero no logré abrirla. Preocupado, empecé a ver cada rincón del palacio para ver qué faltaba. Encontrándome con un armario de oro puro, tenía un candado, pero estaba oxidado y ya no servía.
+
+Me fijé en él y solo encontré un maniquí, algo anormal a mi parecer, lo toqué y sentí una pequeña corriente eléctrica recorrer mis venas. Cuando lo cerré, volteé y salió de allí, torpemente, una chica que cayó mirando al suelo como si sus lentes hubiera perdido.
+
+Pascal: ... ¿hola? (Levanté la mirada y el armario estaba vacío).
+-... ¿dónde estoy? (Decía, permaneciendo con la mirada en el suelo).
+Pascal: ... quisiera saber quién eres tú, ¿de dónde saliste? Levántate.
+-... (levantó la mirada).
+
+Mis ojos brillaron, temblaban mis manos, se me erizó la piel y tragué una saliva que me hizo toser. Era mi amiga, Sayla.
+
+Sayla: ¿hola?
+Pascal: ... ¿Sayla?... ¡Sayla!
+Sayla: ¿ese es mi nombre?
+Pascal: ... ¿no me conoces?
+Sayla: no sé cómo llegué aquí.
+Pascal: ...
+
+Estaba totalmente desnuda, algo que no había notado, irónicamente. Ahora, sabiendo quién era, no podía dejar de mirarla.
+
+Pascal: estás... desnuda.
+Sayla: siempre lo estuve... ¿no?
+Pascal: supongo que no.
+Sayla: ...
+Pascal: toma mi mano.
+
+Ayudé a que se levantara, ojeando su cuerpo una vez más.
+
+Sayla: tú me conoces, ¿verdad? Ese nombre... ¿es mi nombre?
+Pascal: ¿no sabes nada de ti?
+Sayla: ...
+Pascal: pues... estás en el infierno, bueno, aún estoy en duda de eso, pero... sí, es eso básicamente.
+Sayla: ... ¿enfermo?
+Pascal: ¿qué? ¡No! ¡Infierno!
+Sayla: ...
+Pascal: repite conmigo... In...
+Sayla: ... ¿In?
+Pascal: fi.
+Sayla: fi...
+Pascal: er... (a este punto estaba algo cansado de hablar).
+Sayla: ¡er!
+Pascal: no.
+Sayla: ... ¿no? ¿Lo dije mal?
+Pascal: ¡no! O sea... (suspira) no importa.
+
+La llevé a una de las habitaciones. Cerré la puerta y esperé unos pocos segundos. Cuando Sayla salió, no pude evitar admirar su vestimenta: un vestido azul. Aún recordaba pequeños fragmentos de su cuerpo desnudo, sin embargo, ese deseo que antes anhelaba de mi mejor amiga, no parecía cumplirse al completo con esta nueva Sayla. Escuché la puerta y vi a Salomón subir las escaleras.
+
+Salomón: ¿quién es ella? ¿Y dónde mierda están los putos jarrones?
+Pascal: ...
+Salomón: ... ¿y bien?
+Pascal: Cardazu entró al palacio... robó algunas cosas y entre todo el caos... encontré un maniquí que... no sé, al tocarlo salió esta chica.
+Salomón: ¿la conoces?
+Pascal: bueno... la conocía, pero no es la persona que quiero que sea.
+Salomón: ... bien, ese maniquí era especial, tranquilo, en algún momento volverá a ser uno... pero tendrás que cuidarla, su cerebro es limitado.
+
+Por alguna razón, Salomón no era igual a los demás que había conocido. Había algo diferente en él: quería respeto, pero sin ser intimidante, buscaba bondad, pero también algo de maldad, era vulnerable y empático, sin comprender todo lo necesario.
+
+Sayla correteaba por mi escritorio como si fuese una niña. A veces se golpeaba con las librerías, obligándome a levantarme y acomodar todo en su respectivo lugar, no era tedioso hasta cierto tiempo: hasta que comenzó a chocarse varias veces, como si fuese una regla obligatoria.
+
+Pascal: ¿no quieres... no sé, ir abajo?
+Sayla: ¿qué hay abajo?
+Pascal: pues... encuentra algo para divertirte.
+
+Se fue, dejándome pensar. Cosa que no duró mucho, ya que volvió a causar desastre, o eso pensaba, pues escuchaba cosas que se caían. Me dirigí a ver, lo que encontré fue a Sayla probándose lencería de una de las habitaciones. Habitación que recién me percataba de su existencia: se veía nueva, como si nunca hubiera sido desordenada.
+
+Sayla: ¿cómo me queda?
+Pascal: no deberías probarte todo lo que encuentras.
+Sayla: ... ¿entonces me la quito?
+Pascal: ... pues... solo vuelve a vestirte.
+Sayla: ¡bien!
+
+Sayla volvió a subir. Yo me quedé allí a ojear el cuarto. Entonces, encontré un cuadro, una foto de Salomón y otra persona, una mujer de vestido negro cuyo rostro estaba cubierto de una bolsa blanca.
+
+Salomón: ¿qué mierda haces aquí?
+Pascal: (me di la vuelta, golpeando mi cabeza con la pared) lo siento, yo... solo venía por Sayla, entró aquí por error.
+Salomón: ... no existen los errores, solo las desgracias.
+Pascal: .... ¿qué es este lugar?
+Salomón: ... un puto recuerdo, la única forma de estar cerca de ella.
+Pascal: ... ella era tu...
+Salomón: ...
+Pascal: ¿y qué sucedió?
+Salomón: ... una desgracia... una puta desgracia.
+Sayla: ¡me gustan las desgracias!
+Salomón: ¡jodete!
+
+Nunca antes lo escuché gritar con tanta rabia acumulada. Sayla borró su sonrisa y se marchó corriendo.
+
+Salomón: ... ¿alguna otra pregunta?
+Pascal: no... (me marché en busca de Sayla).
+
+Encontré a Sayla llorando, sentada en la silla de mi escritorio. Me apoyé detrás de ella, acariciando su cabeza.
+
+Pascal: ¿qué sucede?
+Sayla: ¡me gritó!
+Pascal: tranquila, él es así, solamente no lo escuches.
+Sayla: ¿es fácil no escuchar?
+Pascal: ... sí, más o menos.
+Sayla: ¡tienes razón! Solo debo taparme los oídos.
+Pascal: (sonreí un poco).
+Sayla: gracias.
+
+Se levantó y me abrazó, sintiendo la energía de la verdadera Sayla. Entonces pensé: "¿puedo convertir a Sayla en Sayla?".
+
+## Capítulo 3: Eres Ella, Punto
+
+Todo lo que recordaba de Sayla empecé a escribirlo. Incluso, volví a reescribir poemas que yo había escrito de ella. Luego, vino la práctica. Enseñar a Sayla para que sea la verdadera.
+
+Pascal: ¡Sayla! Primero debo decirte que tu cuerpo... tus ojos... la belleza... son de una persona que yo conozco.
+Sayla: ¿tu pareja?
+Pascal: ... ¿pareja?
+Sayla: yo soy mujer... ¿verdad?
+Pascal: sí.
+Sayla: leí varios de esos libros que tienes en tu escritorio y... una mujer y un hombre juntos... eso significa que son pareja.
+Pascal: ... ¿y qué significa ser pareja?
+Sayla: ... ¿besarse? ¡Abrazarse! Y... hay otra cosa, pero no entiendo muy bien, el libro solo lo mostraba... era como... ¿penetrar?
+
+Sentí risa e incomodidad.
+
+Pascal: eso es el sexo.
+Sayla: ¿sexo? Eso es algo bueno, ¿no? El libro lo mostraba como algo muy bueno.
+Pascal: sí, es... fantástico.
+Sayla: ¿podemos hacerlo?!
+Pascal: ... (otra vez tragué mi saliva, ahogándome en el proceso).
+Sayla: ¿estás bien?
+Pascal: (empecé a toser fuerte) perdón...
+Sayla: y bien?
+Pascal: primero enfoquemos todo en lo otro, ¿bien?
+Sayla: .... esta bien
+Pascal: como dije, tú belleza es compartida con otra chica, una chica que... es mi...
+Sayla: tú novia!
+Pascal: ... si (lo dije en voz baja)
+Sayla: eso quiere decir que yo soy tu pareja?
+Pascal: pues... (mi corazón latía con ganas de afirmar) si, claro que si (al decirlo, volví a sentirme vacío)
+Sayla: y bien? Qué más?
+Pascal: la cuestión es que... si bien físicamente eres idéntica a esa persona, la verdad es que no eres ella, ¿entiendes?
+Sayla: ¿eh?
+Pascal: bien, todo lo que quiero que hagas es justo todo lo que voy a decirte, quiero que leas estos poemas.
+
+Y así comenzó. Leía, pero noté algo que no quería: empezó a replicar lo "divertido" que hacía esa persona, no replicaba a la persona.
+
+"Sayla se balancea en los árboles, con gracia y sin prisa.
+Trepa sus ramas, como si fueran alas, y ella, una mariposa, libre y sin igual.
+Dibujaba a los gatos, con ojos de estrellas, y pájaros que cantaban, en sus sueños más bellos.
+Su lápiz bailaba, sobre el papel blanco,
+creando mundos de fantasía, sin fin ni descanso.
+Con sus manos pequeñas, hacía magia, creaba flores que brotaban, en el aire.
+Su risa era contagiosa, como un virus feliz, que se extendía por todo, sin dejar un rincón infeliz.
+Sayla, que veía mundos ocultos, en cada rincón.
+Con su corazón puro, y su alma de artista, creaba belleza, en cada cosa que hacía.
+Pero hay algo en ella, que no es igual,
+una tristeza oculta, un dolor sin igual.
+Un recuerdo que la persigue, un susurro en la noche, que la hace temblar, como una hoja en el viento".
+
+Trepaba los árboles secos, y en todo momento me preguntaba: "¿cómo puedo ver pájaros?". Solo podía verlos en imágenes de los libros, y le encantaba. Decía que sus picos los hacían hermosas, y sus plumas majestuosos. Mal gastaba su energía
+en cosas estupidas, queria que sea Sayla. Lo único que veía era una chica sin alma explorando un infierno asqueroso.
+
+Salomón: cómo vas con Sayla?
+Pascal: no lo entiende, hace esas putas cosas que... (suspira) las detesto
+Salomón: ... te haré una pregunta... ¿qué te gustaba de Sayla?
+Pascal: todo de ella, era diferente a todas las demás chicas y... eso era lo que me llamaba la atención, lo que me gustaba... creativa, inteligente y... bella en todos los sentidos
+Salomón: y qué ves en esta Sayla?
+Pascal: ... parece una niña conociendo el mundo por primera vez
+Salomón: porque es una niña conociendo el mundo, el infierno no es un buen mundo, pero ella lo ve de forma positiva, ¿no lo entiendes?
+Pascal: qué quieres decir?
+Salomón: en vez de tratarla como Sayla... ¿por qué no la tratas como... Sayla?
+Pascal: ...
+
+Parecía no tener sentido, pero eso es justo la ironía de todo esto. Otra vez, el
+infierno era irónico, entendí incluso porque Cuantonio me mandó a este lugar cuando dije "parásito", porque el infierno es un parásito de la misma realidad. Y la realidad es el gusano del paraíso. ¿Seguía con mi plan de replicar a Sayla o la dejaba ser tal y como era?.
+
+Sayla: mira!
+Pascal: qué? (Pregunte sin verla, escribiendo otro poema)
+Sayla: qué son estos?
+Pascal: (volteé a ver) son gusanos!
+Sayla: se ven tiernos
+Pascal: (pegué un manotazo fuerte para que los soltara)
+Sayla: hey! Por qué hiciste eso?!
+Pascal: te estaban haciendo daño, no ves las heridas?
+Sayla: ... (se miró las manos) eso rojo es... lo que llaman sangre?
+Pascal: si, ven, sígueme.
+
+La lleve a la cocina del palacio, entre busca y busca, encontré vendas. Ella se subió a la mesada y se sentó allí. Me elevó ambas manos y comencé a vendarlas.
+
+Recordé cuando Sayla también se hizo un corte superficial en una de sus manos, sin embargo, yo no fui quien la curó en ese momento, fue su propio padre, pero los veía. Queria estar en el lugar del padre, ser yo quien esté allí para ella, protegerla y cuidarla.
+
+Sayla: y? Está todo bien?
+Pascal: si, estará todo bien
+Sayla: ... me puedo bajar?
+Pascal: ... (verla allí me resultaba agradable) aún no
+Sayla: ... estos días te ves diferente?
+Pascal: da igual eso
+Sayla: no! O sea... en los libros la tristeza es mala... no quiero verte triste
+Pascal: ...
+Sayla: qué puedo hacer para no verte triste?
+Pascal: ...
+
+Mil ideas pasaron por mi mente, pero la primera fue obvia: "replica a la verdadera Sayla". Pero ya era inútil, lo mejor sería que sea tal y como es.
+
+Pascal: tranquila, no hace falta
+Sayla: oye... cuál es la diferencia de ser padre y de ser novios?
+Pascal: pues... un padre cría a su hija, la protege y le enseña todo para que sea feliz en su vida, sacrificando todo de si mismo
+Sayla: y ser novio?
+Pascal: amar a esa persona, aceptando sus errores y defectos
+Sayla: ser padre me parece mejor entonces
+Pascal: no te gusta recibir amor?
+Sayla: si! Pero... no crees que un padre es más completo?
+Pascal: ... si
+Sayla: tienes padre?
+Pascal: ... tenía, falleció
+Sayla: falleció? Qué es eso?
+Pascal: es cuando mueres, o sea...
+Sayla: y qué es la muerte?
+Pascal: pues...
+
+En ese momento una luz en mi mente se encendió. La muerte, no hablaba de ella hace bastante días. Estaba en el mismísimo infierno. Y entonces, ¿dónde está la muerte?, y por sobre todas las cosas... ¿qué sabe el de mi padre?.
+
+Sayla: tú conoces a la muerte?
+Pascal: ... no pero, tengo algo pendiente
+Sayla: la muerte se llevó a tu padre?
+Pascal: si
+Sayla: ... (mira hacia abajo)
+Pascal: qué sucede?
+Sayla: otra vez te veo triste
+Pascal: ... quizás si hay algo que puedas hacer
+Sayla: qué?!
+Pascal: ... dijiste que tenias curiosidad del sexo ¿no?
+Sayla: si! (Sonrió)
+Pascal: de esa forma puedes animarme.
+
+Gran parte de mí no quería eso, pero otra parte, una más resistente, necesitaba algo para procesarlo. Estoy en el infierno: ¿la muerte está aquí? No lo sé, pero, ¿y mi padre? Tampoco se donde esta, pero solo hay algo o alguien que puede saberlo. La misma muerte. Besé a Sayla. Pasando mis manos sobre sus piernas llegando a sus caderas. En ese momento, Sayla me empujó, como si fuese una función automática.
+
+Sayla: espera! Me siento... no me siento como describía el libro, hablaba de... mariposas, no siento mariposas
+Pascal: tranquila, lo vas a sentir
+Sayla: (su sonrisa se desvaneció, como si no confiará en mí).
+
+La cargué conmigo. Llevándola a una de las habitaciones.
+
+## Capítulo 4: Bufón
+
+Salí del cuarto sin Sayla y cerré la puerta. No miré atrás. Fui directo a mi escritorio con un peso en el pecho que no sabía explicar. Me senté y tomé la pluma, pero apenas toqué el papel me di cuenta de que no podía escribir. La cabeza me daba vueltas. Quise armar un verso, una línea, algo que ordenara lo que había hecho, pero no salió nada.
+
+Busqué una palabra que acomodara el poema. Una sola. No aparecía. Probé con otras, escribí y taché. Rompí hojas. Tiré libros al piso. Golpeé la mesa. Nada cambió. Cuanto más intentaba, peor me sentía. El poema no era el problema. Yo era el problema. Me levanté y empecé a desordenar todo sin pensar. Tiré la pluma contra la pared. Abrí libros al azar y los cerré de golpe. El ruido no me descargaba nada. El silencio después era peor. Entonces entró Salomón. No levanté la cabeza. Ya sabía que estaba ahí. Sentí su presencia como cuando alguien te mira fijo desde atrás.
+
+Salomón: ¿qué haces?
+Pascal: ... me siento un puto monstruo, un puto pecador como todos ustedes
+Salomón: ¿dónde está Sayla?
+Pascal: justamente es ella por lo que no estoy bien
+Salomón: ¿qué pasó?
+Pascal: ¿conoces a la muerte?!
+Salomón: ... ¿qué?
+Pascal: ¿existe la muerte? ¿Aquí?
+Salomón: ... incluso en el infierno es difícil de explicarlo
+Pascal: ¿cómo la encuentro?
+Salomón: ... existen varias formas realmente, y ninguna es normal... ¡jajaja!
+
+Y se rió. No fue una risa normal. Fue una risa que parecía hecha para romperme algo adentro. El suelo se movió y me mareé. La vista se me fue apagando mientras su risa seguía sonando. Intenté agarrarme del escritorio, pero no pude. Sentí que me caía sin caer. Luego me desmayé.
+
+Cuando desperté, había fuego alrededor. El calor no me quemaba, pero me hacía doler todo el cuerpo. Vi lava brillando frente a mí. El suelo estaba rajado, rojo por dentro. Miré a mi alrededor y noté a personas ahí. Rostros conocidos de gente famosa.
+
+Algunos que habían sido monstruos y otros que habían sido reverenciados. Estaban todos juntos. Nadie gritaba. Nadie lloraba. Nadie parecía pedir nada. Solo se encontraban allí. Los miré uno por uno, esperando que alguno dijera algo. Fue en ese momento que alguien me tomó del brazo. No vi su cara. Usaba una túnica que le tapaba todo. Me arrastró hacia la lava sin decir nada. Traté de resistirme, pero no tenía fuerzas. Me empujó y caí.
+
+No sentí fuego. Sentí que todo se torcía. Los colores se mezclaron, el suelo dejó de existir, el aire se volvió espeso, perdí la noción de arriba y abajo. Desperté tirado en una cueva.
+
+El suelo estaba húmedo y el aire pesado. Frente a mí había algo que no podía llamar animal. Era una red hecha de carne, como si fuese la piel de una vaca formando una estrella con varios picos.
+
+En la parte de atrás tenía cientos de ojos. Adelante, una boca llena de dientes con babas que caían lentamente. Escuché una voz, venía de esa cosa.
+
+Glouu: las personas que vienen a verme no son normales, ¿acaso tú lo eres?
+Pascal: ... ¿conoces a mi padre?
+Glouu: directo al grano, ¿eh?
+Pascal: ¿dónde mierda está mi padre?
+Glouu: las cosas son diferentes... tú estás aquí por ser un maldito pecador, él está disfrutando de su estadía en el paraíso
+Pascal: llévame al paraíso, ¡ahora!
+Glouu: ... ¡jajaja! Si eso es lo que deseas
+Pascal: ¡sí!
+Glouu: no puedo llevarte al paraíso, pero quizás puedas ganártelo
+Pascal: llévame a donde sea, pero quiero salir de aquí
+Glouu: antes debo decirte que... no podrás volver, ni mucho menos recordar todo cuando estés en el paraíso
+Pascal: ¡no me interesa!
+Glouu: ¿seguro? Pensé que Sayla te importaba
+Pascal: ... (en todo momento estuve pensando en ella)
+
+Me quedé quieto y pensé en Sayla. Pensé que sin mí no era nadie. Pensé que sin mí no entendía nada. Pensé que sin mí no era real. Me sentí vacío al pensarlo, pero no lo negué.
+
+Pascal: ella... ¿no puede venir conmigo?
+Glouu: ¡jajaja! Ella no tiene alma
+Pascal: ... y entonces, ¿qué puedo hacer?
+Glouu: quedarte y protegerla, sin ti va a morir
+Pascal: ...
+Glouu: eso es tu decisión
+Pascal: ¡Salomón! Él puede cuidarla, ¿no?
+Glouu: ¿Salomón? No pensé que eras tan ingenuo
+Pascal: ... ¿de qué hablas?
+Glouu: al parecer no lo conoces del todo.
+
+Mi cabeza cambió de rumbo otra vez. Como si fuese una visión. Vi a Salomón y una mujer junto a él. Supe su nombre sin que nadie me lo dijera: Cáliz. Ella se deterioraba frente a mis ojos. Su piel se oscurecía, su cuerpo se deshacía lentamente. Él no la tocó, mucho menos la ayudó. No gritó. Solo la miró desaparecer. Ella se volvió ceniza a la par de Salomón. Volví a recuperar la consciencia.
+
+Pascal: ella era su...
+Glouu: exactamente
+Pascal: ... ¿la dejó morir?
+Glouu: y volverá a pasar si te vas, esta vez con Sayla
+Pascal: ...
+Glouu: es hora de que tomes una decisión
+Pascal: (afirmé con la cabeza)
+
+De pronto sentí un golpe tan fuerte en la cabeza que creí que se me había partido en dos. Todo se puso blanco. Luego nada. Cuando abrí los ojos, estaba tirado en la arena con un sol que me quemaba la cara. Me levanté con dificultad, miré alrededor. Estaba en un desierto en medio de la nada. O eso creía. Volteé y vi una fila enorme de personas.
+
+## Capítulo 5: Baila Y Deja Bucear
+
+Una fila enorme. Vi detrás de mí y se acercaba otra persona, con una sonrisa algo inquietante a mi gusto. Venía despacio montando un camello.
+
+Paimon: ¿eres el nuevo? Tienes una larga espera, ¿eh?
+Pascal: ¿quién eres?
+Paimon: me llamo Paimon, solo soy un aventurero, que cambió su... bueno, no importa
+Pascal: ¿cuánto tiempo debo esperar?
+Paimon: ¿tiempo? El tiempo no existe, si fuese así, el desierto hubiera oscurecido
+Pascal: ... ¿y qué tan rápido es esto?
+Paimon: lo suficiente para que todos tengan oportunidades
+Pascal: o sea?
+Paimon: o sea que... te recomiendo tener varios hobbies, ¡jajaja!
+Pascal: ¿no hay nada que pueda hacer para avanzar?
+Paimon: sí, pero realmente quieres saberlo?
+Pascal: ...
+Paimon: habla con ellos, quien no desee hablar sigue con otra persona, recuerda, algunos de ellos cometieron pecados, por lo tanto... algunos se deberán evitar.
+
+Me adelanté, apenas avancé unos pasos adelante, uno de ellos, Dante, gritó con una voz grave que no había escuchado jamás.
+
+Dante: ¡hacia atrás!
+
+Volteé con un enojo hipócrita, después de todo era mi culpa.
+
+Dante: ¡atrás!
+Pascal: ...
+
+Pensé en charlar con él, sería difícil convencerlo, pero quizás tenga una oportunidad.
+
+Pascal: ¿cuál es tu nombre?
+Dante: ¿acaso te importa? Vuelve a tu lugar
+Pascal: solo intento hacer amigos
+Dante: ... ¿y yo soy una buena opción?
+Pascal: quizás
+Dante: ... me llamo Dante
+Pascal: mi nombre es Pascal
+Dante: ¿Pascal? Parece un nombre poético, creo
+Pascal: me gusta la poesía
+Dante: a mí igual.
+
+En ese momento, una señora, según yo de 78 años, se acercó.
+
+Allireia: ¿poesía? Mis nietos les encanta la poesía
+Dante: ¿en serio? Mira qué casualidad (lo dijo de tal forma que era obvio que no le interesaba)
+Pascal: ¿cómo se llaman tus nietos?
+Allireia: Cosco y Lambinio.
+
+Se me ocurrió hacer una especie de poesía con esos nombres, ¡ya sabes!, dos hermanos cómicos. Mi pensamiento fue interrumpido por una mujer: Beatriz.
+
+Beatriz: ¿Allireia? Pensé que te había perdido, vuelve a la fila, perdonen.
+
+Dante me miró como si tuviera un plan.
+
+Pascal: ¿qué sucede?
+Dante: ¿no te parece raro que una extraña ayude a esa anciana?
+Pascal: ¿qué tiene de raro?
+Dante: pasé mucho tiempo aquí, conozco todo, y nadie se ayuda entre sí
+Pascal: ... (le puse una mano en el hombro) ¿no crees que nosotros podemos hacer un buen dúo?
+Dante: ... ¿de qué mierda hablas?
+Pascal: yo no tengo pensado quedarme esperando, y tú tampoco, ¿verdad?
+Dante: ...
+Pascal: trabajemos juntos para avanzar, ¿qué dices?
+Dante: ten cuidado, hermano, no pienso confiar en nadie, y tú no pareces de fiar
+Pascal: solo quiero lo mismo que tú, avanzar en esta interminable fila
+Dante: ... (miró a Beatriz junto a la anciana) bien, pero tendrás que ayudarme en algo antes
+Pascal: ... ¿qué?
+Dante: ... descubrir quiénes son ellas (lo dijo apuntando con su dedo a Beatriz y Allireia).
+
+Dante me permitió estar a su lado en la fila. Con esto, había entendido cómo jugar más adelante. Quizás, no siempre se trate de amigos, sino de cómo lograr manipular a todos. Mi segunda opción fue a Allireia, una anciana, fácil de manipular y estaba a unos pocos pasos adelante de mí.
+
+El sol quemaba mi piel, me había sentado en la arena. Casi oliendo las piernas de Dante. Estaba cansado, y al parecer, era el único que parecía estarlo. Probablemente, todos se habían acostumbrado, pero yo no. Dante me ojeaba varias veces, como si le matara la vergüenza que yo esté sentado a su lado. Volteé a ver atrás y por primera vez me sorprendí de algo en todo este extraño mundo: la fila se había alargado. Había nuevas almas, nuevos que no había visto antes. En eso, vi a un joven, quizás de unos 19 años. Él también permanecía sentado.
+
+Pascal: ... hola
+Manfredo: ¿qué quieres?
+Pascal: ¿no sabes saludar?
+Manfredo: no quiero saludar a nadie, voltéate, no quiero hablar
+Pascal: ... ¿cuál es tu nombre?
+Manfredo: ¡no me jodas! Voltéate
+Pascal: si no me dices tu nombre no voy a voltearme
+Manfredo: ... me llamo Manfredo, ¿ahora sí? Voltéate
+Pascal: Manfredo... pareces que vienes de una familia rica, ¿qué sucedió en tu vida para terminar aquí?
+Manfredo: ¿qué mierda te importa?
+Dante: ¡hey! Cuida ese tono
+Manfredo: (se cayó de inmediato)
+Pascal: no te preocupes, Dante
+Dante: ... (me miró a los ojos, como si allí lograra confirmar mi propia justificación)
+Pascal: ¿y bien? ¿No vas a contar nada?
+Manfredo: ... ¿cuánto tiempo llevas aquí?
+Pascal: no existe el tiempo aquí
+Manfredo: (suspira)
+Pascal: habla de ti, quiero escucharte
+Manfredo: ¡nadie quiere escucharme!
+Pascal: ...
+Manfredo: ... (miró al suelo, como avergonzado de haber gritado) déjame en paz, por favor
+Pascal: solo quiero hacer amigos
+Manfredo: ¿de alguien como yo? ¡Tengo 19 años!
+Pascal: ¿y eso qué?
+Manfredo: ... (parecía sorprendido por más que su expresión no lo demuestre)
+Pascal: habla, anímate a hablar
+Manfredo: ... jodete
+Pascal: ... bien, voy a voltearme... si quieres, puedes venir a mi lado, podemos guardarte un lugar en la fila
+Manfredo: ...
+
+Al voltearme mantuve una sonrisa. Entonces sentí sonidos de la arena. Manfredo se sentó a mi lado.
+
+Manfredo: ... gracias
+Pascal: ¿y bien?
+Manfredo: ... no lo entenderás
+Pascal: si no cuentas nada... dudo que lo entienda
+Manfredo: ... ¿tienes alguna idea del por qué estoy aquí?
+Pascal: ni una sola
+Manfredo: ... dejémoslo así entonces
+Pascal: ... puedo adivinar otra cosa si quieres
+Manfredo: ¿qué cosa?
+Pascal: pues... que la gente adulta no te comprende, que te sentías solo por no tener a nadie a tu lado y...
+Manfredo: ¡y que los putos de mis padres me obligaban a ser mejor en todo!
+Pascal: ... exacto
+Manfredo: ...
+Pascal: no voy a juzgarte, solo quiero entender
+Manfredo: ¿y por qué yo?
+Pascal: ... tienes los mismos rasgos que yo tenía cuando estaba solo
+Manfredo: (por primera vez me miró a los ojos)
+Pascal: ... sabes, yo también me encontraba perdido, hice cosas que... no esperaba de mí
+Manfredo: ... mis padres querían que sea bueno en todo... yo solo quería... no sé qué quería, pero sabía que eso me estaba destruyendo
+Pascal: ¿y entonces?
+Manfredo: y entonces llegué aquí... (otra vez me miró, como para saber si había entendido. Efectivamente, sí había entendido)
+Pascal: ...
+Manfredo: me suicidé, sí
+Pascal: ...
+Manfredo: yo solo espero que... solo así logren entenderme
+Pascal: yo te entiendo
+
+Manfredo: (sonrió, una sonrisa similar a Sayla. Ahora que la recuerdo, empezaba a extrañarla).
+
+## Capítulo 6: La Mirada Del Otro
+
+No podía escribir, solo pensar en qué escribir. No era cómodo, mucho menos yo, quien olvida muchas cosas con facilidad. Después de tanta espera, por fin sentí que la fila avanzó, aunque no bastaba. Fueron pequeños pasos.
+
+Dante: ¡puta madre! Me estoy cansando de esto
+Pascal: será mejor mantenernos tranquilos
+Dante: debemos hacer algo para movernos, estoy harto
+Pascal: ... estuve pensando en Allireia, creo que es fácil de manipular
+Dante: ¡sí! Justo eso. ¡Hey, tú!
+Manfredo: ... ¿yo?
+Dante: ¡sí! ¡Tú! Cuida el lugar, nosotros nos encargamos de otra cosa
+Manfredo: bien.
+
+Dante salió de la fila. Tomó mi mano y me empujó para salir. Se dirigió fijamente con Allireia. La anciana sonrió con gusto, como si le alegrara de verlo, quizás, le recordábamos a sus nietos.
+
+Allireia: ¡hola! Gracias por visitarme
+Beatriz: ¿qué quieren?
+Allireia: no les hables con ese tono, solo quieren compartir con nosotras, ¿verdad?
+Dante: ... sí... sí, sí
+Beatriz: (miró a Dante con desconfianza)
+Pascal: nos vendría bien un poco de compañía después de todo
+Allireia: vengan, cabemos todos para estar en la fila.
+
+Habíamos avanzado, pero no lo suficiente.
+
+Allireia: cuenten, ¿hablarán de algo?
+Dante: pues... la verdad queremos escuchar a ambas
+Allireia: eso es muy hermoso y gentil de su parte
+Dante: ...
+Beatriz: ¿qué quieren oír?
+Pascal: conocernos, solo queremos conocernos
+Beatriz: no hablo de mí con cualquier par de idiotas como ustedes
+Allireia: ¡Beatriz Cavall! ¡Respeta a nuestras visitas!
+Beatriz: ... lo siento, abuela
+Dante: ¿abuela? ¿Ella es tu abuela?
+Beatriz: ¿recién te percatas de eso?
+Pascal: pensábamos que solo la ayudabas
+Beatriz: somos familia, por eso la ayudo
+Allireia: ¿ayudarme en qué?
+Beatriz: ... nada, abuela (lo dijo manteniendo una voz suave y delicada)
+Allireia: quisiera haberlos conocido en vida, podríamos haber compartido tardes y cenas
+Dante: ¿de qué trabajabas?
+Beatriz: ¿acaso eso te importa?
+Allireia: ¡basta! Compórtate
+Beatriz: ...
+Allireia: trabajaba en un taller de tela, todas éramos mujeres encargadas de hacer vestimentas
+Dante: ¿en serio?
+Allireia: sí, en el trabajo conocí a mi esposo, Fabali... era el único hombre en el taller, y era muy bueno tejiendo
+Pascal: ¿un hombre?
+Beatriz: ¡¿acaso un hombre no puede hacer lo mismo que una mujer?!
+Pascal: ...
+Allireia: ¡qué te calles! (Por primera vez, sentí miedo de una anciana)
+Beatriz: ...
+Dante: ¿cómo terminaste aquí?
+Allireia: he muerto por causas naturales, felizmente
+Dante: ¿felizmente?
+Allireia: de entre todas las muertes... es una buena opción
+Pascal: ...
+
+Para mí, tenía mucho sentido.
+
+Pascal: ¿y tú, Beatriz? ¿Cómo acabaste aquí?
+Beatriz: ... no puedo vivir sin mi abuela
+Dante: ... ¿eso es todo?
+Beatriz: jodete
+Pascal: ...
+
+Escuché mi nombre, alguien me llamaba. Miré a los demás y nadie parecía escuchar lo que yo sí. Me levanté y observé a Paimon viéndome desde lejos. Le dije a Dante que ya volvía. Me acerqué a él.
+
+Paimon: ¿cómo vas?
+Pascal: siento que esto es lento
+Paimon: ¡jajaja! Las cosas pueden ser más rápidas, y hacer amigos no creo que sea efectivo
+Pascal: solo quiero que confíen en mí
+Paimon: ¿y qué generas con eso?
+Pascal: es lo que me dijiste, ¿no? Manipularlos emocionalmente
+Paimon: no cambies mis propias palabras, yo sé muy bien lo que dije... y esto jamás dará frutos
+Pascal: ... ¿entonces qué?
+Paimon: necesitas la dosis
+Pascal: ... ¿de qué mierda me hablas?
+Paimon: ¡es fácil! Si sigues así, en algún punto, te convertirás igual que ellos, por lo tanto... debes tener a mano tu propio éxtasis y jugar como se debe
+Pascal: ¿éxtasis?
+Paimon: puedo ayudarte con eso
+Pascal: ... ¿cómo?
+Paimon: ¡jajaja!
+
+Sentí una punzada en mi espalda. Casi de rodillas y mi realidad se distorsionaba. Abrí los ojos, estaban más abiertos de lo normal. Miraba para todos lados con paranoia. Escuchaba voces que se me hacían familiares: "¿ese es mi nombre?", "In-fi-er-¿no?", "¿sexo? ¿Eso es algo bueno?", "¿qué son estos?, se ven tiernos". Reconocía esas frases. Eran de Sayla. Entonces la vi, lejos, muy lejos en la oscuridad.
+
+Sayla: ¿hola?
+Pascal: ... ¿Sayla?... ¡Sayla!
+Sayla: ... ¿me abandonaste?
+Pascal: ... ¿eh?, ¡no! Te juro que no
+Sayla: ¿y entonces por qué te fuiste? ¡Vuelve, por favor!
+Pascal: ... ¡sí! ¡Claro!
+
+Corrí rápidamente para alcanzarla. Sin embargo, noté que mientras más veloz era, más me alejaba de ella. Grité, casi dejándome sin voz, repetidas veces su nombre. Solo la veía alejándose de mí. ¡Desperté!
+
+Dante: ¡Pascal?!
+Pascal: (abría lentamente los ojos) ¿qué sucede?
+Dante: te quedaste dormido de la nada
+Pascal: ...
+Beatriz: si tiene sueño, déjalo, al parecer somos aburridas
+Dante: ... ¿estás bien?
+Pascal: sí, estoy bien.
+
+Pensé rápido: dejarlos de lado y seguir avanzando. Y en el camino, resolver mi propia duda: "avanzar al paraíso, o, volver al infierno". Aunque esto, en mi mente, era distinto: "encontrar a mi padre, o, volver con Sayla".
+
+## Capítulo 7: Fue Antes, Es Ahora, Será Después
+
+Vi a Dante, me miraba con desprecio. Tenía motivos: lo había abandonado, logré hacer otro "amigo", y este me dejó estar a su lado en la fila. Aun así, debía pensar en salir de este lugar, sin importar que pierda en el camino, además, la rápida amistad con Dante no fue para nada de lo que yo me espero.
+
+Alhigieri: ¿sigue mirando?
+Pascal: a veces voltea, pero da igual
+Alhigieri: ¿y? ¿Qué hacemos?
+Pascal: ¿a qué te refieres?
+Alhigieri: no quiero estar en esta fila para siempre
+Pascal: ... lo siento, pero... no vendrás conmigo
+Alhigieri: ... (me miró descontento)
+
+Alhigieri me empujó fuera de la fila. Entonces seguí avanzando, aunque esta vez quise ir a por todo, avanzando hasta lo más lejos.
+
+Caminar por un desierto, lleno de personas juntas en una fila casi infinita, es sin duda una imagen fantástica a mi parecer. Luego de haberme adelantado, vi a un grupo de cinco hombres en el mismo lugar. Me acerqué a una persona y pregunté por ellos.
+
+Pascal: ¿sabes qué sucede ahí?
+Belacqua: al parecer llegaron a la fila al mismo tiempo, dicen que llevan esperando por cinco años
+Pascal: ¿años? No existe el tiempo
+Belacqua: ¿eso piensan los de atrás? En realidad no, pero luego de tanto tiempo... crear es una buena opción siempre
+Pascal: ¿crearon el tiempo?
+Belacqua: es diferente al que ya conocemos
+Pascal: ... ¿te conozco?
+Belacqua: (por primera vez, volteó a verme)
+Pascal: ¡Belac!
+Belacqua: ... ¿Catón?, ¡amigo!
+Pascal: ¡no! No soy Catón
+Belacqua: ¿eres imbécil? ¿Qué no recuerdas tu nombre? ¡Jajaja!
+Pascal: ...
+
+Fue entonces que recordé. Ese era mi nombre, mi nombre verdadero: Catón.
+
+Pascal: ¡sí! Ese es mi nombre
+Belacqua: ¿estás bien?
+Pascal: ... tengo bastante que contarte.
+
+Sayla: ¿puedes oírme? ¡Pascal! ¿Me escuchas?!
+Pascal: ...
+Sayla: por favor... háblame.
+
+Me encontraba amarrado, con una cinta en mi boca que tapaba cualquier cosa que pueda decir.
+
+Sayla: ¡háblame! ¡Habla!
+
+Tenía mil cosas para decirle. Ella estaba frente a mí, a pocos centímetros.
+
+Sayla: ¡háblame! ¡Ya!
+
+Abrí los ojos. Estaba durmiendo en la arena, pero no era el único. Todos estaban durmiendo, el desierto se había oscurecido. Era de noche, totalmente inusual, era imposible. Entonces lo vi, era Paimon. Me sonreía a lo lejos otra vez y me levantó el pulgar. Me levanté y me acerqué.
+
+Pascal: ¿qué sucede?
+Paimon: hice lo que debería, te ayudé, ¿no? El éxtasis es muy bueno
+Pascal: me estás diciendo que... ¿todo este tiempo sí existía la noche?
+Paimon: mejor dicho... siempre existió el tiempo, pero todos son unos putos ingenuos
+Pascal: ... ellos, ¿ellos no lo saben?
+Paimon: tú tampoco lo sabías
+Pascal: ... ¿por qué? ¿Qué sucede?
+Paimon: ... en pocas palabras... cada lugar, cada... ¡piso! Tiene eso que lo hace único, y todos comparten una cosa... nuestra percepción siempre es incorrecta
+Pascal: ¿de qué formas?
+Paimon: el infierno nunca te mostrará cómo se ven los demonios de verdad, tus ojos verán parecidos humanos, personas que ya conoces quizás, pero jamás sus verdaderos cuerpos. ¡El paraíso! Bueno, ya lo descubriste, la noche, en resumidas cuentas, el tiempo existe, pero nadie lo ve porque todos no son conscientes cuando... duermen
+Pascal: ¿y el paraíso?
+Paimon: ... ¡jajaja! ¿Aún no lo descifras?
+
+Me alejé de Paimon. Me vi obligado a caminar hasta el final de la fila. Por fin era el primero en la fila.
+
+Dante: ¡Pascal!
+Pascal: ... (pensé que solo era mi cabeza, pero no. Me volteé y vi a Dante despierto igual que yo)
+Dante: te ibas a ir, ¿no?
+Pascal: no sabes nada
+Dante: ¡claro que lo sé! Todo lo que lograste fue porque... porque eres un puto privilegiado!
+Pascal: ¡no sigas! Deja de acercarte.
+
+Dante ignoró mis palabras. Me golpeó fuerte, logrando que cayera y tragara algo de arena. Vi a Paimon, quien solo se dedicaba a mirar, riéndose de la situación. Dante se agachó y siguió golpeándome sin parar. Fue entonces que volví a recordar a Sayla.
+
+Dante: ¡eres un hijo de puta, Pascal! ¡Me traicionaste!
+
+Justo en ese momento, Paimon por fin reaccionó. Montado en su camello, logró empujar a Dante.
+
+Paimon: sabía perfectamente que no sabes escuchar, Dante.
+
+Cuando lo dijo, supe de inmediato que había una historia entre Paimon y Dante. Seguramente, Paimon, al igual que hizo conmigo, se comunicó con Dante como su mentor. Pero Dante jamás lo escuchó, eso explica por qué también puede despertarse en la noche. Probablemente, Paimon también le ofreció del éxtasis.
+
+Dante: ¡Paimon! Eres una puta mier...
+
+El sol salió repentinamente. Yo estaba primero en la fila. Enseguida, Cuantonio apareció y me habló.
+
+Cuantonio: dime, Pascal, ¿crees que mereces el paraíso?
+Pascal: ¡no me jodas! Envíame de una puta vez a ese lugar!
+Cuantonio: ... si es lo que deseas
+Paimon: cuídate, Pascal, y por favor hazme un favor
+Pascal: ... ¿qué?
+Paimon: no cambies tu nombre... Catón, no te queda.
+
+Todo se oscureció.
+
+## Capítulo 8: ¿Es Aquí Dónde Pertenezco?
+
+¿Era mi padre?... sí, lo era. Gritó mi nombre: "¡Catón!". Se acercó a mí y me abrazó. Lo único que sentí fue nada, vacío absoluto. Su abrazo no era como pensé, dudé si era mi padre, probablemente, no lo era.
+
+Pascal: sabía que vendrías, hijo, ¡lo sabía!, mi Catón
+Pascal: no... no soy Catón, no me llames así
+Pascal: ¿de qué hablas? Ven, ¡otro abrazo!
+Pascal: ¡no! Jodete
+Pascal: ... (cambió su expresión de felicidad a una que me recordaba a mi abuelo, un abuelo autoritario) que vengas y me abraces... ven, acércate
+Pascal: no... no eres mi padre, sé que no lo eres, todo aquí es una puta farsa!
+Pascal: ... dime qué te sucede, por favor, no entiendo qué dices, pero sé que no es normal, ¿qué te sucede?
+Pascal: ¡vete! Vete de una puta vez
+Pascal: ... (se marchó).
+
+El paraíso era un lugar de puertas. Cada una me llevaba a esos rincones que más anhelaba, lo que me hacía sentir bien. El suelo era blanco reluciente, con un cielo que podías mirar, estrellas, la noche o el día. Decidí entrar a la primera puerta de todas. Puerta que conducía a esa larga fila otra vez. Al pasar, la puerta se cerró, dejándome otra vez en ese lugar. Aunque, no sabía si era el verdadero, o uno completamente falso.
+
+Dante: ¡hey! ¿Eres tú, Pascal?!
+Pascal: ... mierda (dije en voz baja)
+Dante: ¿ni vienes a saludar a... tu amigo?
+Pascal: ... (no sabía si realmente era él o algo más) acércate tú
+Dante: ¡vamos, Pascal! Ven! No muerdo, ¡jajaja!
+Pascal: ...
+Manfredo: ¿por qué me dejaste?
+Pascal: (me volteé y lo vi)
+Manfredo: ... ¿eh? ¿Por qué me abandonaste? Pensé que tú sí escuchabas
+Pascal: no... no entiendes tú...
+Beatriz: ¡lo sabía!
+Pascal: (miré a mi costado)
+Beatriz: sabía que eras una persona despreciable, mi intuición no falla nunca, ¡nunca!
+Allireia: ¿Pascal? ¿Por qué te fuiste? Ven, hablemos, por favor, sé que algo te sucede
+Pascal: (ya no quería escucharlos. Solo quería irme de allí)
+Paimon: ¡Pascal! Pensé que te cambiarías el nombre... ¡jajaja!
+Pascal: ¡jodete! ¡Jódense todos!
+
+Dante me golpeó en la cabeza. Beatriz me empujó. Al caer al suelo, solo vi cómo Dante se acercó a mí junto a Beatriz. Cedieron el paso a Manfredo, quien fue el que me golpeaba sin parar, golpes más dolorosos. Quería gritar, decirles que paren. Pero unos golpes no son tan dolorosos.
+
+Mi visión se volvía borrosa, sentía dolor, sentía que mi alma salía de mi cuerpo. Irónicamente, era un alma en el paraíso, en el purgatorio o el infierno, ya no sabía cuál era la diferencia.
+
+Desperté, con una sonrisa de oreja a oreja. Me sentía libre, con ganas de vivir. Ni estaba en la fila, no estaba en ningún otro lugar que no sea despreciable. Estaba tranquilo, en paz, balanceando mi cuerpo en las nubes. Saltando alto, riendo a carcajadas y respirando como nunca antes. Era un alma viva.
+
+Cuantonio: ¿cómo te sientes, Pascal?
+Pascal: ... sabes... quiero que me llames Catón
+Cuantonio: ¿cómo te sientes, Catón?
+Catón: de maravilla, nunca me sentí tan vivo
+Cuantonio: me alegra escucharlo... tengo una sorpresa para ti
+Catón: mi vida es una puta sorpresa... (reía suavemente)
+Cuantonio: ¿estás listo para ver a tu padre?
+Catón: (abrí los ojos y lo miré manteniendo esa sonrisa) claro.
+
+Me guió a otra puerta. Cuando la abrió, un cálido viento golpeó mi rostro. Allí estaba, Pascal, mi padre.
+
+Pascal: ¡hijo! ¿Ahora sí vas a abrazarme de verdad?
+
+No lo pensé. Lo abracé fuertemente.
+
+Catón: te extrañé, no sabes cuánto
+Pascal: lo sé, perdón por todo lo que has pasado, este lugar no es muy normal
+Catón: no existen los lugares normales
+Pascal: tienes razón... mucha razón
+Catón: ... ¿y ahora qué?
+Pascal: ¿qué clase de pregunta es esa? Quiero enseñarte todos los lugares del paraíso, ¡todos!
+Catón: ¿las puertas?
+Pascal: sí
+Catón: sabes... quiero conocer a una sola persona
+Pascal: ¿sí?
+Catón: ¿dónde está él?
+Pascal: hablas de...
+Catón: sí, el responsable de todo
+Pascal: es una larga historia, pero... ¿te gustan las historias?
+Catón: me encantan
+Pascal: entonces te llevaré con él, él es grandioso, es misericordioso, es... es todo lo bueno
+Catón: quiero conocerlo
+Pascal: bien, ven, sígueme.
+
+## Capítulo 9: Mi Padre, El Padre Y Yo
+
+Mi padre y yo caminábamos lentamente por el pasillo. En cada costado se veía una puerta, puertas sin parar. Entendí que cada una de esas puertas me llevaba a esos lugares o con esas personas que uno anhela. Incluso, con personas que conozco en lo absoluto, pero que las iba a conocer si no fuese por mi muerte. Aquellas cosas en las que soy bueno que jamás llegué a probar, aquello que me disgustaba pero que podían gustar. Y cuando mi padre me lo explicaba sentía un pequeño peso. Aún era consciente de algo: "aún existe una parte de mí real". Paimon mencionó que cada lugar divino nos cambiaba o cambiaba nuestra percepción.
+
+Ese pequeño dato es un dato que no muchos privilegiados conocen. Nadie lo piensa, nadie cuestiona, mi viaje quizás trataba de eso, de ser diferente a los demás. Pero es algo que no puedo confirmar, y tiene muchos baches en el argumento.
+
+A medida que avanzaba, recuperaba algo de mí. Quizás era a propósito, o quizás no. No sabía si confiar en el lugar, antes confiaba, pero volvía a desconfiar. Esos golpes, de Dante, Manfredo y Beatriz, significaban algo. A medida que seguía el paso, respondía las propias incógnitas.
+
+Efectivamente esos golpes significaban algo. Un castigo, ¿para olvidarme de quién soy quizás? ¿Una anestesia para dejar de cuestionar? Sí, todo eso era. Entendí que cada lugar fue construido perfectamente, incluso con errores y todo. Algo no estaba bien, pero sí estaba bien. Si seguía así, podría convertirme en el primer pecador del paraíso, ¿un pecador inteligente? Sí. Todo porque pienso diferente.
+
+Pascal: llegamos
+Catón: ... es brillante y... tiene todo lo que imaginé
+Pascal: lo sé.
+
+Frente a mí, una puerta. La puerta se veía como un portal majestuoso que irradia una luz celestial, como si el mismo sol se detuvo frente a mis ojos. La puerta es de un material que no se puede identificar, un metal que parece cambiar de color según el ángulo de la luz, pasando del oro al platino, del rubí al esmeralda. En el centro de la puerta, se encuentra un símbolo que parece ser la fusión de todas las religiones y creencias, un laberinto de líneas y curvas que se entrelazan en un patrón que hipnotiza. El símbolo late con una energía suave, como si fuera el latido del corazón del universo.
+
+Pascal pasó. Me esperó, al ver que no estaba convencido en pasar por la puerta, extendió su mano hacia mí.
+
+Pascal: ven, ¿no es lo que quieres?
+Catón: ...
+
+Tomé de su mano y él me jaló. No tuvimos que avanzar más, lo vi, era el ¿creador? Ya no lo sé. No tuve tiempo de imaginar su apariencia, pero tampoco era nada del otro mundo. Mi misma altura. Eso sí, cuando se acercaba a mi padre, su altura cambiaba, era un poco más alto. Misma altura que mi padre, aunque nunca noté en qué momento: "crecía". Era otro ser humano normal.
+
+-Catón y Pascal! Sabía que vendrían
+Catón: ¿en serio? ¿Y también sabes qué sucede en esa puta fila?
+Pascal: ¡Catón!
+-... (su mirada se volvía seria. Se acercó a mí rompiendo con mi espacio personal)
+
+Al verlo de cerca me di cuenta de que no era tan normal como parecía. Su piel estaba formada por rostros conocidos. Cada partícula era una persona nueva, estaba formado por sus propias creaciones.
+
+-yo diría que cuides tu tono, la idea de este lugar es mantener la serenidad
+Catón: que se joda la puta serenidad
+Pascal: ¡Catón, basta! ¡Vete de una vez!
+-déjalo, aquí todos pueden expresarse como quieran.
+Catón: entonces, ¿no te molesta si te hablo con la verdad?
+-... me parece que has entendido nada, este lugar fue diseñado para...
+Catón: para joder a los demás, ¿verdad?
+-... ¿puedes dejarnos un minuto, Pascal?
+Pascal: ... bien, no hagas nada de lo que me arrepienta, Catón
+Catón: ...
+
+Pascal se marchó. En ese momento, me abalancé y comencé a asfixiarlo con mis propias manos. Los ojos se iban cerrando poco a poco. Lo solté, me levanté, miré mis manos y mi respiración se cortaba. Lo vi allí, inconsciente. No sentí lástima, angustia, nada, era lo que quería. Por primera vez me sentí libre. En ese instante, mi padre me vio.
+
+Pascal: ¿qué mierda?
+Catón: jodete, no eres mi padre.
+
+Me largué sin decir más nada. Pascal se quedó allí observando el cuerpo. Fue entonces que sentí punzadas en mi cabeza, me hicieron arrodillarme y grité, mejor dicho, intenté gritar. Caí boca abajo.
+
+Sayla: despierta, por favor
+Catón: ... (mis ojos se abrían lentamente) ¿Sayla?
+Sayla: ¡jajaja! ¡Te ves ridículo!
+Catón: ... ¿dónde mierda estoy? (Intenté levantarme)
+Sayla: tranquilo, no te muevas, Salomón dice que debes estar relajado
+Catón: ... ¿Salomón? Estoy en el...
+Sayla: sí... en el enfermo, digo! En el infierno
+Catón: (tal y como Salomón lo hubiese querido: me sentí relajado)
+
+En ese momento escuché pasos. Salomón entró al cuarto.
+
+Salomón: ¿cómo estás?
+Catón: ... no lo sé
+Salomón: oye, Sayla, ¿nos dejas un minuto a solas?
+Sayla: bien, ¡te traeré flores, Pascal!
+
+Sayla se marchó. Salomón se acercó y se arrodilló para estar a mi altura.
+
+Catón: ¿Pascal? ¿Aún no sabe que no me llamo así?
+Salomón: sabes... te queda mejor Pascal
+Catón: ¿tú crees?
+Salomón: sí, no quería que te lo cambiaras, por eso mismo le dije a Paimon para que te lo dijera
+Catón: ... ¿Paimon? Tú y él... ¿lo conoces?
+Salomón: llevo siglos aquí, conozco a todos
+Catón: ¿por eso Paimon me estaba mudando?
+Salomón: no confundas las palabras, los demonios no ayudan, hacen lo que hacen, pero sí... gracias a mí él te... "ayudó"
+Catón: ... ¿cuidaste de Sayla?
+Salomón: es una pregunta estúpida, si no fuese así no volverías a ver, y la viste
+Catón: ¡espera! Esto... ¿es real? O sea, no es nada de...
+Salomón: no
+Catón: ... pensé que Sayla había muerto, pensé que tú... no harías nada
+Salomón: (suspira) también lo pensé, pero cuando vi de nuevo la habitación de Cáliz yo... bueno, sentí que era mi obligación, y también era mi obligación que volvieras, no te mereces el paraíso, es un lugar complicado
+Catón: ¿qué hay de él?
+Salomón: pues... no lo sé, solo Paimon puede acercarse, y aun así jamás podrá verlo, por cierto, agradece a Paimon que te trajo aquí
+Catón: ... ¿pero él murió?
+Salomón: ¿crees que podrás matar a un puto creador solamente asfixiándolo? La respuesta... es corta y realista, mejor dicho... irónica
+Catón: ...
+Salomón: escucha... utiliza el puto nombre de Pascal, ¿bien?
+Catón: (sonreí) bien.
+
+Pensé un poco sobre mi próxima decisión. Pero siento que es lo bueno. Dejé la poesía por un tiempo. Intenté disfrutar cada momento con Sayla, hacer lo que haría la verdadera Sayla. No era imitarla, era estar a su lado, divirtiéndome en un lugar donde todo castiga. Es lo mejor, ver las cosas positivas al menos por una sola vez, porque jamás seré como Sayla. Y es justo eso lo que dejó apreciar, es justo eso lo que me hace diferente.
+
+Aun así, no sé si pertenezco al infierno, vivir en una fila por siempre o merecer mi propio lugar de paz. Pero, quizás mi único lugar es estar al lado de quien merece la pena estar.
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Divina Comedia';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
