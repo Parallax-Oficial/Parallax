@@ -14,15 +14,15 @@ body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
   padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
   text-align:center;opacity:0;transition:opacity var(--fade) ease}
 #stage.on{opacity:1}
-#box{max-width:34rem;width:100%;margin:auto}
+#box{max-width:30rem;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center}
 #stage::-webkit-scrollbar{display:none}
-.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
-.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400;text-align:center;width:100%}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em;text-align:center;width:100%}
 .title{font-size:clamp(3rem,16vw,6rem)}
 .chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
 .chname{font-size:clamp(2.4rem,13vw,4.6rem)}
-.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
-.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400;width:100%;max-width:26rem;margin-left:auto;margin-right:auto}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3;width:100%}
 .who{font-weight:600}
 .ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
   display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
@@ -50,6 +50,8 @@ body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
 
 <!-- ============ HISTORIA (Eternamente Vivo) ============ -->
 <script type="text/plain" id="story">
+Importante: esta historia es una autobiografía donde todos los hechos son reales (pocas cosas serán modificadas). Toda la información usada viene de la memoria, cartas, mensajes, experiencias, anécdotas, etc.
+
 ## Capítulo 1: Nuevo Aire
 
 Febrero 2025.
@@ -281,7 +283,7 @@ Martino: soy hermano de Luanisia
 —¿y? No puedes entrar, tienes que irte con los demás
 Martino: ¿con quiénes?
 —... tus compañeros
-Martino: no entender
+Martino: no entiendo
 —... tú eres de...
 Martino: de Bandera
 —¡ah! Hubieras dicho eso antes
@@ -382,13 +384,13 @@ Martino: bueno, algo es algo
 Estefanía: ...
 Matías: usa Granito
 Estefanía: ¿qué es eso?
-Gustavo: ¡no me jodas, Estefi! Te mostré todas mis metas, que tenía organizadas en esa app
+Gustavo: ¡no me jodas, Estefi! Te mostré todas mis metas, que tenían organizadas en esa app
 Estefanía: ...
 Gustavo: bueno, no importa.
 
 El tiempo pasó y Luanisia volvió diciendo que ya era tarde. Martino retrocedió, Gustavo y Matías lo saludaron; Martino los saludó solo porque Luanisia se lo dijo. Antes de irse, Estefanía se acercó rápido, le dio un papelito doblado y volvió con los demás sin decir nada. Martino guardó el papel en su bolsillo.
 
-Luanisia lo llevó de vuelta al departamento. Martino estaba cansado, pero en su cabeza seguían apareciendo imágenes de esos chicos, el documento de la EFA y la luz del exterior encendida toda la noche anterior. Ahora, esa misma luz titilaba. Martino encendió la televisión y recordó aquel papel. Al verlo, era un número de teléfono. Sonrió, y esa luz del exterior dejó de titilar. Abrió "Granito" y comenzó a un nuevo proyecto, una nueva historia: "El Dibujo Del Amor Prohibido".
+Luanisia lo llevó de vuelta al departamento. Martino estaba cansado, pero en su cabeza seguían apareciendo imágenes de esos chicos, el documento de la EFA y la luz del exterior encendida toda la noche anterior. Ahora, esa misma luz titilaba. Martino encendió la televisión y recordó aquel papel. Al verlo, era un número de teléfono. Sonrió, y esa luz del exterior dejó de titilar. Abrió "Granito" y comenzó un nuevo proyecto, una nueva historia: "El Dibujo Del Amor Prohibido".
 
 ## Capítulo 4: Normal Y Corriente
 
@@ -522,7 +524,7 @@ Martino: me siento... apagado, sin uso, pero que a la vez me usan todo el tiempo
 Martino: ... ¿sí?
 —sí, estoy aquí para ayudarte, ¿para qué me necesitas?
 Martino: no, o sea... me refiero a que si realmente crees que me sucede eso
-—no tengo información de cómo te sientes hoy, pero podrías contarme para entender tu situación, ¿qué es lo que te sucede?
+—no tengo información de cómo te sientes hoy, pero podrías contarme para entender tu situación, qué es lo que te sucede?
 Martino: ... bueno... hoy vino mi hermana luego de dos años sin verla, y siento que se me suma un peso, las visitas no me gustan, cada vez que alguien viene es donde comienza mi uso ilimitado, cuyas baterías... no son para siempre
 —entiendo. Parece que la visita de tu hermana te ha generado ansiedad y estrés porque anticipas que vas a tener que dedicarle tiempo y energía, y eso te preocupa porque sientes que ya estás agotado.
 Martino: no, o sea, sí, pero es que siempre me están usando... ¿tú qué harías si tu familia no te deja descansar solamente para hacer esto, esto, lo otro y otro sin un puto descanso de mierda? Lo mínimo que pido es salir, tener mi mundo... mandar yo
@@ -596,7 +598,7 @@ Garilda: es su novia
 Martino: ¿novia? Nunca pensé en oír eso
 Garilda: es muy gracioso ver la foto, él todo alto y ella pequeña, ¡jajaja!
 Martino: ... a todo esto, ¿Santillán tiene pareja?
-Garilda: ¡sí! ¿Recién te entereas? ¿Tan perdido estás?
+Garilda: ¡sí! ¿Recién te enteras? ¿Tan perdido estás?
 Martino: ... ¿qué hay de ti? ¿Sigues en pareja con Mauricio?
 Garilda: ... sí, pero no me siento cómoda
 Martino: empieza a hablar
@@ -637,7 +639,7 @@ Martino: sí, es para lo que nací... y es lo único que me hará crecer, llegar
 
 Nueve Años Antes (2016).
 
-Yolanda se despierta en la madrugada por ruidos en el baño, ruidos torpes, como algo cayendo y moviéndose sin cuidado. Se levanta sin apuro, camina hasta la puerta y la abre. Sitichi está en el suelo, ebrio, semidesnudo. Yolanda lo mira unos segundos, no dice nada, y vuelve a la cama. Se acuesta mirando el techo y respira hondo sin estar sorprendida. Al amanecer, ella se levanta y hace su rutina sin molestar. Mientras prepara el desayuno piensa en todo lo que pasó en los últimos meses. Se siente cada vez más sola y esa soledad ya no la lastima, solo le confirma que todo está terminado. Sitichi llega siempre tarde, sin avisar, y cuando vuelve trae mal olor, deja los zapatos tirados, rompe cosas sin querer y nunca limpia. Yolanda ya no discute, no reclama, simplemente deja de esperar. Al mediodía, Yolanda cocina solo para ella. No prepara de más. Pone el plato en la mesa, come lento, mirando un punto fijo en la pared, tranquila. Luego de dos horas, Sitichi llega y mira la cocina buscando comida. Cuando no ve nada, le reclama molesto, como si fuera obvio que debía tener algo listo para él.
+Yolanda se despierta en la madrugada por ruidos en el baño, ruidos torpes, como algo cayendo y moviéndose sin cuidado. Se levanta sin apuro, camina hasta la puerta y la abre. Sitichi está en el suelo, ebrio, semidesnudo. Yolanda lo mira unos segundos, no dice nada, y vuelve a la cama. Se acuesta mirando el techo y respira hondo sin estar sorprendida. Al amanecer, ella se levanta y hace su rutina sin molestar. Mientras prepara el desayuno piensa en todo lo que pasó en los últimos meses. Se siente cada vez más sola y esa soledad ya no la lastima, solo le confirma que todo está terminado. Sitichi llega siempre tarde, sin avisar, y cuando vuelve trae mal olor, deja los zapatos tirados, rompe cosas sin querer y nunca limpia. Yolanda ya no discute, no reclama, simplemente deja de esperar. Al mediodía, Yolanda cocina solo para ella. No prepara de más. Pone el plato en la mesa, come lento, mirando un punto fijo en la pared, tranquila. Luego de dos horas, Sitichi llega y mira la cocina buscando comida. Cuando no ve nada, le reclama molesto, como si fue obvio que debía tener algo listo para él.
 
 Yolanda: perdón, pero estoy harta de cocinar y calentar la comida porque llegas tarde, ahora prepárate tú la comida
 Sitichi: ... ¿yo?
@@ -647,7 +649,7 @@ Yolanda: no, el dinero no resuelve nada
 Sitichi: ... ¿ya no me amas?
 Yolanda: no, ya no
 Sitichi: ...
-Yolanda: puedo irme, puedo volver a la casa de mis padres y conseguir trabajo, pero yo ya... ya no quiero esto, o al menos no si tú estás
+Yolanda: puedo irme, puedo volver a la casa de mis padres y conseguir trabajo, pero ya... ya no quiero esto, o al menos no si tú estás
 Sitichi: ... bien, me iré yo, quédate con todo, tú sí la vas a cuidar... si necesitas algo... no dudes que no estaré para ti
 Yolanda: ... solo quiero que te vayas.
 
@@ -824,7 +826,7 @@ Martino: no, nada
 Garilda: bueno, te sigo contando
 Martino: ...
 Garilda: y... le compré autos, esos de colección que a él le gustan, y... él no se esfuerza, ni una puta carta de amor, ¿me entiendes?
-Martino: mira... y lo único que puedo decirte es que...
+Martino: mira... yo lo único que puedo decirte es que...
 Garilda: ¡ayúdame!
 Martino: ... ¿eh?
 Garilda: me siento sola, tengo miedo de perderlo
@@ -879,7 +881,7 @@ De niño pasaba más tiempo adentro que afuera. Le gustaba estar en el piso, sen
 
 Con los años cambió la forma en que jugaba, pero no dejó de hacerlo. Empezó a imaginar orden en todo: la presentación del personaje, el conflicto, el final. Se sentaba en la mesa con papeles rayados, dibujaba nombres, trazos que parecían flechas, signos que ni él entendía pero que representaban movimientos o decisiones. Cada historia, por más simple que fuera, debía tener su estructura. A veces leía en voz baja lo que iba creando, y se corregía como si fuera un director exigente.
 
-Cuando leyó Martín Fierro, sintió algo inmediato. Le llamó la atención cómo hablaba el protagonista, cómo avanzaban los hechos sin perder tiempo. Lo leyó más veces de las necesarias. Quiso copiar esa forma de contar, así que escribió su propia versión, casi igual. La llamó Sin Filo. El título le sonaba serio, como si fuera una obra real. Era torpe, repetitiva, pero para él era la primera vez que sentía que podía contar algo en papel.
+Cuando leyó Martín Fierro, sintió algo inmediato. Le llamó la atención cómo hablaba el protagonista, cómo avanzaban los hechos sin perder tiempo. Lo leyó más veces de las necesarias. Quiso copiar esa forma de contar, así que escribió su propia versión, casi igual. La llamó Sin Filo. El título le sonaba serio, como si fuera una obra real. Era torpe, repetitiva, pero para él era la primera vez que sintía que podía contar algo en papel.
 
 Falagar: ¿de qué trataba Sin Filo?
 Martino: la trama era una inspiración muy fuerte, podría decirse que incluso una copia de la obra de Fierro... se centraba en un hombre de campo que... al verse acorralado, termina yéndose a la frontera, donde los indios atacaban... y así perdía todo
@@ -1064,7 +1066,7 @@ Martino ya tenía confianza con Adriana, aunque no hablaban todos los días. Igu
 
 Junio 2034.
 
-Falagar: ... ¿dno te parece extraño el hecho de que lo estuvo pensando cuatro días?
+Falagar: ... ¿no te parece extraño el hecho de que lo estuvo pensando cuatro días?
 Martino: Garilda me dijo lo mismo y... la verdad no pensaba en eso
 Falagar: ¿Garilda? ¿Cuánto sabía ella de tu relación?
 Martino: ... no lo sé
@@ -1142,7 +1144,7 @@ Martino también tenía lo suyo, aunque fuera más simple. Lo llamó "aparentar"
 
 El nombre fue un problema desde el primer día. Para Martino tenía sentido, pero para Máximo no representaba nada. Martino insistió varias veces hasta que lo convenció con una promesa: "en un futuro lo podemos cambiar". Máximo aceptó, aunque ya mostraba menos interés. Igualmente continuaron trabajando. Se comunicaban casi todos los días. Martino seguía los avances, opinaba y hacía cambios. En mayo, con ayuda de Matías, anunció la página web. Matías logró hacerle algo de publicidad, pero fue limitada y no generó demasiado movimiento. Aun así, alcanzó a llegar a algunos lectores del colegio donde Matías estudiaba. Gustavo se mantuvo cerca y le daba consejos constantes. Uno de ellos fue claro: Martino debía hacerse cargo de todo el proyecto. Según Gustavo, Máximo no iba a seguir ayudando y era mejor que Martino se quedara con la página por completo. Estefanía también intervino y le consiguió cursos online de programación web para que se formara.
 
-Martino tomó otra decisión. En lugar de seguir a Máximo, decidió apropiarse del proyecto y descartar casi todo lo que ya habían pensado. Tampoco aceptó los cursos; en su lugar eligió una aplicación sencilla para programar, aun sabiendo que eso lo limitaría más adelante. Matías volvió a hacerle promoción a la página y esta vez logró que algunas personas más la vieran. Martino empezó a recibir seguidores y una pequeña cantidad de éxito. No era grande, pero era algo. Y ese "algo" fue lo suficientemente fuerte para marcar un cambio en él. Martino pasó de hacerlo por gusto a convertirse en el único estudiante de su colegio que recibía dinero por lo que hacía. Eso lo empujó aún más hacia su proyecto. Se volvió exigente consigo mismo y con los demás. Esa actitud provocó discusiones con Estefanía. Ella decía que Martino estaba cambiando, que se estaba volviendo egoísta. Él no lo veía así, pero la distancia igual creció.
+Martino tomó otra decisión. En lugar de seguir a Máximo, decidió apropiarse del proyecto y descartar casi todo lo que ya habían pensado. Tampoco aceptó los cursos; en su lugar eligió una aplicación sencilla para programar, aun sabiendo que eso lo limitaría más adelante. Matías volvió a hacerle promoción a la página y esta vez logró que algunas personas más la viesen. Martino empezó a recibir seguidores y una pequeña cantidad de éxito. No era grande, pero era algo. Y ese "algo" fue lo suficientemente fuerte para marcar un cambio en él. Martino pasó de hacerlo por gusto a convertirse en el único estudiante de su colegio que recibía dinero por lo que hacía. Eso lo empujó aún más hacia su proyecto. Se volvió exigente consigo mismo y con los demás. Esa actitud provocó discusiones con Estefanía. Ella decía que Martino estaba cambiando, que se estaba volviendo egoísta. Él no lo veía así, pero la distancia igual creció.
 
 Gustavo y Matías siguieron apoyándolo, aunque cada vez menos.
 
@@ -1185,7 +1187,7 @@ Yolanda duerme casi todo el día, y cuando lo hace, la casa queda sin movimiento
 
 En medio de todo esto, Maldonado, el cobrador del alquiler, aparece cada vez con más frecuencia. A veces golpea las ventanas y otras se queda frente a la puerta repitiendo que quiere que Yolanda y Martino se vayan de la casa. Maldonado no solo grita e insiste, también presiona de diferentes formas: corta la luz, retira la cocina y, en un momento, incluso quita una de las puertas, lo que hace que Martino empiece a dormir sin saber qué cambio va a encontrar al día siguiente.
 
-Es entonces que en una tarde que parecía comenzar igual que las anteriores, Maldonado entra al terreno con un martillo grande y, sin hablar con nadie, camina directo hacia una de las paredes para comenzar a romperla con una fuerza inesperada. Los ladrillos salen despedidos y uno de ellos golpea a Yolanda en la frente, haciéndola caer hacia atrás mientras la sangre empieza a correrle por la cara. Octavi, que estaba unos pasos más atrás, estalla en llanto y su grito atraviesa toda la casa mientras Martino apenas alcanza a reaccionar. En ese momento aparece Rubenio, que intenta hablar con Maldonado para frenarlo, pero Maldonado sigue golpeando la pared sin escucharlo. La policía llega al rato, observa la situación desde cierta distancia, hace un par de preguntas que no llevan a nada y decide retirarse sin intervenir. Martino alza a Octavi y lo lleva a la casa de Rubenio, un lugar que siempre tuvo un ambiente extraño, con olor a encierro, humedad y muebles viejos que parecían abandonados hacía tiempo. Estar ahí le provoca una incomodidad conocida, pero aun así entra y se queda cerca de la puerta mientras sostiene a Octavi, que sigue agitado por el susto. Mientras tanto, Rubenio y su hermano Hugo regresan a la casa dañada para sacar lo que queda. Retiran colchones, cajas y ropa, y en el camino Rubenio encuentra su bate, lo toma sin pensarlo y vuelve hacia el conflicto. Maldonado continúa con el martillo en alto, ambos se insultan con fuerza y parecen estar a punto de enfrentarse, aunque ninguno se anhela a avanzar.
+Es entonces que en una tarde que parecía comenzar igual que las anteriores, Maldonado entra al terreno con un martillo grande y, sin hablar con nadie, camina directo hacia una de las paredes para comenzar a romperla con una fuerza inesperada. Los ladrillos salen despedidos y uno de ellos golpea a Yolanda en la frente, haciéndola caer hacia atrás mientras la sangre empieza a correrle por la cara. Octavi, que estaba unos pasos más atrás, estalla en llanto y su grito atraviesa toda la casa mientras Martino apenas alcanza a reaccionar. En ese momento aparece Rubenio, que intenta hablar con Maldonado para frenarlo, pero Maldonado sigue golpeando la pared sin escucharlo. La policía llega al rato, observa la situación desde cierta distancia, hace un par de preguntas que no llevan a nada y decide retirarse sin intervenir. Martino alza a Octavi y lo lleva a la casa de Rubenio, un lugar que siempre tuvo un ambiente extraño, con olor a encierro, humedad y muebles viejos que parecían abandonados hacía tiempo. Estar ahí le provoca una incomodidad conocida, pero aun así entra y se queda cerca de la puerta mientras sostiene a Octavi, que sigue agitado por el susto. Mientras tanto, Rubenio y su hermano Hugo regresan a la casa dañada para sacar lo que queda. Retiran colchones, cajas y ropa, y en el camino Rubenio encuentra su bate, lo toma sin pensarlo y vuelve hacia el conflicto. Maldonado continúa con el martillo en alto, ambos se insultan con fuerza y parecen estar a punto de enfrentarse, aunque ninguno se anima a avanzar.
 
 La tensión cambia cuando aparece Leisha, la quinta hermana de Martino y primera hija de Rubenio, que entra como si la situación le fuera familiar, sosteniendo un machete en una mano y un martillo más grande que el de Maldonado en la otra. Se dirige a la casa sin hablar con nadie y empieza a romper las ventanas con golpes firmes, para después continuar con las rejas y las partes sueltas de la estructura, mientras los vidrios caen por todas partes y el sonido llena todo el terreno. Maldonado, al ver eso, baja el martillo y comienza a llorar sin poder sostener el momento; no discute ni intenta quedarse, solo se da vuelta y se retira. Leisha continúa destruyendo lo que aún queda en pie hasta que considera suficiente y, recién entonces, todos se unen para terminar de mover lo que resta hacia la casa de Rubenio, donde la tensión finalmente empieza a bajar.
 
@@ -1229,7 +1231,7 @@ Martino: ...
 
 Abril 2025.
 
-Es el comienzo de clases y Martino nota cambios en todos. Sus compañeros hablan de cosas nuevas y con una forma distinta de verse entre ellos. La mayoría ya no actúa como el año pasado. Siente que algo se movió sin que él estuviera preparado. Ve a Isadox. Ya no lo espera en los recreos y pasa más tiempo con otros chicos. Martino lo mira desde lejos mientras ve que habla y se ríe como si lo conociera de toda la vida. Rich también cambió. Se enamoró de una chica, pero ella casi no responde a lo que he intenta. Rich igual insiste, y Martino entiende que ya no puede ayudarlo. Santillán está peor. Está muy enganchado con una chica que a veces lo empuja o lo golpea sin que él diga nada. Martino lo observa una vez en el pasillo. Santillán sigue detrás de ella aunque ella lo deje parado. Martino se da cuenta de que las cosas dejaron de ser tan simples.
+Es el comienzo de clases y Martino nota cambios en todos. Sus compañeros hablan de cosas nuevas y con una forma distinta de verse entre ellos. La mayoría ya no actúa como el año pasado. Siente que algo se movió sin que él estuviera preparado. Ve a Isadox. Ya no lo espera en los recreos y pasa más tiempo con otros chicos. Martino lo mira desde lejos mientras ve que habla y se ríe como si lo conociera de toda la vida. Rich también cambió. Se enamoró de una chica, pero ella casi no responde a lo que él intenta. Rich igual insiste, y Martino entiende que ya no puede ayudarlo. Santillán está peor. Está muy enganchado con una chica que a veces lo empuja o lo golpea sin que él diga nada. Martino lo observa una vez en el pasillo. Santillán sigue detrás de ella aunque ella lo deje parado. Martino se da cuenta de que las cosas dejaron de ser tan simples.
 
 Junio 2034.
 
@@ -1307,7 +1309,7 @@ Andrés: tu forma de narrar me recuerda a ese libro, y Ernest era muy talentoso.
 Martino: pues... sin duda cumpliendo cada uno de mis sueños
 Andrés: eso no cabe duda, tienes talento, creo que ya eres un artista.
 
-Martino vuelve a su asiento. Apoya las manos sobre la mesa y respira hondo. Se da cuenta de que está contento. No es emoción desbordada, pero sí algo que lo recorre y que nunca había sentido antes.
+Martino vuelve a su asiento. Apoya las manos sobre la mesa y respira hondo. Se da cuenta de que está contento. No es emoción desbordada, pero sí algo que lo recorre y que nunca había sentito antes.
 
 Junio 2034.
 
@@ -1360,7 +1362,7 @@ Martino se levanta y se larga.
 
 Junio 2034.
 
-Martino: Isadox es mi amigo, aún lo quiero, pero... no siempre lo fuimos, y cuando no eramos amigos, porque él... él era un hijo de puta, es cuando comenzó a salir con mi mejor amiga... Garilda
+Martino: Isadox es mi amigo, aún lo quiero, pero... no siempre lo fuimos, y cuando no éramos amigos, porque él... él era un hijo de puta, es cuando comenzó a salir con mi mejor amiga... Garilda
 Falagar: ¿y eso qué significa?
 Martino: sentí que Isadox me ganó
 Falagar: ¿por qué?... espera, tú llegaste a enamorarte de... ¿Isadox sabía de eso?
