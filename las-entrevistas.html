@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Las Entrevistas — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.news{text-align:left}
+.newslab{display:inline-flex;align-items:center;gap:.55rem;font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.95rem;background:#c8102e;color:#fff;padding:.3rem .8rem .22rem;margin-bottom:1.1rem}
+.newslab i{width:.55rem;height:.55rem;border-radius:50%;background:#fff;animation:nblink 1.2s steps(2,start) infinite}
+@keyframes nblink{50%{opacity:0}}
+.newstxt{font-size:1.1rem;line-height:1.65;border-left:3px solid #c8102e;padding-left:1rem}
+.sys{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;color:#e6e6e6;border-top:1px solid #555;border-bottom:1px solid #555;padding:.9rem 0}
+.sys i.rec{display:inline-block;width:.6rem;height:.6rem;border-radius:50%;background:#e02020;margin-right:.6rem;animation:nblink 1s steps(2,start) infinite}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+-:- ¡1965! Los anuncios cambiaron para siempre. Con la llegada del creador de promociones "Carl Fricaz", los anuncios son dinámicos, complejos y venden cualquier producto sin necesidad de hablar de calidad -:-
+
+La puerta se abrió, un cuarto solo para hablar, cuya única fuente de luz era un foco que titilaba varias veces. Jason se acomodó en el asiento, un sofá, mientras que el entrevistado, Carl Fricaz, se sentaba en una silla incómoda.
+
+Jason: bien, aquí dice que usted inventó los anuncios dinámicos, ¿es verdad?
+Carl: ... yo no inventé nada, solamente soy... muy bueno para vender
+Jason: claro, por eso traje algo para usted
+Carl: ...
+Jason: aquí tienes
+Carl: ¿un muñeco?
+Jason: supongo que sabrías cómo usarlo, ¿no?
+Carl: ... ¿quieres que lo venda?
+Jason: eres bueno en eso, ¿no?
+Carl: ... necesito una sola cosa para eso
+Jason: ...
+Carl: una audiencia
+Jason: la tendrás
+Carl: ...
+
+-:- Millones de niños enloquecidos por el nuevo muñeco "¡Bla! ¡Bla!". Está ganando billones y siguen creciendo las ventas para la empresa Touchplay con el nuevo juguete. Pero también es un problema -:-
+
+-:- Muchachos locos arrasaron algunas tiendas cerca de sus hogares apropiándose ilegalmente de los ¡Bla! ¡Bla! -:-
+
+## Capítulo 1: La Locura Más Humana
+
+-:- A finales del año 1960, la ciudad sufrió una inundación caótica. Destruyó casas, el edificio Montecarlo, dos iglesias cristianas y acabó con 134 millones de muertos -:-
+
+-:- Cuando la inundación desapareció, su impacto aún se sentía entre todos, sobre todo para el edificio Montecarlo, conocido por transmitir las noticias del día a día. Montecarlo fue derrumbado y generó escasez de trabajo. Nació, entonces, en 1974, un equipo de entrevistadores, EDEN (Equipo de Documentación y Entrevistas Nacional) -:-
+
+Jason saludó al oficial de guardia, quien lo dejó pasar sin problemas. Se dirigió al bloque de entrevista y se sentó en el sofá hasta que trajeran a su nuevo entrevistado.
+
+Jason: ¿cómo estás, Ludd?
+Ludd: ... en vez de hacerme estas entrevistas cada puta mañana, ¿por qué no me liberas?
+Jason: lo siento, pero yo no me encargo de eso
+Ludd: ¿vas a seguir grabando nuestras sesiones?
+Jason: si quieres que quite la cámara, dímelo
+Ludd: ... no, déjala así
+Jason: bien, dime, ¿cómo vas?
+Ludd: ¿qué mierda crees que haga en este lugar? No puedo hacer nada
+Jason: ¿seguro? Algunos de ustedes ya comenzaron cursos, Barionix ahora inició un curso para hablar francés
+Ludd: no me importa, nada de lo que digas... terminemos con esto, por favor
+Jason: antes debo mostrarte estas fotos, ¿las reconoces?
+Ludd: ... son de la inundación
+Jason: eso creíamos, pero realmente fueron víctimas de asesinato
+Ludd: ¿crees que tengo la culpa?
+Jason: no te estoy culpando
+Ludd: entonces, ¿por qué venir aquí?
+Jason: eso hago, tú lo dijiste, todas las mañanas me presento, hablamos... discutimos, pensé que eso te gusta, tener compañía
+Ludd: sí, pero no la tuya
+Jason: claro, y dime, Ludd... ¿ellos eran tu familia? ¿Amigos? ¿Alguien cercano?
+Ludd: ¡no los maté, no soy un asesino!
+Jason: ¿ah, no? Y entonces dime... ¿por qué estás aquí adentro?
+Ludd: ...
+Jason: habla, ¿fueron amigos?
+Ludd: no los maté
+Jason: ¡sí los mataste!
+
+Jason golpeó la mesa con fuerza
+
+Jason: confiesa, ¿qué caso tiene decir mentiras? No podrás salir de aquí jamás
+Ludd: ... ellos eran compañeros de trabajo
+Jason: ¿y?
+Ludd: ... ese día era mi cumpleaños, nadie me saludó, entonces quise hacerme un regalo, un pequeño recuerdo... los maté y... aproveché la inundación de la fábrica para... para decir que murieron de esa forma
+Jason: ¿matar a tres personas por qué no recordaron tu cumpleaños?
+Ludd: ... no sabes cómo me sentía ese día
+Jason: y dime, ¿qué pasó luego?
+Ludd: luego vine aquí
+Jason: ¿y por qué llegaste aquí?
+Ludd: por asfixiar a mi madre por error
+Jason: no... no fue un error, fue un asesinato, aprovechaste su estado en el hospital y la asfixiaste
+Ludd: ¡basta!
+Jason: ¡yo soy quien dice basta!
+
+Jason se puso de pie, volviendo a gritarle la frase, escupiendo en su cara
+
+Jason: gracias por compartir esto conmigo
+Ludd: ...
+Jason: puedes quedarte con las fotos... considéralas como un... un pequeño recuerdo.
+
+Jason se marchó con su maletín.
+
+-:- La inundación de 1960 fue un golpe devastador para todos, pero también fue una gran oportunidad para quienes sufren de la locura más asfixiante -:-
+
+## Capítulo 2: Touchplay
+
+-:- La empresa más grande de juguetes estaba a punto de declararse en bancarrota. Había estado pasando por problemas económicos luego de la reciente salida de la Popy's, una muñeca que fracasó rotundamente. Un proyecto que habría superado millones de dólares gracias a su mecanismo complejo -:-
+
+-:- La Popy's es el claro ejemplo de un juguete que, por más novedoso que fuera, dejó a sus creadores en la ruina -:-
+
+Entró, allí estaba sentado. Lo habían visto segundos antes en la esquina del cuarto. Jason se presentó formalmente.
+
+Jason: otra vez...
+Carl: ... al parecer, harás lo mismo conmigo
+Jason: ¿hacer qué?
+Carl: lo mismo que con Ludd, entrevistarme varias veces. He visto todas tus entrevistas... eres famoso, ¿te gusta eso?
+Jason: ¿por qué no querías hacer el comercial para la Popy's?
+Carl: pensé que era muy obvio
+Jason: ...
+Carl: muchos dirán muchas cosas de mí, pero no soy una persona mala, soy... ingenioso, vendo las cosas de la mejor forma, mis comerciales son la prueba de eso
+Jason: ¿a qué quieres llegar?
+Carl: ... nadie, absolutamente nadie con mi mismo ingenio sería capaz de hacerle un anuncio a esa muñeca... el mecanismo que tenía era pésimo
+Jason: costó millones
+Carl: ¿y eso qué? El presupuesto no significa nada, yo logré mi primer comercial sin dinero, solo con pasión
+Jason: ...
+Carl: y esa muñeca no valía la pena, si yo hubiera participado, habrían hablado mal de mí, tal y como pasó con Touchplay
+Jason: ...
+Carl: ¿y a qué viene esta entrevista a mí?
+Jason: bueno, Touchplay claramente nunca se hace cargo de sus errores, pero... investigando a fondo, quizás no fue un error, y que el mecanismo fue alterado
+Carl: ... ¿y eso qué?
+Jason: una empresa japonesa se encargaba de un lenguaje de códigos totalmente nuevo y exclusivo para esa muñeca, del código nacía su mecanismo
+Carl: ... (mira hacia abajo)
+Jason: un mínimo fallo en la programación significaba... bueno, lo que pasó
+Carl: ... ¿y qué pasó?
+Jason: millones de niñas sufrieron lesiones graves gracias a la Popy's, la muñeca devoraba su cabello, y a veces también sus dedos
+Carl: (tose fuerte)
+Jason: y si mal no recuerdo, en aquel año te quejabas de que tu pago era mediocre
+Carl: ya sé para dónde vas, y te equivocas... yo no alteré nada del código, ¡no entiendo nada de programación!
+Jason: esa es la peor excusa que puedas decirme. Dije que un mínimo error en el código alteraba todo... cualquiera puede cometer errores, siempre que estos sean intencionados
+Carl: (se levanta furioso) ¡no! ¡Yo no hice eso! ¡No lastimé a nadie!
+Jason: tú lo provocaste, ese error le costó incluso la vida de una niña
+Carl: ... no, estás mintiendo, ¡no!
+
+Carl se abalanzó hacia Jason y lo golpeó. La puerta se abrió y los guardias detuvieron la situación, llevando a Carl a su celda.
+
+-:- Tal y como lo prometimos, estamos con Jason en casa de Mariana, madre de la niña de once años que murió cuando una de sus muñecas Popy's explotó -:-
+
+Jason: algo totalmente espantoso, cosa de la que Touchplay jamás se hará cargo... dime, Mariana, ¿cómo te sientes al levantarte todos los días y... procesar lo que pasó, que tu hija ya no está contigo?
+Mariana: es... es fuerte, aún no puedo creerlo, despierto y... quiero que sea un sueño, pero mientras más pienso en ella, no logro despertar, derramo lágrimas, llamo a mi hermana todo el tiempo, su voz... es igual que la de mi hija... (se quiebra en llanto)
+Jason: sin duda es algo muy duro, algo que solo una persona debe pagar
+Mariana: (toma el micrófono repentinamente) ¡escuchen bien! Si esa empresa no se hace cargo, ¡yo misma voy a incendiar las fábricas! ¡Yo misma lo haré!
+
+## Capítulo 3: Mi Voz
+
+Jason: tendrás que hacerlo tú, necesito un descanso
+Jess: ¿descanso? Esa historia ya me la conozco
+Jason: ¿qué? ¿No puedo tener un descanso?
+Jess: la última vez que lo dijiste, viajaste hasta Ford, a ver a nuestra madre
+Jason: ...
+Jess: trabajaste todo un mes para pagar sus medicamentos
+Jason: es mi forma de descansar, hacer algo por la gente que quiero
+Jess: eso es bueno, Michale no pensaría lo mismo
+Jason: ¿no quieres venir?
+Jess: ... ¿otra vez la vas a visitar?
+Jason: es nuestra madre, nos necesita
+Jess: ... no, haré tu trabajo... ¿a quién debo entrevistar?
+Jason: ... ¿seguro?
+Jess: sí
+Jason: ... se llama Buendiga
+Jess: deja todos los archivos en mi escritorio, primero estudiar y luego entrevistar
+Jason: bien, pero no te obsesiones mucho con eso
+Jess: es la primera que entrevisto, ¿cómo alguien se obsesiona así?
+Jason: no hablo de las entrevistas, hablo de tu libro, también deberías descansar
+Jess: (suspira) quizás sí, pero falta poco
+Jason: ...
+
+-:- Buendiga Narsele, la mujer que pasó veintitrés años en el conjunto Barsovel, la cárcel más cruda de la historia de la humanidad, ahora volverá a aquel lugar para dejar a un lado su trauma, sus recuerdos de dolor y llantos de aquellos años -:-
+
+Jess: así que... querías ser entrevistada
+Buendiga: ... ¿sabes cuál es la diferencia entre un loco y un enfermero?
+Jess: ...
+Buendiga: que ambos creen en cosas, y tienen miedo de las mismas cosas, miedo de él
+Jess: ¿de quién?
+Buendiga: (rechina sus dientes)
+Jess: ... (un escalofrío recorre su cuerpo) para, deja de hacer eso... ¡detente!
+Buendiga: ... ¿te molesta? Es música para mis oídos
+Jess: no para mí, por tu culpa tengo mareos ahora, ese ruido es lo peor
+Buendiga: lo siento, yo me acostumbré a esa música
+Jess: eso no es música
+Buendiga: ...
+Jess: volvamos a la pregunta inicial, antes de tu viaje a ese lugar, querías que te entrevistara en este hospital
+Buendiga: esto no es un hospital, aquí hay muchos locos, en un hospital hay enfermos, aquí está lleno de...
+Jess: ¿de qué?
+Buendiga: ... dolor, aquí nadie te sanará
+Jess: ¿puedes responder a la maldita pregunta?
+Buendiga: sí
+Jess: te escucho
+Buendiga: ... aún tengo miedo, quiero que la gente escuche mi voz, porque allí voy a... voy a volver a nacer
+Jess: (estaba confundido) ... ¿a qué te refieres con eso?
+Buendiga: nacer es muy bonito, yo quiero nacer de nuevo... pero no quiero dejar este cuerpo con traumas, por eso volveré a ese lugar... ¿crees que mi gente me escuche? Cuando vuelva a nacer, también quiero escucharme
+Jess: pues... no estoy grabando nuestra conversación
+Buendiga: ¿puedes grabarla? Por favor, te lo suplico
+Jess: ... quizás sí.
+
+Ariana trajo consigo un fonógrafo.
+
+Jess: gracias
+Ariana: a tus órdenes, Jess (sonríe)
+Jess: jaja
+Ariana: ¿qué harás luego?
+Jess: ... estaré libre
+Ariana: podríamos ir a tomar algo
+Jess: me encantaría
+Ariana: bien (sonríe), sigan
+
+Ariana se va, Jess seguía mirando de reojo.
+
+Buendiga: deja de perder tiempo
+Jess: ... bien, dime, ¿qué crees que pueda llegar a pasar una vez que estés en la cárcel?
+Buendiga: ¡no! No esas preguntas, quiero preguntas lindas
+Jess: lo siento, pero no puedo
+Buendiga: ¡¡sí lo harás!!
+
+Ariana escuchó el grito, quiso volver, pero decidió no entrometerse al ver a varios enfermeros que la veían fijamente, con una cara nada amigable.
+
+Jess: ... ¿cómo fue tu infancia?
+Buendiga: increíble, llena de fantasías... perseguía las mariposas, al atrapar una, la más hermosa, la encerraba en un frasco, frascos de esa mermelada que mi madre... mi madre...
+Jess: ¿tu madre qué?
+Buendiga: ... fue ella, ella me entregó
+Jess: ...
+Buendiga: yo no tenía la culpa, yo no quise hacer eso, no quise quemar a mi hermanita, no... ¡yo no!
+Jess: ¿de qué hablas?
+Buendiga: sus bracitos, pies pequeños... era, era...
+Jess: ¿bebé? ¿Era una bebé?
+Buendiga: yo no quise quemarla, yo... entendí mal, confundí las cosas, no fue mi intención poner a mi hermanita allí
+Jess: ¿allí dónde?
+Buendiga: ... en el horno... no quise, fue un error, todos cometemos errores, ¿verdad? ¡Sí! Un error, solamente fue un error, un error lo comete cualquiera... pero mi madre, ella no lo entendió, ella nunca comprende los errores, ¡jamás! Y me envió con ellos, a ese... a ese lugar
+Jess: ... ¿tu madre? Dijiste que fue tu abuela
+Buendiga: mi abuelo murió, jamás la conocí
+Jess: ...
+Buendiga: mi abuela sí hubiera entendido, ella sí, hubiera comprendido mi pequeño error
+Jess: ¿mentiste en tu testimonio? ¿Dijiste que fue tu abuela y todo este tiempo estaba muerta?
+Buendiga: ... dime una cosa, lo que hice... ¿fue un error?
+Jess: ... pues... sí
+Buendiga: (sonríe) ¿sí?
+Jess: sí.
+
+Buendiga se levanta y lo abraza con mucho cariño.
+
+-:- Los hechos del caso de Buendiga Narsele fueron modificados luego de su encuentro con el entrevistador Jess del equipo EDEN. Al parecer, fue su madre quien la llevó a la cárcel cuando Buendiga, padeciendo trastornos mentales, puso a su hermana de cuatro meses en el horno -:-
+
+-:- En otras noticias, Buendiga se suicidó luego de haber recorrido toda la cárcel de Barsovel, se encerró en una de las habitaciones de uno de los presos, aquel preso le dio su cuchillo y ella comenzó a cortarse las venas. Según lo que comenta Jess, ella lo hizo para volver a nacer -:-
+
+## Capítulo 4: Un Exquisito Café
+
+Ariana: ¿cuándo vuelve tu hermano?
+Jess: apenas comience el nuevo mes
+Ariana: ... ¿siempre visita a su madre?
+Jess: casi siempre, solamente cuando ella lo necesita
+Ariana: ¿y qué harás?
+Jess: lo que siempre hice cuando él se iba... tomar su lugar, aunque por primera vez me siento extraño
+Ariana: ¿y a cuántas personas conociste?
+Jess: muy pocas, todas eran algo normales, o sea, eran raras, pero nada del otro mundo
+Ariana: ¿Buendiga es la primera entrevista con la que tú te sientes así?
+Jess: en realidad ya me sentía extraño desde antes, luego con Buendiga me siento peor
+Ariana: pero, ¿por qué ahora? Has entrevistado a muchos y recién ahora te sientes así
+Jess: ... escribo un libro, se llama "Entrevista Con El Mundo", relato las diferentes entrevistas que mi hermano ha hecho, observé sus informes, papeles, cartas y cada grabación... por eso ahora me siento... no sé, ya no puedo explicarlo
+Ariana: ... ¿y si vienes conmigo?
+Jess: ... ¿eh?
+Ariana: si quieres, puedes renunciar a EDEN, nadie te obliga a quedarte
+Jess: no, pero... sería una traición a mi hermano, además, ¿quién se encargaría de las entrevistas?
+Ariana: ¿eso quiere decir que sí quieres venir conmigo?
+Jess: ... (toma el café)
+Ariana: (sonríe) (le toma la mano) vámonos, juntos
+Jess: ... ¿y quién se encarga de reemplazarme?
+Ariana: Michale, ¿él no puede?
+Jess: claro que no, es un... una mierda
+Ariana: ¿quieres irte conmigo, sí o no?
+Jess: ... (suspira) bien.
+
+Ariana termina su café. Jess decide dejarlo.
+
+-:- En 1967, Jordán Meet, carnicero de la zona Vanguardia de la ciudad, cometió un atroz crimen. Secuestró a los asesinos de su hijo y los torturó durante días. Los hizo trabajar a escondidas en la carnicería, y cuando ya no les servían, comenzó a matar a cada uno y a vender su carne como cualquier carne de vaca común -:-
+
+Michale entró a la cárcel, saludó al guardia.
+
+Michale: ¡¿cómo vas, Estrellita?!
+—¿Estrellita? ¿Un nuevo apodo?
+Michale: te ascendieron, traes una estrella en tu uniforme... es perfecto para ti
+—camina, Michale, camina
+Michale: aún no me creo que en la policía acepten a gente enana como tú
+—... (lo ignora)
+Michale: ¡nos vemos, Estrellita! ¡Jaja!
+
+Se acomoda su corbata y entra al cuarto. Como siempre, una sola luz, y en frente estaba sentado Jordán.
+
+Michale: ... según estos papeles, muchos papeles, me dicen que mataste a los asesinos de tu hijo, fue un acto de venganza, pero ahora me pregunto... ¿por qué vender su carne?
+Jordán: esa es una respuesta fácil... mataron a mi hijo como si nada, lo asesinaron porque ellos pensaban que él no valía nada. Esos chicos eran los que no valían nada, así que... por qué no vender su carne así, solo así, pueden valer algo en esta vida, aunque... haya sido en su muerte
+Michale: claro, en realidad yo me refería a que, en vez de vender su carne, ¿por qué no dársela de comer a perros? ¡No! Aún mejor, a los putos cerdos
+Jordán: cuando una persona muere, solo tiene que saber algo, morir con valor, eso me lo enseñó mi padre... eso le enseñé a mi hijo, y eso hice con esos asesinos... dárselo de comer a los animales sería desaprovechar lo que yo aprendí
+Michale: tengo otra pregunta... ¿sabes quiénes compraron su carne?
+Jordán: sí, gente del mismo barrio, conocidos, vecinos... todos ellos
+Michale: ¿y sabes qué pasó luego?
+Jordán: no, no los veo desde 1976
+Michale: pues yo sí, los veo todo el tiempo... y los sigo viendo en este gran año 1978
+Jordán: ... no entiendo
+Michale: por eso traje esta televisión y un VHS... ¿lo miramos?
+Jordán: ...
+
+Michale dejó la televisión en la mesa, gritó: "Estrellita". El guardia llegó y lo ayudó, conectaron los cables y colocaron el VHS.
+
+Michale: mira con atención, Jordán, escucha y mira.
+
+::: video ::: 08/12/77 ::: 17:34 :::
+
+Carla se colocó en medio de los demás, Máximo intentó hablar, pero lo interrumpió Esheil.
+
+Esheil: ¡este mensaje es para ti, carnicero de mierda!
+Máximo: ¡nos envenenan todos los putos días esos políticos corruptos y ahora vienes tú! ¡Estamos hartos de todos! ¡Y de ratas como tú!
+Carla: por eso nos juntamos todos los vecinos, toda esta gente aquí se reunió por una cosa... darte de la misma mierda que tú vendiste
+Esheil: ¡mierda eres tú! ¡Mierdas como ustedes caerán!
+
+Carla tomó una bandeja y la acercó a la cámara.
+
+Carla: ¿ves todo esto? Es excremento de cerdo, todo para ti, ¡rata!
+
+Michale se asoma y saluda con una sonrisa pícara, acompañada de una voz burlona: "¿no tienes antojo?".
+
+::: video finalizado :::
+
+La televisión se apaga, Michale toma el VHS y se lo deja junto a Jordán. Luego vuelve a sentarse.
+
+Jordán: ...
+Michale: ¿qué pasa? ¿Te comieron la lengua los ratones? Jajaja
+Jordán: ... yo lo hice por mi hijo, lo hice porque soy padre... ¡¡soy un buen padre!!
+Michale: quizás sí seas un buen padre, pero no un buen carnicero, eso sí es imperdonable, ¿sabes por qué?
+Jordán: ...
+Michale: porque la gente disfruta tanto de comer una buena parrillada en familia, eso lo arruinaste
+Jordán: ¡vete a la mierda, Michale!
+Michale: eso mismo haré, fue una excelente entrevista, gracias por confiar en EDEN, ¡jajaja!
+
+Michale se levanta y se va, cierra la puerta y, antes de entrar a su auto, mira al guardia.
+
+Michale: gracias por cuidarme el auto, Estrellita
+—...
+Michale: cuando venga toda esa gente... déjala pasar, es mejor no interferir en nada, solo faltaría que te hagan comer mierda de cerdo a ti también, ¡jajaja!
+—...
+Michale: bueno, supongo que esto es todo, hoy fue un gran día... ¡nos vemos mañana, Estrellita!
+—... nos vemos, Michale (en tono frío).
+
+## Capítulo 5: Hiroshima
+
+-:- La bomba atómica lanzada sobre Hiroshima el 6 de agosto de 1945 dejó una estela de destrucción y muerte, y en los días siguientes la ciudad se convirtió en un infierno en la tierra, con miles de personas muriendo por radiación y heridas. Sin embargo, una pequeña comunidad sobrevivió de puro milagro, pero no de la forma en que ellos quisieran vivir -:-
+
+-:- El centro de ayuda "Aetheria Relief" logró por años cuidar y atender todas las necesidades de esta pequeña comunidad. Pero fue en 1962 que comenzaron a tomar el centro de ayuda para sí mismos, como si fuese un hotel o mansión exclusiva para personas de su comunidad -:-
+
+-:- Gracias al apoyo de donantes y gobiernos, lograron tener alimentos y una estabilidad más o menos estable, a pesar de haberse apropiado de una institución que valía millones -:-
+
+Michale: sabes... no me gustan mucho los aviones
+Sergeti: tendrás que acostumbrarte, esa gente pide muchas entrevistas, si le caes bien... cada dos meses tendrás que volver
+Michale: eso sí que no, ¡mira! Son... aves, nubes... mierda
+Sergeti: ¿por qué te sorprende? No es la primera vez que viajas en avión
+Michale: sí, pero cada experiencia parece única... ¿estamos bajando? ¿Qué pasa?
+Sergeti: pareces loco, ¡es normal, idiota!
+Michale: (se sostiene con fuerza al asiento) ... imagínate que empiece a ver humo y luego... luego fuego
+Sergeti: si sigues imaginando así, vas a estar más inquieto
+Michale: ... (respira hondo).
+
+-:- El equipo de entrevistadores EDEN viajará al centro de "Aetheria Relief". Según lo que la comunidad de Luciérnagas dice: "es quizás la mejor entrevista que tendremos, vimos todos los programas, ellos son los indicados" -:-
+
+Michale entró al centro, no había nadie en el patio. Pero pronto todos comenzaron a salir. Unos niños, cuya piel parecía la corteza de un árbol, lo llevaron con el superior.
+
+—¡Aquí! ¡Siéntese ahí!
+Michale: bien, gracias, ¡y no! No me toques
+—...
+
+Los niños se fueron corriendo. Su nombre era Akimitsu, no vestía ropa, su piel era idéntica a la de un bebé. Michale pensó que no era un ciudadano de Hiroshima. Al acercarse más y al inclinarse para verlo detalladamente, observó que su espalda tenía bultos.
+
+Michale: ¿hay muchos niños aquí?
+Akimitsu: bastantes
+Michale: ¿hablas español? Pensaba que no
+Akimitsu: ¿y entonces por qué me haces una pregunta?
+Michale: no pensaba que... no importa, con que tú eres aquí el... ¿rey?
+Akimitsu: me gusta llamarme padre
+Michale: ¡ah! Entiendo, ¿mandas sobre todos los deformes, verdad?
+Akimitsu: ... no, enseño los valores, enseño nuestra historia, quiénes somos y por qué la vida nos escogió
+Michale: ¿escoger? ¿Ustedes?
+Akimitsu: sí, sobrevivimos... eso fue por algo
+Michale: claramente fue por algo, ¡porque el impacto de la puta bomba no los afectó! Bueno, sí les afectó, aquí todos son deformes
+Akimitsu: en realidad, somos personas con malformaciones que no elegimos, pero si las tenemos es porque son sagradas... marcas de legado
+Michale: te corrijo, son marcas de una puta explosión, y todo lo que dices es pura propaganda
+Akimitsu: vuestras mentes no lo entienden, pero no obligamos a nadie a entenderlo
+Michale: sí, como digas. Y... ¿por qué apropiarse de Aetheria?
+Akimitsu: realmente nos cansaba estar aquí, pensamos mil formas de escapar, pero era como... como si fuese lo correcto, como si escapar fuese la peor opción, lo más fácil fue quedarse y hacer de este lugar nuestro
+Michale: ¿correcto? En primer lugar, no es correcto tomar un lugar así como si nada, y segundo... ¿qué le temían que los impedía escapar?
+Akimitsu: una sola cosa... el pasado, escapar de sus consecuencias significa rendirse, la vida nos escogió para ser fuertes...
+Michale: creo que me da náuseas cada vez que dices eso de la vida y no sé qué mierda más
+Akimitsu: y dime, tú no le tienes miedo a nada?
+Michale: no, el miedo nos hace débiles, lo mejor es ignorar las emociones
+Akimitsu: estás mintiendo (sonríe). Tenías miedo de viajar en avión, y sufriste al estar en las alturas
+Michale: ... ¿qué? ¿Cómo sabes eso?
+Akimitsu: lo puedo ver
+Michale: ...
+Akimitsu: también veo a una persona insegura, llena de odio... pero contra sí mismo
+Michale: (ríe a carcajadas) no sabes nada de mí, te crees sabio, pero solamente eres un puto viejo con deformidad que está a punto de morir en cualquier momento
+Akimitsu: (sonríe) solo dime qué es lo que te hace tener tanto odio, no tengas miedo de compartir tu ser
+Michale: estás loco, demente, la entrevista terminó, alguna otra persona deforme más interesante debe estar aquí... ¿sabes de alguna?
+Akimitsu: podrías visitar a Kaori, ella estaba ansiosa por verte, eso sí... no habla español
+Michale: entonces vendrás conmigo y vas a traducir.
+
+Michale obliga a Akimitsu a levantarse. Él accede y Michale retrocede al verlo. Estaba totalmente jorobado, desnutrido, y se ayudaba de un bastón. Ambos se dirigen hacia Kaori.
+
+Michale: entiendo que estás totalmente hecho mierda, pero... ¿puedes al menos caminar un poco más rápido?
+Akimitsu: todo funciona con paciencia
+Michale: ¡no me joda! ¡Camine!
+Akimitsu: (ríe suavemente)
+
+Niños pasan y corren alrededor de Michale. Akimitsu ríe y les dice: "Tsuzukete ne, kodomo-tachi".
+
+Michale: ¡puta madre!
+
+Michale empuja a uno de los niños. Akimitsu deja de reír. En eso aparece Kaori.
+
+Kaori: Kodomo-tachi, soko o dake!
+
+Los niños se largaron de inmediato.
+
+Michale: ¿es ella?
+Akimitsu: estuviste mal empujando a ese niño
+Michale: responde a mi pregunta, ¿es ella?
+Akimitsu: ... sí
+Kaori: Konnichiwa! Aete ureshii wa
+Michale: (mira a Akimitsu)
+Akimitsu: te saluda y está emocionada por verte
+Michale: sí, como sea, dile cómo está
+Akimitsu: Kare wa "Genki?" tte kiita no
+Kaori: Chichi no okage de, watashitachi wa higai o norikoeru koto ga dekita no
+Akimitsu: dice que ella, como los demás, logró ver más allá de la tragedia
+Michale: ¿qué tiene que ver eso con mi pregunta?
+Kaori: Nandemo kittatte ii yo
+Michale: ¿qué?
+Akimitsu: que preguntes lo que quieras
+Michale: ¿los niños son así de mierdas?
+Akimitsu: Kodomo-tachi wa itsumo kō iu fuuni sawagu no?
+Kaori: Kodomo wa iya da, kodomo o miru no wa itsumo kirai da
+Akimitsu: dice que los niños son malos y que a ella no le gustan los niños
+Michale: somos del mismo bando, ¿cuál es tu deformidad?
+Akimitsu: Kare no shitsumon wa... "Anata no kizu wa nani?" tte iu no
+Kaori: Kore wa watashi no ushiro ni aru no, mite
+Akimitsu: puedes revisar detrás de su cabeza.
+
+Michale caminó lento y vio, un poco calva, pequeños granitos que parecían pus, pero si explotaban salía sangre.
+
+Michale: ¿y qué pasó con los dueños y el personal del lugar?
+Akimitsu: Kono basho no mochinushi to sutaffu wa dō natta no?
+Kaori: Tantai ni itte shimatta, karera o oidaseneta
+Akimitsu: se fueron, los echamos
+Michale: ¿qué deformidades se pueden encontrar aquí?
+Akimitsu: Koko de wa donna tokubetsu na kizu ga aru no?
+Kaori: Minna tokubetsu na kizu ga aru no, kare wa onaka ni ookina kiretsu ga aru, kanojo wa me ga mienai, me ga nai no, kanojo wa kiroku saki made kio ga dekiru kedo, tabemono no chikaku ni kite wa kio ga dekinai no
+Akimitsu: ¿ves a ese? ¿El que está sentado comiendo una fruta de dragón?
+Michale: no conozco la fruta de dragón
+Akimitsu: ¿el que está sentado comiendo?
+Michale: sí
+Akimitsu: tiene una grieta en su estómago. Ella, la de las velas
+Michale: ... sí
+Akimitsu: es ciega, no tiene ojos. Luego está Aiko, ella puede oler a kilómetros, pero no de cerca
+Michale: ... (bajó la mirada)
+Kaori: Soshite anata wa? Anata wa donna tokubetsu na kizu ga aru no?
+Akimitsu: pregunta si tienes alguna marca
+Michale: ¿marca de qué?
+Akimitsu: alguna deformidad, básicamente
+Michale: no tengo ninguna, no soy imperfecto como ustedes
+Akimitsu: Kare no kizu wa, yūki to, shōjiki to, karera no nejireta hiniku no arikata desu
+Kaori: (sonríe)
+Michale: ¿por qué sonríe? ¿Qué le dijiste?
+
+En ese momento se escucha una explosión. Michale mira rápido y apunta con el dedo, eran fuegos artificiales. Todos entran en pánico, excepto Michale, quien los ve con una sonrisa. Luego vuelve a reír a carcajadas, disfrutando del miedo ajeno.
+
+## Capítulo 6: Memoria A Corto Plazo
+
+::: Llamada Entrante :::
+
+Jason: ¡¿qué mierda hiciste?!
+Jess: ... ¿ya lo sabes?
+Jason: lo vi en las noticias, fue una pésima idea
+Jess: escucha, hermano, te voy a ser sincero... no me siento cómodo, me siento extraño con ellos, y entrevistar a personas... ya no sé cómo llamarlos
+Jason: ... mira, yo también me sentía incómodo, pero me acostumbré, aunque no fue nada fácil
+Jess: ...
+Jason: vuelve, Michale no es un buen entrevistador
+Jess: ... debo pensarlo, lo siento
+Jason: entonces piénsalo bien
+Jess: ... estoy enamorado, ella no quiere que vuelva
+Jason: ¿Ariana?
+Jess: sí
+Jason: (suspira) esa chica no me parece la adecuada
+Jess: ya suenas igual que madre
+Jason: en algo tiene razón. Ella también abandonó a su madre para perseguir sueños, y jamás los cumplió
+Jess: ... nos vemos, hermano
+Jason: ...
+
+::: Llamada Finalizada :::
+
+Ariana: ... ¿qué te dijo?
+Jess: ... (voltea) nada, solo quiere que vuelva
+Ariana: no soy estúpida, te habló de mí, ¿cierto?
+Jess: ... sí
+Ariana: es verdad que dejé a mi madre, pero ¿acaso eso me vuelve mala persona?
+Jess: Michale también hizo lo mismo que tú
+Ariana: ... ¿me comparas con él?
+Jess: ...
+Ariana: yo abandoné a mi madre porque me sentía atrapada, él abandonó a tu madre solamente porque...
+Jess: ... ¿por qué?
+Ariana: ... nada
+Jess: ¡¿cómo que nada?! ¡Habla!
+Ariana: ... sigue escribiendo, eso te dejará pensar
+
+Ariana se va, antes cierra la puerta. Jess se sienta en el escritorio. Toma un libro y lo deja a un lado. Con una máquina de escribir, volvió a retomar su libro.
+
+-:- En noviembre de 1955, Richard Freud fue sentenciado a 34 años de prisión. En todos estos años en la cárcel logró escribir 15 libros, relatando las historias de cada uno de los presos -:-
+
+-:- Sin embargo, de entre todos, uno contó algo que hasta el día de hoy sigue en duda y genera debates. El preso Raymond Fitz menciona a un asesino en serie con vestimenta peculiar, quien habría sido el responsable de haber matado a su familia. Raymond, en busca de venganza, acabó con la vida de varios inocentes siguiendo pistas falsas. Esto lo llevó a que fuera condenado a cadena perpetua -:-
+
+-:- Este año, 1978, finalmente Raymond aceptó ser entrevistado junto a Richard para dar detalles más concretos de ese tal asesino, ya que sostienen que sigue en libertad y que es el responsable de los asesinatos de los últimos años -:-
+
+Michale: ¿cómo estás, Estrellita?
+—hola, Michale
+Michale: ¿tú les crees a estos?
+—se ven muy convencidos de lo que dicen
+Michale: tomaré eso como un no
+—...
+Michale: nos vemos luego, Estrellita.
+
+Michale se dirigió al cuarto. Entró y se sentó con una sonrisa.
+
+Michale: ¿y bien? ¿Cómo están? ¿Cómo es estar en la cárcel?
+Raymond: (voltea a ver a Richard)
+Richard: es más tranquilo de lo que se cree
+Michale: escribiste quince libros, muchos de ellos con tramas inspiradas en las experiencias de tus compañeros presos, quiero preguntarte si... ¿nunca pensaste que quizás te mentían?
+Richard: ... no entiendo
+Michale: no es tan complicada la pregunta... me refiero a si no dudabas de sus anécdotas
+Richard: jamás
+Michale: claro...
+Richard: ¿por qué la pregunta?
+Michale: bueno, soy muy fan de tus obras, me leí varias y... relatas todo como si los presos fuesen víctimas, están presos por algo... considerarlos víctimas me parece lo peor de tus obras
+Richard: cualquier preso vive muchas cosas, hay una gran diferencia entre un asesino que mata y un asesino que mató
+Michale: ¿cuál es la diferencia?
+Richard: el que mata lo vuelve a repetir sin remordimientos, y el que mató tuvo una excusa o un contexto que lo llevó a esa acción atroz
+Michale: entiendo perfectamente. Pero también entiendo que quien mata no es una víctima, es un asesino cuyos actos violentos no pueden justificarse... en la vida hay muchas excusas, pero no existe ninguna para justificar la violencia
+Richard: ...
+Raymond: ¡basta! ¡Esto no lleva a ningún lado! ¡Solo pregunta lo que quiero que preguntes!
+Michale: bien... ¿qué cosas sabes de ese asesino en serie?
+Raymond: ¡que no es una víctima! Y que mata por matar, no existe un porqué, lo hace, no debemos preguntarnos por qué. Solo deben atraparlo
+Michale: ¿cómo se atrapa a un asesino?
+Raymond: ... yo puedo atraparlo. ¿Esto sale para televisión?
+Michale: claro que sí
+Raymond: ...
+
+Raymond se levantó y se acercó a la cámara.
+
+Raymond: ¡yo puedo encontrar a ese puto asesino! ¡Solo deben liberarme!
+Richard: Ray...
+Raymond: ¡yo puedo! ¡Lo voy a encontrar y lo entregaré a la justicia!
+Richard: ¡Raymond!
+Raymond: ...
+Richard: siéntate
+
+Volvió a su lugar.
+
+Michale: todo tiene sentido ahora, lo haces solo porque quieres irte, ser libre... ¡jajaja! La libertad no la vas a encontrar saliendo de prisión
+Raymond: lo que digo es verdad, si me liberan puedo trabajar junto a la policía y los investigadores, ¡lo digo en serio!
+Michale: ... te lo digo por experiencia, la libertad no se consigue de esta forma
+Richard: ¿has estado en prisión?
+Michale: no, estuve en el puto infierno... era el bufón del diablo
+Richard: ¿y quién era el diablo?
+Michale: ... (parpadea varias veces)
+Richard: ...
+Raymond: ... ¿por qué hace eso?
+Michale: ... (se tapa la boca repentinamente y comienza a rascarse el cuello).
+
+Michale empieza a emitir sonidos desesperantes, se rascaba con fuerza el cuello como si tuviera una picazón incontrolable.
+
+Raymond: ¿estás bien?
+Michale: ¡¡mierda!!
+
+Michale cae al suelo, casi rompiendo la silla de madera inestable. Allí no para de moverse, inquieto.
+
+Richard: debe estar recordando
+Raymond: ... ¿qué? ¿Quién hace esto cuando está recordando?
+Richard: los que tienen traumas profundos, no son solo recuerdos, es como si los estuviera viviendo
+Raymond: ¿cómo sabes tanto?
+Richard: lo mismo les sucedía a los presos, eso mismo le pasó a Guanare
+Raymond: ¿por eso gritaba esas noches?
+Richard: sí
+
+El guardia entró al cuarto y logró levantarlo con ayuda de otros oficiales. Lo llevaron al hospital urgentemente. Mientras tanto, Richard y Raymond volvieron a ser trasladados a la prisión estatal de la ciudad.
+
+## Capítulo 7: El Tema
+
+Jess: ¿estás bien?
+Michale: ... (apenas con los ojos abiertos) ... ¿eh?
+Jess: no sé cómo explicar lo que te pasó
+Michale: ... ve al grano
+Jess: en medio de la entrevista comenzaste a... moverte mucho
+Michale: ... ¿qué?
+Jess: ¿no recuerdas nada?
+Michale: ... ¿quiénes están en la ventana?
+Jess: ... (se voltea) al parecer tienes seguidores.
+
+Cinco personas entraron al cuarto.
+
+Carla: ¿cómo estás, Michale?
+Esheil: ¡claro que está bien! Míralo
+Michale: ... ¿ustedes quiénes son?
+Máximo: ¡lo hicimos! Gracias a ti, esa rata comió toda la mierda de mi cerdo
+Michale: ... ¡jajaja! (no paraba de reír)
+
+Jess salió del cuarto e hizo una llamada.
+
+::: Llamada Entrante :::
+
+Jason: ¿cómo estás, hermano?
+Jess: ... pues... la verdad, no me siento bien
+Jason: ¿y ahora qué?
+Jess: otra vez le sucedió eso a Michale
+Jason: ... solamente cuida que deje de drogarse
+Jess: no, Jason, creo que no se droga
+Jason: ¿alcohol?
+Jess: lo dudo mucho
+Jason: ¿y entonces?
+Jess: (suspira) hablé con uno de los presos que Michale entrevistó, me dijo que quizás son recuerdos traumáticos que son muy reales cada vez que los recuerda
+Jason: ¡¿recuerdos de qué?!
+Jess: siento que madre le hizo algo
+Jason: ¡no seas estúpido!
+Jess: lo digo en serio, ¿te acuerdas de cuando madre lo castigaba?
+Jason: los castigos eran por algo
+Jess: sí, pero... no sé, no era el mismo luego de eso
+Jason: ... ¿y? Tenía que comportarse
+Jess: ...
+Jason: a todo esto... ¿ya lo pensaste?
+Jess: ... sí
+Jason: ¿y?
+Jess: no quiero volver a EDEN
+Jason: ...
+Jess: ... ¿Jason?
+Jason: ...
+
+::: Llamada Finalizada :::
+
+En ese momento, Ariana apareció.
+
+Ariana: ¿dónde está Michale?
+Jess: ... no importa, vámonos
+Ariana: ¡no! Ese idiota te hizo venir aquí, tuviste que dejar de escribir por venir a ver a ese... enfermo de tu familia
+Jess: vámonos
+Ariana: ... bien, pero esto no quedará así.
+
+-:- Día 18 de octubre de 1978. Luego de varios días con disturbios por los asesinatos en la ciudad, por fin se hará una investigación más profunda. Los investigadores principales, Gregor y Lauss, aceptaron que Raymond Fitz se uniera al caso -:-
+
+-:- Mientras tanto, las entrevistas que el equipo EDEN ha confirmado no podrán ser realizadas por un tiempo, debido a que uno de sus entrevistadores sufrió un ataque desconcertante en medio de una entrevista -:-
+
+-:- Se estimó que el segundo entrevistador, Jess, tomaría la batuta; sin embargo, confirmó públicamente que se retira del equipo EDEN. He aquí las imágenes de su retirada pública -:-
+
+Una multitud de personas le hacían preguntas mientras sostenían micrófonos.
+
+—¿por qué decidió irse?
+Jess: básicamente ya no me sentía cómodo
+—¿cree que pueda regresar?
+Jess: no lo sé, igualmente no lo descarto
+—¿qué piensa su hermano, Jason?
+Jess: ... aún no hablé con él sobre esto, pero estoy seguro de que verá las noticias
+—¿cree que se lo tomará bien?
+Jess: ... claro que sí, siempre me entendió
+—ha dicho que está escribiendo un libro
+Jess: sí, y tiene mucha relación con EDEN y las entrevistas a lo largo de estos años
+—¿ya hay alguna fecha estimada para que se termine?
+Jess: no, pero estoy en las últimas páginas
+—¿su nuevo trabajo será de escritor?
+Jess: sí, sin duda. ¡Bien! ¡Sin más preguntas!
+
+Jess se subió al auto, aun así las preguntas seguían. Jess las ignoraba.
+
+-:- Bueno... como ven, Jess Carter, cofundador de EDEN, se retira. Esto sin duda confirma una cosa, y es que... tenemos noticias de última hora... un nuevo asesinato y... un sospechoso -:-
+
+Mientras tanto, Ariana y Jess llegaron a casa. Ariana se sacó el abrigo y le entregó una carta a Jess.
+
+Jess: ¿qué es esto?
+Ariana: llegó al buzón a nombre de tu hermano
+Jess: ¿Jason? ¿En qué momento me mandó una carta?
+Ariana: esta mañana revisé el buzón, pero seguro llevaba un par de días
+Jess: ...
+Ariana: ...
+
+Jess se sentó y empezó a leer, pero se sintió aliviado. La carta no era nada para preocuparse.
+
+Ariana: ¿qué dice?
+Jess: solamente quiere que le mande las cintas de las entrevistas
+Ariana: ¿los VHS?
+Jess: sí
+Ariana: pero... ¿no los necesitas para tu libro?
+Jess: no, me las sé de memoria, además... estoy cerca de terminarlo... unas pequeñas reflexiones al final y habré acabado con mi trabajo
+Ariana: eso suena... muy bien
+Jess: sí... las cintas están en la caja de siempre, ¿verdad?
+Ariana: sí...
+
+Ariana fue a la cocina y preparó dos tazas de café. Al llevarlas a la sala, Jess apareció con dos cajas llenas de las cintas VHS.
+
+Ariana: ¿café?
+Jess: sí, gracias
+Ariana: ¿cuántas son?
+Jess: no lo sé, pero son muchas... recuerdo que tenía otra caja
+Ariana: ... ¿y... por qué querría las cintas?
+Jess: ... ¿y por qué no? Es el fundador de EDEN
+Ariana: sí, pero... ¿qué hará con las cintas si está en casa de tu madre?
+Jess: no me puse a pensar en eso, es raro, pero... quizás... bueno, no sé
+Ariana: ... (toma un sorbo del café)
+Jess: ¿segura de que estaban todas las cajas en mi habitación?
+Ariana: ¡sí!
+Jess: siento que falta una... ¿tú no tomaste ninguna caja?
+Ariana: ¿por qué querría guardar estas cintas?
+Jess: ... ¿qué es ese sonido?
+Ariana: ... ¡el teléfono!
+
+::: Llamada Entrante :::
+
+Jess: ¿sí?
+—¿usted es Jess Carter?
+Jess: ... ¿sí? ¿Pasa algo?
+—soy Gregor, uno de los investigadores de los asesinatos de la ciudad
+Jess: ¡ah! Había oído sobre eso
+Gregor: necesitamos de su ayuda
+Jess: ¿en qué?
+Gregor: hace una hora hemos tenido otro caso de asesinato, pero este es diferente, tenemos a un sospechoso y... debe ser interrogado
+Jess: ... (suspira) yo ya no trabajo en EDEN
+Gregor: lo sé, pero sin Jason y con un inexperto como Michale... usted es el único que podría hacer un trabajo profesional, queremos que hable y... quizás usted logre hacer eso
+Jess: ... bien, ¿están en la comisaría?
+Gregor: sí, venga rápido
+Jess: está bien.
+
+::: Llamada Finalizada :::
+
+Ariana: ¿ahora qué?
+Jess: supongo que es un buen cierre
+Ariana: ... ¿qué?
+Jess: quieren que interrogue a un sospechoso
+Ariana: ¿un último trabajo?
+Jess: espero que sí
+Ariana: ...
+
+-:- ¡Jess Carter regresa! Al menos por un corto tiempo. Jess será quien lleve el interrogatorio a Farla Cash, uno de los sospechosos del caso de los asesinatos. Farla fue visto por los vecinos entrando a la casa de la víctima Garon Cash, su hermano. Según los vecinos, ellos discutían mucho y Farla siempre se ha comportado de forma muy agresiva y violenta -:-
+
+Jess saluda con un apretón de manos a Gregor.
+
+Gregor: gracias por venir
+Jess: un placer hacer esto una vez más
+Gregor: perdón por molestarlo, pero no confiamos en otra persona que no sea usted
+Jess: eso me halaga
+Gregor: por aquí.
+
+Jess entra al cuarto. Se sienta sin mirar demasiado a Farla.
+
+Jess: Farla Cash, ¿correcto?
+Farla: ...
+Jess: le encontraron manchas de sangre en su camisa, su hermano, Garon, está muerto, obviamente eres un sospechoso que encaja perfectamente con lo que es un sospechoso
+Farla: ... no lo maté
+Jess: no hay caso, Farla, lo mataste, discutían mucho, tenías la ropa manchada, intentaste huir y golpeaste a un oficial... mira, ocultarlo ya no sirve, lo mejor sería decir la verdad
+Farla: ... no quiero ir a la cárcel
+Jess: ... ¿quieres que sea completamente sincero durante todo el interrogatorio?
+Farla: sí
+Jess: no hay forma de que no vayas a prisión
+Farla: ... (empieza a llorar)
+Jess: tampoco hará nada llorar
+Farla: ¡ya lo sé!
+Jess: ¿cómo fue? Si dices la verdad, podría hacer algo para que te reduzcan la condena
+Farla: (se seca las lágrimas) ... lo odiaba, solo eso
+Jess: yo también odio a muchas personas, pero no cometo un crimen
+Farla: ...
+Jess: habla
+Farla: ... él me alimentó
+Jess: no entiendo
+Farla: él es el verdadero violento, ¡no, yo!
+Jess: ¿quién?
+Farla: ... llevaba una máscara de gas, y me dio de comer
+Jess: ¿qué comida? En la escena del crimen no había restos de comida y la casa estaba casi vacía de alimentos
+Farla: no, no lo digo en serio, me alimento de ideas... de... resentimiento y... tuve que matar a mi hermano
+Jess: ¿sabes su nombre?
+Farla: no, pero... lo vi en un callejón, estaba con una chica, la estaba asfixiando... corrí y logré golpearlo, pero era más fuerte, golpeó repetidas veces la cabeza de la mujer contra la pared, se acercó a mí y empezó a hablarme
+Jess: ¿qué te dijo?
+Farla: me conocía de alguna forma, empecé a recordar a mi hermano y todas las putas burlas que me hacía, él me dio un cuchillo, fui directo a mi casa y... (baja la cabeza), te juro que me arrepiento
+Jess: ... ¿dónde queda ese callejón?
+Farla: ... es el callejón de la calle veinticinco.
+
+Jess se levantó repentinamente y salió del cuarto.
+
+Gregor: ...
+Jess: ¿escucharon?
+Gregor: sí, muchas gracias
+Jess: ¡calle veinticinco!
+
+Gregor se fue corriendo, junto a él se sumó Lauss. Cuando Jess se volteó, fue golpeado por Farla, cayó al suelo. Logró ver cómo Farla se escapaba.
+
+Jess: ¡atrápenlo!
+
+Fue entonces que Raymond escuchó, vio a Farla y empezó a correr.
+
+## Capítulo 8: De Naturaleza Violenta
+
+La casa es vieja y deteriorada: tiene paredes de ladrillo con pintura descascarada, ventanas cubiertas con tablones y un revestimiento lateral mezclado y mal reparado. Está en un terreno descuidado, con pasto alto y objetos tirados. Alrededor se ve una zona boscosa, de allí se ve una persona que se acerca. Tenía una máscara de gas y una vestimenta descuidada.
+
+::: Llamada Entrante :::
+
+Lázaro: ¡lo sé! ¡Pero nadie entiende!
+Raymond: escucha, ya no importa eso, lo bueno es que están lejos, las van a pasar
+Lázaro: policías de mierda... nunca entienden nada
+Raymond: ¿cómo está nuestra madre?
+Lázaro: está bien, algo confundida, pero... es totalmente entendible, nuestro padre se volvió loco
+Raymond: ¿sabes algo de lo que le pasaba? ¿Por qué la intentó atacar?
+Lázaro: no sé nada, lo único que quiero es golpearlo
+Raymond: ... (suspira) cuida de nuestra madre
+Lázaro: ¿cuándo vienes?
+Raymond: mañana seguramente
+Lázaro: bien, te esper... (sonido gutural y ahogado)
+
+Lázaro cayó al suelo, con el cuello cortado por un cuchillo. Ese hombre con máscara de gas lo mató. Entró a la casa y comenzaron los gritos, gritos de una mujer.
+
+Raymond: ¿Lázaro?... ¡Lázaro!... ¡hermano!, ¡¡hermano!!.
+
+::: Llamada Finalizada :::
+
+Jess: ... ¿así pasó?
+Raymond: ¿te lo cuento con más detalles? No puedo pensar en mi familia de esa manera, ya los he visto y... no quiero volver a recordarlo
+Jess: ... ¿por qué empezaste a matar a cualquiera?
+Raymond: de inmediato pensé que fue mi padre, lo maté... luego pensé que podrían ser sus amigos, primos y otros, pero luego entendí... y creo que Richard me hizo entender muy bien
+Jess: entraste a prisión en 1976
+Raymond: sí, el primer día conocí a Richard y lo comprendí, y creo que también logré comprenderme a mí mismo.
+
+Golpearon la reja, era Farla, encerrado en una celda.
+
+Farla: ¡por favor! ¡No quise hacerlo! ¡Él me obligó! ¡Por favor! ¡No quiero ir a prisión! ¡¡Escuchen!!
+Raymond: es mejor que te calles, hijo de puta, te querías escapar y ¿ahora estás diciendo que él te obligó? Por favor, eso es estúpido
+Jess: espera, deja que hable... ¿puedes escucharlo?
+Farla: ¡escucho voces todo el tiempo!
+Jess: ¿y qué dicen?
+Raymond: ... ¡hey! Habla
+Farla: quieren que... haga el círculo
+Jess: ¿círculo?
+Farla: sí, ¡un puto círculo!
+Raymond: (mira a Jess)
+Jess: ¿círculo de qué?
+Farla: ...
+Raymond: ¿me dejas preguntar a mí?
+Jess: ... adelante
+Raymond: ¿conocías a mi padre?
+Farla: ... ¿cómo se llamaba?
+Raymond: Josh
+Farla: ... ¿Josh? Él también estaba en el círculo
+Raymond: ¡puta madre! ¿Qué círculo?
+Farla: ¡no, no! ¡Las voces otra vez!
+Raymond: ... loco de mierda
+Jess: ¿no sabes nada de Gregor y Lauss?
+Raymond: no
+Jess: ... ¿cómo te llevabas con tu hermano?
+Raymond: ... bastante mal, pero cuando teníamos que proteger a nuestra madre... éramos inseparables
+Jess: ... mi madre no fue muy buena conmigo, tenía a su favorito... Jason
+Raymond: ¿fue su primer hijo?
+Jess: sí, luego vino Michale... aunque él... creo que la pasaba peor
+Raymond: ... te escucho
+Jess: Michale era muy problemático en el pueblo, les robaba a todos y... se metía en problemas hasta en la única iglesia a la que cada puto domingo iba con mucho entusiasmo
+Raymond: ¿vivía con sus reglas?
+Jess: sí, pero siento que... no sé, ¿las personas nacen inmorales o la sociedad los crea?
+Raymond: ...
+Jess: cuestión, madre lo castigaba seguido
+Raymond: ¿y qué hay de tu padre?
+Jess: nos visitaba seguido, trabajaba mucho y cuando regresaba se sentía que estaba deteriorado... siempre se encontraba con madre en el granero, el mismo lugar donde castigaban a Michale
+Raymond: ... ¿cuáles eran los castigos para Michale?
+Jess: nunca lo supe, pero lo cambiaban, se volvía callado, distante... y cada vez cometía más cosas inmorales, perdía los valores
+Raymond: ...
+
+Lauss aparece, estaba herido. Raymond corre a ayudarlo. Jess le trae agua.
+
+Raymond: ¿qué mierda pasó?
+Lauss: no se oculta, el hijo de puta no se oculta, sigue en el callejón, se llevó a Gregor, parece que quiere proteger ese lugar
+Jess: ¿el callejón?
+Lauss: no... una puta fábrica abandonada
+Jess: ... ¿fábrica? ¿Cómo se llama?
+Lauss: no sé, la que está muy cerca de la calle veinticinco
+Raymond: esa es la fábrica de Touchplay, bueno, lo que alguna vez fue
+Jess: ¿Touchplay? ¡Las entrevistas, las putas cintas!
+Raymond: ...
+Lauss: ... ¿de qué hablas?
+Jess: ... una de las entrevistas de mi hermano Jason era con Carl Fricaz, mencionó varias veces haber trabajado con la empresa de juguetes Touchplay
+Lauss: ¡¿y qué mierda tiene que ver esa empresa?!
+Jess: no lo sé... las fuerzas especiales deben ir a revisar ese lugar
+Lauss: ¡Raymond!
+Raymond: ¿sí?
+Lauss: llama a todos, estoy harto de este caso, ¡que todo se pudra! ¡Que lleven armería pesada, todo! ¡Que maten a ese puto con máscara de gas!
+
+Raymond se fue, directo a llamar. Jess se fue de la comisaría, caminó a casa. Al llegar notó todo un desorden, gritó el nombre de Ariana varias veces, pero nadie respondía. Se dirigió a su cuarto y encontró a Michale tirado en el suelo, sus archivos y todas las hojas de su libro no estaban.
+
+Jess: ¡Michale! ¡¡Hermano!!
+Michale: ... ¿Jess?
+Jess: ¡¿qué mierda pasó?! ¿Dónde está Ariana?
+Michale: ¡es una hija de puta!
+Jess: ...
+Michale: te robó todas las hojas que escribiste, te utilizó
+Jess: ... ¿qué? Dime que es una puta mentira
+Michale: ¡no! ¡Por primera vez no estoy siendo el puto Michale de siempre! ¡Se fue! Con todas las hojas, quiere apropiarse de tu libro
+Jess: ...
+Michale: debes creerme
+Jess: ... te creo.
+
+Michale abraza a Jess.
+
+Michale: perdón por todo... intenté detenerla pero no pude
+Jess: ¿por qué viniste aquí? Debías estar en el hospital aún
+Michale: odio los hospitales, y odio mi hogar... por eso vine y me encontré con que ella te estaba... bueno, ya sabes, robando todo
+Jess: ... Jason y madre tenían razón, no era una buena chica
+Michale: ...
+Jess: escucha, cosas extrañas están pasando, cuídate
+Michale: ... me llamaron para una entrevista
+Jess: rechaza, te quedarás aquí para descansar
+Michale: pero tengo esa entrevista con Carl Fricaz
+Jess: ... mierda
+Michale: ... ¿qué pasa?
+Jess: tendrás que aceptar
+Michale: ...
+Jess: pero voy a acompañarte.
+
+-:- Noticia de última hora, Michale y Jess trabajarán juntos para entrevistar a Carl Fricaz una vez más. Como siempre, las entrevistas a Carl ya son una costumbre en el equipo EDEN. Y ya que lo menciono, creo que no está de más decir que... está más vivo que nunca -:-
+
+Carl: ¿por qué me miran así?
+Jess: iré al grano, trabajabas para Touchplay, ellos no te pagaban bien por tu trabajo...
+Carl: magnífico trabajo...
+Jess: ... no te pagaban muy bien por tu magnífico trabajo, eso llevó a que sabotearas la muñeca Popy's, pero... en la entrevista con Jason mencionaste algo... el mecanismo de la Popy's funcionaba gracias a un código de computadora... este código, con un simple error, alteraba todo, ¿no es así?
+Carl: sí, es correcto
+Jess: ... ¿sabías algo más con respecto a esto de la empresa?
+Carl: solamente que gastaron millones, por eso casi entran en bancarrota... gracias a mí, hoy en día pasaron de ser la empresa de juguetes más exitosa e influyente a una del montón, especialmente... una que apenas vende, y cuyas creaciones solo son copias, sin mí no son nada
+Michale: queremos saber más al respecto de esa programación
+Carl: pues... yo no entiendo casi nada, pero me parece muy loco, era tan compleja que quizás podría funcionar para cosas mucho más grandes, los japoneses no la inventaron para crear juguetes, eso es un hecho... nadie crea algo tan complejo y sofisticado para cosas simples
+Michale: ¿y entonces?
+Carl: ... creo que esa programación la llamaban... software, uno que podría ser... no sé, muy arriesgado
+Jess: ¿en qué sentido arriesgado?
+Carl: no sé, había escuchado que... alguien podría volverse loco si tuviera esa programación en su cabeza... prácticamente fue eso lo que le pasó a la Popy's cuando un solo error cambió el juego
+Michale: ¿y es posible tener el software en la cabeza? ¿En la mente humana?
+Carl: les diré un secreto... los japoneses inventaron robots con ese software, pero siempre las cosas salían mal, les daba consciencia propia, como dije... un solo error marca la diferencia, no sé si funcionaría en la mente humana, pero lo que sí sé es que... nada es imposible
+Michale: ...
+Jess: ...
+
+## Capítulo 9: Gas
+
+-:- Un equipo de fuerzas especiales comenzará un ataque en una de las fábricas abandonadas de la empresa de juguetes Touchplay -:-
+
+-:- Al parecer, el interrogatorio a Farla fue de gran ayuda para lograr establecer una posible ubicación del verdadero causante del mal -:-
+
+La ubicación es exacta. El equipo especial se dirigió al lugar rápidamente. Atrás de ellos venían Jess, Raymond y Michale.
+
+Michale: ¿crees que todo salga bien?
+Raymond: es imposible que las cosas salgan mal, mira a todos, están armados hasta los dientes
+Jess: hay cosas que aún no entiendo, ¿realmente usan el software?
+Raymond: ya no importa, lo mejor será que ese mierda muera.
+
+Llegaron a la fábrica. Entraron de inmediato, Raymond, Gregor y Lauss siguieron el paso, mientras que Michale y Jess preferían respirar antes de entrar.
+
+Jess: ...
+Michale: ... lo siento
+Jess: ...
+Michale: sé que amabas a Ariana
+Jess: ... no importa
+Michale: sabes... tengo pensada una nueva entrevista
+Jess: ... ¿cuál?
+Michale: ... da igual, es una idea absurda
+Jess: ... ¿qué pasó entre tú y madre?
+Michale: ¿por qué tan repentina la pregunta?
+Jess: puede pasarte otra vez lo mismo, quizás lo mejor sería que me lo digas
+Michale: ... ella era... bueno... madre me sostenía del cuello, me asfixiaba... a veces me ataban con alambres o sogas, no podía moverme casi
+Jess: ... ¿y padre lo sabía?
+Michale: ...
+Jess: ...
+
+Jess lo abrazó. Michale bajó la mirada hacia su hombro y comenzó a llorar.
+
+Jess: lo siento, perdón por nunca haber hecho nada
+Michale: ... (se seca las lágrimas) ... entremos
+Jess: ...
+
+Michale abrió la puerta dejando paso a Jess. Tomó un respiro profundo y entró a la fábrica.
+
+Jess: ¿oscuro?
+Michale: ...
+
+La fábrica estaba en casi plena oscuridad. Avanzaron con pasos lentos, en el centro una pequeña luz que entraba por una de las ventanas.
+
+Michale: ... ¿esos son cables?
+Jess: ... (se acercó) ... es una persona
+Michale: ...
+
+Las luces se encendieron. La persona estaba sentada, con un televisor en lugar de cabeza y cables que conectaban con una estructura mecánica. Arriba hay una estructura grande de la que salen muchos cables negros: en esa parte están varias televisiones de distintos tamaños, todas colgadas y unidas por los cables. Cada pantalla muestra imágenes diferentes: ojos, bocas, expresiones y algunos textos. Las televisiones están distribuidas alrededor de la estructura, formando una especie de conjunto que rodea el centro.
+
+Jess: la ropa
+Michale: ¿qué?
+Jess: la ropa que lleva... es... Jason
+Michale: ¿Jason? Pero... estaba con madre
+Jess: ...
+
+De pronto, todo el equipo especial reapareció, cargaron sus armas y los apuntaron. Gregor y Lauss habían dejado inconsciente a Raymond, tiraron su cuerpo y conectaron esos mismos cables a su cabeza. El enmascarado se presentó con un televisor y, de forma violenta, lo colocó en la cabeza de Raymond. Los televisores de la estructura ahora señalaban cosas diferentes: imágenes en primera persona en donde víctimas eran asesinadas.
+
+Gregor: ¡Jess! ¡¿Qué tal, Michale?!
+Lauss: ¡miren sus caras! ¡¿Qué sucede?!
+Jess: ... ¿qué mierda? ¡¿Qué es todo esto?!
+
+Fue entonces que una máscara de gas fue lanzada hacia ellos. Jess y Michale voltearon y lo vieron, esta vez sin máscara. Aun así no lograron ver su rostro. La luz no llegaba a iluminarlo, parecía que era a propósito.
+
+—¿cómo es posible que existan personas tan estúpidas como ustedes?
+Jess: hijo de puta, ¡¡¿qué le hiciste a nuestro hermano?!!
+—mejor hay que calmarse, esto es lo mejor
+Michale: ¡¿mejor qué?!
+—absolutamente todo, esto es el futuro, muy pronto, quizás en varios años, debo admitirlo... existirá algo más grande que el ser humano, más grande que todo... y gracias al equipo EDEN logramos saber más de lo imaginado
+Jess: ¡¿de qué mierda hablas?!
+—las cintas VHS son muy importantes, pero no lo son si no tuvieran el contenido que queremos... las entrevistas muestran mucho de las personas, traumas... emociones, igual que un ser humano en su día a día... ustedes, al igual que las cintas, son importantes
+Michale: ...
+—no me miren así, créanme que esto es lo mejor
+Jess: ¿fuimos usados? ¿Todo fue una trampa?
+—llámenlo como quieran, era lo que debíamos hacer.
+
+Gregor y Lauss le colocaron esposas a Jess y Michale. A la fuerza, los hicieron arrodillarse.
+
+—lamento su destino, pero es el destino que todos tenemos
+
+Una risa se escuchaba entre medio. Era Farla, quien acompañó al ambiente incluso con aplausos.
+
+Farla: parecen más estúpidos que en la comisaría
+Michale: ...
+Jess: ...
+Farla: sí, sus caras lo dicen todo
+Jess: tú... hijo de puta
+Farla: ¿y? ¿Vieron los círculos? ¡Jajaja!
+Michale: ...
+Jess: ¡eres un puto mentiroso!
+Farla: ¡esto es para un bien, un futuro que promete!
+—debo agradecerte, Jess, por todo, me entregaste las cintas VHS, dejaste que Ariana tuviera toda tu información y, por sobre todo, tu libro
+Jess: ... ¿qué?
+—sí, Jess... no podíamos dejarte que publicaras ese libro, tiene muchas cosas que podrían ser pistas para encontrar todo esto, pero tranquilo, tu libro aún así se va a publicar, claro, no de la forma en que lo escribiste, pero algo es algo
+Jess: ... ¡¿por qué hacen todo esto?! ¡Hijos de puta!
+—la inteligencia humana nunca podrá compararse con la de una máquina... el software era tan majestuoso que... bueno, sirve para algo mucho mejor, una nueva consciencia controlada por los humanos
+Jess: ...
+—pero... para eso se necesita la consciencia de varias personas, combinando todo, traumas, emociones, recuerdos, la capacidad de un ser humano llevada al mil
+Jess: ...
+
+Un golpe seco. Jess cayó al suelo.
+
+Michale: ¡¡Jess!!
+
+Otro golpe. Michale cayó, logrando ver su último recuerdo: una madre que llegaba de las compras y le entregaba un chocolate.
+
+Gregor: te toca
+—pásame la máscara
+
+Gregor se agachó, tomó la máscara y se la lanzó.
+
+—bien, ¡todos! ¡Ya saben qué hacer!
+
+Las fuerzas especiales, Farla, Gregor y Lauss se arrodillaron formando entre todos una fila. Cerraron sus ojos y un gas cubrió toda la fábrica. Todos se durmieron, pero su mente, sus cerebros, seguían funcionando. El hombre con la máscara de gas se acercó a Farla, bruscamente, colocó otra televisión pequeña en su cabeza y conectó los cables a la estructura. Este proceso lo repitió una y otra vez con todos y cada uno.
+
+-:- Las noticias de última hora confirmaron que la fábrica abandonada perteneciente a Touchplay estaba completamente vacía. Otra vez volvemos a vivir con miedo, se reportaron nuevos asesinatos con pistas que no conducen a nada -:-
+
+-:- El libro del entrevistador Jess fue publicado libremente y resultó ser un fracaso. Los críticos lo consideran malo por haber desaprovechado una idea potente como lo son las diferentes entrevistas a lo largo de la historia de EDEN. Y ya que lo mencionamos, no se ha sabido nada de sus integrantes, por lo que muchos consideran que permanecen en el anonimato, cansados de su equipo de entrevistas -:-
+
+## Capítulo 10: La Nueva Inteligencia
+
+**2034**
+
+Lilard: ¡ya! ¡Váyanse! No soporto ese ruido, ¡hélices de mierda!
+Gustov: ¿no quieres venir? ¡Jajaja!
+Lilard: ¡váyanse!
+
+Gustov se subió al helicóptero. Estaba acompañado de otras personas. El vuelo comenzó y se dirigieron a kilómetros de distancia de la base.
+
+Connor: ¿cómo estás, Gustov?
+Gustov: odio hacer esto cada puto mes
+Connor: ¿todavía no te acostumbras?
+Gustov: no, para muchos es fácil... pero no para mí
+Fred: ¿qué harás esta noche?
+Gustov: tengo muchas cosas, pero si me invitas a tomar no tengo nada
+Fred: estás de suerte, te invito unos tragos
+Connor: ¡¿no me invitas a mí?! Si vas a invitar a uno, invita a todos
+Fred: no tengo dinero para todos
+Connor: ¡no jodas! ¡Pleno año 2034! Uno puede ganar dinero de mil formas
+Fred: lo sé, pero siento que es más trabajo
+Ethan: lo que dices no tiene sentido, puedes ganar dinero sin hacer nada
+Fred: sí, claro
+Ethan: ¡es verdad! Pregúntale a Meis.
+
+Todos voltearon a ver a Ethan.
+
+Ethan: ... ¿qué? ¿Por qué me miran así?
+Connor: ¿no te animas a preguntar?
+Ethan: ¿preguntar qué?
+Connor: ya sabes de qué hablo
+Ethan: ... ¡Meis!
+
+Un LED circular azul se encendió en su cabeza, un pequeño dispositivo ubicado en la sien. Ethan lo tocó con su dedo y preguntó: "Meis, ¿cómo podría estrangular a un ser humano sin dejar pistas? Hablando hipotéticamente".
+
+Una voz femenina respondió con el más mínimo detalle. Connor se rio, Fred solamente sonrió, mientras que Gustov intentaba ignorarlos.
+
+Gustov: ya llegamos
+Connor: hey, Ethan, ¿otra pregunta?
+Gustov: es mejor que dejen a Meis a un lado
+Connor: imposible, todos la tenemos aquí, es cotidiano, ¡es el futuro!
+Gustov: ...
+
+El helicóptero aterrizó. Gustov bajó primero. Le siguieron el paso Ethan y Fred. Por un lado, Connor tomó una herramienta pesada, se adelantó y, con fuerza, golpeó el suelo. El ruido fue metálico, era una escotilla.
+
+Gustov: ábrela de una vez
+Connor: estoy en eso...
+
+Una y otra vez golpeaba repetidas veces. La escotilla por fin se abrió. Gustov se asomó y observó: cientos de cuerpos apilados unos encima de otros con cabezas de televisor. Todos llevaban cables que parecían conectar con algo que Gustov no veía.
+
+Ethan: ¿y?
+Gustov: ... todo está en orden, podemos volver tranquilos.
+
+Cerraron la escotilla y volvieron a subirse al helicóptero de regreso a la base.
+
+Ethan: ¿por qué no me dejas ver?
+Gustov: ... no estás preparado aún, novato
+Ethan: ¿y qué es?
+Gustov: ¿no conoces la historia?
+Ethan: ...
+Connor: ¿no se te viene nada a la mente?
+Ethan: ...
+Connor: ¿1978?
+Ethan: nada, no sé nada
+Gustov: cuando lleguemos a la base te cuento, pero en resumidas cuentas... todo funciona gracias a eso, esa escotilla es el corazón del nuevo Dios
+Connor: ¿ahora le llaman Dios? No me jodas
+Ethan: ¿Dios?
+Gustov: sí... está aquí, pegado a nuestra puta cabeza.
+
+Gustov se tocó el dispositivo LED. Una inteligencia artificial mucho más poderosa y compleja.
+
+Fred: bueno, yo tengo sed, novato, ¿nos acompañas?
+Ethan: quizás
+Fred: bien.
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Las Entrevistas';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim().replace(/^>\s*/,'').replace(/`/g,'').trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^-:-\s*(.+?)\s*-:-$/))){ splitLong(m[1]).forEach(function(part){ items.push({t:'news',s:part}); }); }
+    else if((m = l.match(/^:::\s*(.+?)\s*:::$/))){ items.push({t:'sys',s:m[1].replace(/\s*:::\s*/g,'  ·  ')}); }
+    else if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='news'){
+      var w=el('news',''); var nl=el('newslab',''); nl.appendChild(document.createElement('i')); nl.appendChild(document.createTextNode('NOTICIA'));
+      w.appendChild(nl); w.appendChild(el('newstxt',it.s)); box.appendChild(w);
+    }else if(it.t==='sys'){
+      var sy=el('sys',''); if(/video/i.test(it.s) && !/finaliz/i.test(it.s)){ var rd=document.createElement('i'); rd.className='rec'; sy.appendChild(rd); }
+      sy.appendChild(document.createTextNode(it.s)); box.appendChild(sy);
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
