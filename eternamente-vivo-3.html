@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eternamente Vivo 3 — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,15vw,6rem);white-space:pre-line;text-align:center}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: Todo Es Cierto
+
+El edificio Excálibur estaba frente a Martino, era grande y majestuoso. Desde la vereda tuvo que inclinar la cabeza para ver el final de la estructura. Era un edificio enorme, lleno de ventanas oscuras y líneas rectas que parecían repetirse hasta perderse. (Poético 😢).
+
+**Diciembre, 2036.**
+
+Martino cruzó la entrada principal con una sensación rara en el pecho. El interior era amplio y silencioso, con un mostrador al fondo donde estaba la administradora del edificio, Eby. Caminó hasta ella tratando de mantener cierta calma.
+
+Martino: hola
+Eby: ¡hola! (Una sonrisa de oreja a oreja) ¿sí? (Ese "sí" sonó igual de dulce que una mandarina en invierno)
+Martino: ¿cómo estás? (No pudo evitar preguntar algo que nada tenía que ver)
+Eby: ... pues... bien, ¿en qué puedo ayudarte?
+Martino: ... bueno... claro, sí. Vengo a ver... (bajó la cabeza para leer en una pequeña hoja cortada con tijera de forma desprolija). Vengo a ver al señor Amadeus Shell.
+Eby: ... ¿eres Martino?
+Martino: sí.
+Eby: ¡un placer! Es decir, todo el mundo habla de que ibas a aparecer aquí y... perdón, no quiero quitarte más tu tiempo, pero... es un placer tenerlo por aquí. No vienen muchas... ya sabes, celebridades.
+Martino: claro.
+Eby: aquí tienes (una tarjeta).
+
+Cuando terminaron de hablar, Eby le entregó una tarjeta. En ella estaba escrito Ex-34. No era exactamente una sala, sino la tarjeta que permitía abrir la puerta de esa sala.
+
+Martino guardó la tarjeta y comenzó a subir por las escaleras. Al principio lo hizo con decisión, pero el edificio parecía no terminar nunca.
+
+Cada que se sentaba en uno de los escalones, veía pasillos más largos con distintas puertas. Algunas estaban cerradas y en otras se veía un pequeño cartel LED con una palabra simple: "ocupado".
+
+Después de varios pisos, empezó a notar el cansancio. Miró hacia arriba y entendió que todavía faltaba mucho, así que decidió cambiar de idea. Bajó nuevamente hasta encontrar el ascensor. El viaje fue corto y silencioso. (Si te estás aburriendo en este punto... pues... tranquilo, lo que sigue es más interesante).
+
+Cuando las puertas se abrieron, Martino salió a un pasillo limpio y casi vacío. Caminó unos metros hasta encontrar la puerta con la numeración correcta. Durante un segundo dudó. Luego golpeó la puerta (No suelo insultar a mis personajes. Pero, ¡ES UN PUTO ESTÚPIDO!, ¡TIENES UNA TARJETA PARA ABRIR LA PUERTA!).
+
+Se dio cuenta enseguida, sacó la tarjeta (algo molesto consigo mismo) y la deslizó por la cerradura electrónica. El lector (No tú, criatura que encuentra significados en las palabras, sino lo que "lee la tarjeta") emitió un sonido breve y la puerta se abrió. Desde el interior se escuchó una voz.
+
+Una voz con un tono extraño, algo irónico, exagerado, como la de un villano de Disney caricaturesco (para no decir que era la voz de un maricón).
+
+—Pasa, siéntate y preséntate, solo si quieres.
+
+La puerta comenzó a cerrarse sola mientras Martino entraba. El movimiento era lento, casi cuidadoso, hasta que quedó completamente sellada.
+
+La sala era simple. Cuatro paredes muy blancas, un techo del mismo color y un suelo gris. No había muebles, excepto un pequeño banquito en el centro. Martino caminó hasta allí y se sentó. Durante unos segundos no pasó nada.
+
+Luego se escuchó un sonido mecánico suave. Martino levantó la cabeza y vio que una pequeña abertura del techo se había abierto sin explicación (en realidad, si hay una explicación 🤓☝️). No alcanzó a entender qué era. Cuando volvió a mirar hacia el frente, alguien estaba parado frente a él.
+
+Martino dio un pequeño salto en el banquito. El hombre tenía una apariencia imposible de ignorar. Cabello blanco exagerado, sonrisa abierta y una expresión que parecía mezclar diversión con algo difícil de explicar.
+
+Era Amadeus (busca la misma palabra en Google).
+
+Amadeus: da mucho gusto tener a alguien de su escala en este lugar.
+Martino: no creo ser el único.
+Amadeus: para nada, otros famosos han venido seguido, pero nadie aquí, conmigo.
+Martino: okey.
+Amadeus: en fin, vayamos al grano, ¿qué te trae por aquí?
+Martino: pues... hace dos años visité a mi padre en un lugar de cuidado. Sí, él sigue vivo y mi madre... bueno, no sé dónde está.
+Amadeus: bien, continúa.
+Martino: cuando lo visité no hablamos nada. Él ya no puede hablar, está muy viejo y... aunque no me dijo ni una sola palabra, me sentí... extraño, decaído (suspira). No puedo ni describirlo.
+Amadeus: no hace falta, entiendo con claridad.
+Martino: bueno... desde entonces he tenido varias pesadillas, patrones, veo patrones en todas partes. Aquel día que me llamó fracasado, o que... iba a lastimar a mi madre otra vez... o cuando... bueno, da igual. Yo solo quiero "curarme" de alguna forma.
+Amadeus: ¿qué buscas aquí?
+Martino: ... enfrentar mi trauma, un trauma que no entiendo, pero que me atormenta desde mi puta adolescencia.
+Amadeus: (suspira y sonríe levemente) a mí no me gusta escuchar la parte buena de la persona, siento que es justo eso el problema central.
+Martino: ¿qué quieres decir?
+Amadeus: (se inclina hacia él) quiero escucharte hablar de esas cosas malas que hiciste, como hijo, como persona, como... no sé, como un mal ciudadano, supongo.
+Martino: ¿por qué?
+Amadeus: ... porque yo voy a ayudarte, voy a ayudarte.
+
+Amadeus comenzó a reír. La risa era fuerte, desordenada y completamente fuera de lugar, igual de alocada que su propia apariencia.
+
+## Capítulo 2: Mentir No Es Pecado
+
+Amadeus: bien, creo que es momento de comenzar.
+Martino: ¿qué debo hacer?
+Amadeus: nada del otro mundo, solamente... cierra los ojos.
+
+Martino cerró los ojos por un momento, tratando de concentrarse en lo que acababa de escuchar. Frente a él, Amadeus sonreía con una calma incómoda. Luego se levantó del banquito con total tranquilidad y chasqueó los dedos. El cambio fue inmediato.
+
+Desde distintos puntos de la sala comenzaron a aparecer pequeñas partículas tecnológicas, diminutas y luminosas. Se agrupaban, se separaban y volvían a unirse formando estructuras cada vez más complejas. En cuestión de segundos, aquellas partículas empezaron a construir algo mucho más grande.
+
+Un escenario. Las paredes blancas desaparecieron, y aparecieron edificios, calles y luces que tomaban forma con una precisión sorprendente (🤯). El suelo gris se transformó en una vereda realista, con texturas y pequeños detalles que respondían incluso al movimiento.
+
+Amadeus: quizás sientas náuseas, o nada, pero te aseguro que vas a sentir, incluso si es nada.
+Martino: ...
+Amadeus: mantén tus ojos cerrados... estos... estos... nano... ¡nanobichos!, harán el trabajo.
+
+Las nanoestructuras ("nanobichos" para los amigos) terminaron su trabajo. Martino abrió los ojos lentamente. Al levantar la cabeza vio dos edificios enormes frente a él, idénticos en tamaño y forma. Durante un momento no entendió lo que estaba viendo. Retrocedió un paso, intentando procesar la escena. Al girar el cuerpo observó algo aún más desconcertante.
+
+Cientos de personas caminaban por la calle como si nada fuera extraño. Conversaban, cruzaban la avenida, miraban sus teléfonos o simplemente seguían su camino. Nadie parecía notar la presencia de Martino. Se acercó a uno de ellos.
+
+Martino: ¿dónde estoy?
+—What? I don’t understand.
+
+El hombre siguió caminando sin detenerse. Martino volvió a mirar los edificios. Esta vez los observó con más atención y entonces lo entendió. Un pequeño zumbido comenzó a sentirse dentro de su oído. La voz de Amadeus apareció directamente en su cabeza.
+
+Amadeus: no te preocupes, te voy a guiar.
+Martino: ¿dónde estoy?
+Amadeus: lo sabrás pronto, dirígete al piso 3, allí te encontrarás con un amigo.
+
+Martino decidió moverse. Caminó hacia uno de los edificios y atravesó la entrada principal. El interior era amplio y elegante. Frente a él estaban los ascensores, con una fila ordenada de números iluminados. Presionó el botón del piso 3.
+
+El ascensor subió con suavidad y se abrió en un pasillo silencioso. Al avanzar unos metros, llegó a una sala grande llena de muebles caros, alfombras gruesas y una iluminación cálida.
+
+Mayordomos caminaban con bandejas mientras distintas personas conversaban entre sí. Eran hombres y mujeres (dos mujeres) con apariencia segura, vestidos con ropa costosa. Todo indicaba que se trataba de gente influyente.
+
+En ese momento Martino bajó la mirada. Recién entonces notó que llevaba puesto un traje elegante color carmesí. Un hombre se acercó a él con paso tranquilo.
+
+Doug: ¿eres Martino Lipschitz?
+Martino: sí.
+Doug: un gusto, acompáñame.
+
+Ambos terminaron sentándose en unos sofás.
+
+Martino: ¿qué es todo esto?
+Doug: nada del otro mundo (sonríe), solamente juntadas, y ya.
+Martino: ¿siempre hacen juntadas?
+Doug: (suspira) hablemos de ti, Martino.
+Martino: ... ¿de qué?
+Doug: pues, cuéntame algo malo.
+Martino: ¿cómo que hago malo?
+Doug: lo más incorrecto que hayas hecho, ¿sabes? Cuéntame de aquella vez que robaste.
+Martino: ¿cómo sabes eso?
+Doug: ¡Mar! ¡Solo cuenta!
+
+**Octubre, 2022.**
+
+Martino tenía doce años y estaba solo dentro del aula. La clase todavía no había terminado, pero el ambiente era extraño. El silencio ocupaba todo el lugar. Solo se escuchaba el sonido del lápiz moviéndose sobre el cuaderno. Mientras escribía, levantó la mirada.
+
+Sobre cada banco había una tablet del colegio. Hacía semanas que los profesores pedían usar esos dispositivos para las actividades diarias. Todas estaban puestas sobre las mesas, quietas, como si esperaran a ser usadas otra vez. Martino dejó de escribir.
+
+Observó la puerta del aula, luego miró hacia las ventanas y finalmente volvió a ver las tablets. Durante unos segundos no se movió. Después extendió la mano con cuidado y tomó una. El movimiento fue lento. La deslizó hacia su mochila y la escondió entre los cuadernos. Cerró la mochila sin hacer ruido y volvió a sentarse como si nada hubiera pasado (JAJAJA, gran ladrón)
+
+Siguió escribiendo. El tiempo parecía avanzar muy despacio. De pronto el timbre del recreo sonó en todo el colegio. Las voces comenzaron a escucharse en los pasillos y los alumnos regresaron al aula poco después. Martino también volvió, entrando junto con el resto del grupo.
+
+La maestra pidió que todas las tablets fueran devueltas y apiladas en el escritorio del frente. Los estudiantes comenzaron a levantarse y caminar hacia allí, chocándose un poco entre ellos mientras dejaban los dispositivos. Martino se levantó también. Se acercó junto al resto, esperando el momento correcto.
+
+Mientras todos estaban ocupados dejando sus tablets sobre la pila, él hizo un movimiento rápido y dejó caer algo dentro del cesto de basura que estaba cerca del escritorio. Regresó a su banco. La clase continuó con normalidad. Nadie dijo nada. Nadie pareció notar nada. La escena volvió a cambiar.
+
+**Diciembre, 2036.**
+
+Doug: ¡jajaja! ¿Y te descubrieron?
+Martino: no, nadie lo sabe, bueno, al parecer tú sí.
+Doug: solo quería escuchar tu versión, hay muchos que dicen... ya sabes, exageran.
+Martino: ¿quién lo dice?
+Doug: no importa eso. Bueno, voy a ir a lo que realmente importa.
+
+El hombre sentado frente a Martino levantó la mano y chasqueó los dedos. Un mayordomo apareció casi de inmediato, caminando con una postura perfecta. En sus manos llevaba un sobre cerrado. El mayordomo se lo entregó al hombre, quien lo sostuvo durante un segundo antes de extenderlo hacia Martino.
+
+Dentro había fotografías. Las imágenes estaban ordenadas de una forma peculiar, como si alguien hubiera armado una secuencia con cuidado. Martino comenzó a revisarlas una por una, observándolas con atención mientras la confusión crecía lentamente en su rostro.
+
+Martino siguió revisando las fotografías con cuidado. Eran imágenes de distintas personas, distintos lugares, distintos momentos. Algunas parecían antiguas, otras más recientes. No había un orden claro al principio, aunque después empezó a notar que todas parecían conectadas de alguna manera.
+
+El hombre lo observaba con tranquilidad. Cuando Martino levantó la vista, el hombre comenzó a hablar con una calma extraña, como si estuviera explicando algo completamente cotidiano.
+
+Tu bisabuelo, en los años cincuenta, era un tipo común. Trabajaba, hablaba demasiado en los bares, conocía gente porque el mundo antes funcionaba así. Salías de tu casa y terminabas conversando con desconocidos. Una noche coincidió con un viajero europeo que estaba recorriendo Sudamérica después de la guerra. Charlaron un rato. Nada trascendental. Dos hombres tomando algo, hablando de trabajo y de lo caro que estaba todo.
+
+Ese viajero europeo había trabajado antes en un puerto del Mediterráneo. Allí conoció a un ingeniero egipcio que viajaba constantemente por negocios. Se vieron varias veces porque el ingeniero siempre terminaba en el mismo café del puerto esperando barcos retrasados. Conversaban sobre política internacional, sobre el petróleo que empezaba a reorganizar la economía del mundo. Ninguno recordaría la charla años después.
+
+El ingeniero egipcio, a su vez, tenía un primo que estudiaba en Arabia Saudita durante los años setenta. Ese primo participaba en círculos religiosos universitarios donde se discutía la influencia occidental en Medio Oriente. En una de esas reuniones conoció a un joven saudí que comenzaba a ganar fama entre estudiantes por su discurso religioso y político. Hablaron varias veces. Debates, discusiones, café. Nada que pareciera histórico en ese momento.
+
+Ese joven saudí era Osama bin Laden. Décadas después, ese mismo hombre organizaría el atentado.
+
+Martino: ¿atentado? ¿Qué atentado?
+Doug: levántate a verlo.
+
+Martino se quedó quieto durante unos segundos, todavía sosteniendo las fotografías. Luego se levantó lentamente del sofá, caminando hacia el gran ventanal del salón. Afuera, la ciudad seguía moviéndose como si nada fuera extraño.
+
+Se acercó al vidrio. Desde esa altura podía ver perfectamente los edificios cercanos. En ese momento notó algo que le llamó la atención. A lo lejos, un avión avanzaba a gran velocidad en dirección directa hacia uno de los edificios.
+
+La distancia se reducía rápidamente. Algunas personas dentro del salón comenzaron a notar lo mismo. Primero fue un murmullo bajo, después voces cada vez más nerviosas. Varias personas se levantaron, otras comenzaron a gritar cuando entendieron lo que estaba pasando.
+
+El avión seguía acercándose. Los gritos aumentaron alrededor de Martino. Algunos corrían, otros intentaban mirar por las ventanas desde distintos ángulos. Martino no se movió.
+
+Simplemente se quedó mirando a su propia muerte. (¿Entiendes? Porque el avión lo va a matar.... 😐).
+
+## Capítulo 3: Donovan
+
+**2031 (por favor presta atención a los años)**
+
+Amadeus y Donovan estaban sentados frente a frente en unos sofás amplios dentro de un salón elegante. Varias personas los rodeaban, algunos con copas en la mano, otros inclinados hacia adelante escuchando la conversación. El ambiente parecía relajado, casi festivo.
+
+Donovan: ¿tienes eso que queremos? ¿O debemos seguir buscando?
+Amadeus: lo tengo, siempre lo voy a tener.
+Donovan: ¿hace cuántos años vienes de esto?
+Amadeus: desde que nací. Además, estudié en Barcelona, en el instituto...
+Donovan: ¿instituto? ¿Es en serio? ¡Jajaja!
+
+Las personas alrededor comenzaron a reír. Primero algunos, luego casi todos. La risa se expandió por el salón mientras Amadeus permanecía completamente en silencio, observando a Donovan sin moverse.
+
+Donovan: hablando en serio, ¿hace cuántos años vienes de esto?
+Amadeus: pues... de pequeño, bueno, ya sabes, tomaba un palo de algún árbol y simulaba como si estuviese en el teatro, el palo era el micrófono.
+Donovan: ahora sí nos entendemos.
+
+La escena se oscurece.
+
+Amadeus ahora estaba frente a una orquesta completa. Decenas de músicos lo observaban con atención mientras él levantaba las manos con seguridad. Con un movimiento claro marcó el inicio, guiando a los instrumentos con gestos firmes.
+
+Los violines comenzaron primero, luego se sumaron los metales y la percusión. Cada cambio de ritmo respondía a sus manos. Amadeus parecía controlar cada parte de la música con una precisión absoluta.
+
+La escena se oscurece.
+
+Volvemos al mismo salón de antes. Donovan y Amadeus estaban nuevamente frente a frente.
+
+Donovan: tenemos una mala noticia, creo que hay un reemplazo.
+Amadeus: ¿reemplazo? ¿De qué hablas?
+Donovan: alguien mejor que tú, con un legado más prometedor.
+Amadeus: pero... yo... estuve desde el inicio, no pueden solo dejarme tirado así porque así, o sea, no vieron todo mi potencial.
+Donovan: exactamente, nunca vimos tu potencial, por eso debes irte.
+Amadeus: ...
+
+Sin aviso, Amadeus se levantó con rapidez y lanzó un golpe directo al rostro de Donovan.
+
+La escena se oscurece.
+
+La noche era oscura y la lluvia caía con fuerza. Dos hombres sujetaban a Amadeus con firmeza mientras lo empujaban hacia afuera del lugar. Él intentaba mantenerse en pie mientras el agua caía sobre su rostro.
+
+—Eres un maldito fracasado, Amadeus. El apellido Shell no te hace honor.
+Amadeus: ... ¡jódete!
+
+La escena se oscurece.
+
+Un trueno fuerte iluminó el cielo. Amadeus estaba frente al edificio Excálibur. Permanecía quieto bajo la lluvia, levantando la cabeza para mirar toda la estructura mientras el agua corría por su rostro.
+
+La escena se oscurece.
+
+**Diciembre, 2036**
+
+Martino estaba inclinado sobre un pequeño tacho, vomitando mientras su cuerpo todavía reaccionaba a lo que acababa de ver. Amadeus estaba cerca, pasando su mano por el pecho de Martino con calma, como si intentara estabilizarlo.
+
+Martino: tantas náuseas... (vuelve a vomitar), ¿tanto?
+Amadeus: al parecer eres débil a las simulaciones.
+Martino: son muy reales, y los movimientos de esos... "nanobichos" son hipnóticos.
+
+Martino respiró hondo varias veces hasta poder enderezarse. Su cuerpo todavía temblaba un poco.
+
+Martino: ¿sabes qué? Terminamos, no me siento ayudado.
+
+Caminó hacia la puerta de la sala e intentó abrirla usando la tarjeta, pero el lector no respondió. Probó otra vez, deslizando la tarjeta con más fuerza, aunque el sistema seguía completamente bloqueado. Se dio vuelta para mirar a Amadeus.
+
+Martino: ... ¿por qué la puerta no abre?
+Amadeus: la mejor opción es no irse.
+
+Los nanobichos comenzaron a moverse otra vez. Miles de partículas se agruparon rápidamente hasta formar una mano enorme que envolvió el cuerpo de Martino. Lo levantó del suelo durante un segundo y luego lo soltó, dejándolo caer con fuerza.
+
+Antes de que pudiera levantarse, las partículas cambiaron de forma nuevamente. Esta vez imitaron brazos que lo tomaron y lo sentaron en el banquito, obligándolo a quedarse quieto.
+
+La puerta de la sala se abrió. Dubois entró caminando con calma. Se sentó junto a Martino.
+
+Dubois: toda tuya. (le entregó la tablet)
+Martino: ... ¿y esto qué es?
+
+Los nanobichos comenzaron a activarse. Pequeñas partículas tecnológicas se elevaron y empezaron a reconstruir un nuevo escenario: el colegio Monseñor Gottau.
+
+Dubois: ¿lo reconoces?
+Martino: ...
+Dubois: (reía jadeando, con una risa asmática que sonaba a cinismo y poder, pero también a falta de aire).
+
+Dubois se levantó y se fue. En la tableta aparecieron cuatro nombres conocidos: Isadox, Santillán, Garilda y Moreno, acompañados de imágenes de sus rostros. Nuevamente, la voz de Amadeus se escuchó.
+
+Amadeus: ¿a quién escoges?
+Martino: ... ¿a qué te refieres?
+Amadeus: solo puedes salvar a uno.
+Martino: ... (levanta la mirada)
+Amadeus: tic, tac.
+
+Un minuto para elegir. Los nanobichos comenzaron a recrear momentos con cada uno de esos rostros. (No iba a ser nada fácil escoger, ¿verdad?). Imágenes y espacios tomaron forma poco a poco, recreando momentos específicos de la vida de Martino con sus amigos.
+
+**2025**
+
+Martino estaba sentado en el aula mientras daba una inhalación a su vaper. El humo salía lentamente cuando la puerta del aula se abrió y Garilda apareció en la entrada.
+
+Garilda: da igual si vapeas, te arruinas de la misma manera.
+Martino: lo sé, pero... qué importa, mejor vivir que callar moralina.
+Garilda: ... ¿eh, qué dices?
+Martino: no tengo ni la más puta idea.
+Garilda: (sonríe levemente)
+Martino: ¿quieres?
+Garilda: claro que no.
+Martino: es una probada y se acabó.
+Garilda: ... no, no.
+Martino: nadie debe enterarse.
+Garilda: ... no le digas a nadie.
+Martino: soy una tumba.
+
+Garilda tomó el vaper de la mano de Martino, limpió la parte por donde se fumaba y dio una pequeña inhalación. Luego se lo devolvió mientras el humo salía de su boca. Después de unos segundos comenzó a toser levemente.
+
+Martino: ¿estás bien?
+Garilda: sí, aunque... se sintió algo raro, pero... debe ser el efecto psicológico de que estoy haciendo algo, ya sabes, prohibido.
+Martino: sí. Por cierto, es solo agua.
+Garilda: ¿qué?
+Martino: el vaper es agua. No tiene ningún efecto. Agua que sale a vapor. En pocas palabras, no hace daño, ni siquiera es bueno. No vale la pena para el que fuma.
+Garilda: ¿me hiciste probar un vaper que no sirve?
+Martino: ¿crees que te haría probar algo que podría hacerte daño?
+Garilda: pues sí, te conozco.
+Martino: quizás, pero... no soy tan hijo de puta.
+Garilda: ...
+
+Ambos se sentaron inclinando las sillas hacia atrás con cuidado, manteniendo el equilibrio mientras miraban el techo del aula con una sonrisa tranquila.
+
+Garilda: ... ¿qué prefieres?
+Martino: no me jodas con eso otra vez.
+Garilda: bueno, está bien.
+Martino: (cierra sus ojos)
+Garilda: ... ¿crees que vas a tener éxito? Es decir, ¿tu miedo es no llegar a ser exitoso?
+Martino: (suspira), ya no sé qué pensar, creo que le tengo más miedo al éxito.
+Garilda: ¿entonces por qué estás obsesionado con eso?
+Martino: para ser alguien.
+Garilda: si pensaras en las personas, en ti, en... todos los que te rodean, ¿no crees que quizás ya eres alguien?
+Martino: ... mejor cierra tus ojos y... no sé, relájate.
+Garilda: piénsalo. (cierra sus ojos).
+Martino: (abre sus ojos)...
+
+## Capítulo 4: La Caída De Las Criadas
+
+Martino estaba sentado en el suelo de la sala blanca, todavía con el cuerpo pesado después de todo lo que había pasado. Frente a él, Amadeus parecía completamente tranquilo. Estaba recostado en el banquito con un vaso de licor en la mano, mirando a los nanobichos que se movían sobre el suelo.
+
+Las pequeñas partículas se organizaban formando figuras diminutas que simulaban un partido de fútbol. Dos equipos corrían detrás de una pelota microscópica mientras Amadeus observaba el juego con una calma que contrastaba demasiado con la situación de Martino.
+
+Amadeus: ... ¿por qué salvaste a Garilda?
+Martino: dime la verdad, ninguno está muerto ¿o sí?
+Amadeus: ... cuando salgas de aquí sabrás eso.
+Martino: pues entonces, déjame salir.
+Amadeus: (suspira) lamento decirte que aún no terminamos.
+Martino: ¡me importa una mierda! Jódete y déjame salir.
+Amadeus: responde a mi pregunta, ¿por qué a ella?
+Martino: ... ¿y por qué no dejarme salir?
+Amadeus: ¡¿por qué a ella?!
+Martino: ¡porque sé que no vas a matar a nadie!
+Amadeus: ¿eso crees? ¿En serio?
+Martino: ... al menos, es lo que quiero creer.
+Amadeus: ... eres muy raro, Martino. Dices ser narcisista o un maldito idiota que solo piensa en sí mismo, pero no soy estúpido, nadie lo es... lloras cuando no estás cerca de ellos, lloras como una niña. ¡Jajaja!
+Martino: jódete, fracasado hijo de puta.
+Amadeus: sí, justo a eso me refería, ¡la palabra célebre! La palabra que... no quieres escuchar en tu vida.
+Martino: déjame salir.
+Amadeus: ... responde, ¿realmente dejarías a todos para no ser un fracasado?
+Martino: (sonríe) nanobichos... ni siquiera sabes cómo decirlo, suena... infantil, estúpido.
+Amadeus: ... responde.
+Martino: infantil.
+
+Amadeus levantó la mano con tranquilidad y chasqueó los dedos. Los nanobichos abandonaron el juego en el mismo instante y comenzaron a expandirse por toda la sala.
+
+Miles de partículas se organizaron rápidamente, cubriendo el espacio y reconstruyendo el entorno alrededor de Martino. En cuestión de segundos la realidad cambió por completo.
+
+**1938**
+
+Martino se encuentra en un campo de concentración rodeado por cercas, torres de vigilancia y soldados armados que patrullaban sin descanso.
+
+Martino se encontró de pie en medio del lugar. Al bajar la mirada notó algo que lo dejó quieto por un momento: llevaba puesto un uniforme de soldado nazi.
+
+Mientras intentaba entender lo que estaba pasando, otro soldado se acercó caminando con seguridad. Era Rudolf, quien se detuvo frente a él como si se conocieran desde hace tiempo.
+
+Rudolf: ...
+Martino: ... ¿qué?
+Rudolf: mantente alerta.
+Martino: ... ¿alerta?
+Rudolf: vendrán nuevos prisioneros, así que mantente alerta.
+Martino: ...
+
+Mientras hablaban, otros soldados comenzaron a reunirse cerca de ellos. Detrás de los guardias avanzaba una cadena de prisioneros judíos que caminaban lentamente.
+
+Sus manos estaban atadas con sogas gruesas que dejaban marcas profundas en la piel, la ropa estaba sucia y muchos tenían heridas visibles en el rostro. Algunos miraban al suelo mientras avanzaban, otros simplemente seguían caminando con una expresión vacía.
+
+En medio de ese grupo Martino escuchó algo que lo obligó a reaccionar. Reconoció las voces de su madre y de su padre entre los prisioneros, lo que hizo que intentara acercarse rápidamente hacia ellos.
+
+Dio un paso adelante, pero Rudolf lo detuvo colocando una mano firme sobre su pecho, obligándolo a quedarse en su lugar mientras la fila continuaba avanzando frente a sus ojos.
+
+Rudolf entró a su oficina, colgó su sombrero en un perchero y se sentó detrás de su escritorio con total tranquilidad.
+
+Tomó una botella de whisky, sirvió un poco en un vaso de vidrio fino y levantó el vaso para probar el primer sorbo.
+
+En ese momento la puerta se abrió y Martino entró al despacho con paso directo, lo que hizo que Rudolf dejara el vaso nuevamente sobre el escritorio antes de dirigir su atención hacia él.
+
+Martino: ¡¿qué hacen mis padres aquí?! ¡Libérala!
+Rudolf: ... no son tus padres. Si lo fueran, no estarías aquí.
+Martino: ¿eres sordo o estúpido? ¡Libérala!
+Rudolf: ... no son tus padres, el sordo eres tú.
+
+Rudolf abrió uno de los cajones del escritorio con un movimiento tranquilo y sacó varios documentos ordenados. Los colocó sobre la mesa y se los extendió a Martino como si se tratara de algo completamente normal.
+
+Martino: ¿qué es esto?
+Rudolf: papeles que dicen mucho, bastante.
+Martino: ...
+Rudolf: ¿ahora lo entiendes? No son tus padres.
+Martino: ...
+
+Después de mirar las hojas, las lanzó directamente contra el rostro de Rudolf sin intentar contenerse.
+
+Martino: libérala o te juro que...
+Rudolf: ¿juras qué? ¿Qué harás? ¡¿eh?!
+
+Martino bajó lentamente la mano hacia su arma, preparado para sacarla del cinturón, pero antes de que pudiera hacerlo la puerta volvió a abrirse y otro soldado entró al despacho para interrumpir la situación.
+
+—¡Oigan! Esta noche habrá una junta, el Führer se comunicó directo a ti.
+Rudolf: ¿en serio? (sonrió levemente) ¡Habla!
+—Quiere verte a ti y a las otras fuerzas importantes en la gala.
+Rudolf: ... claro, claro que sí.
+—Bien.
+
+El soldado se retiró poco después, cerrando la puerta detrás de él. Rudolf permaneció sentado en silencio observando fijamente a Martino desde el otro lado del escritorio.
+
+Durante varios segundos ninguno de los dos dijo nada, hasta que finalmente Martino decidió darse la vuelta y abandonar la oficina sin pronunciar una sola palabra.
+
+**Gala de Oficiales, 1938**
+
+Mesas largas, copas, uniformes impecables y conversaciones bajas que llenaban el ambiente. Oficiales caminaban de un lado a otro mientras algunos brindaban entre ellos.
+
+Rudolf estaba de pie cerca de una de las mesas, sosteniendo un vaso de bebida mientras observaba el lugar con tranquilidad. Bebió un pequeño trago y dejó que el líquido bajara lentamente antes de girar la cabeza hacia un lado.
+
+En una de las esquinas del salón estaba Martino. No hablaba con nadie. Permanecía quieto, con una expresión fría, mirando fijamente a Rudolf desde la distancia.
+
+Rudolf lo sostuvo con la mirada durante unos segundos, luego levantó el vaso, tomó otro trago y volvió a mirar hacia el frente como si la presencia de Martino no fuera algo importante.
+
+La puerta principal del salón comenzó a abrirse lentamente. El movimiento hizo que varias personas dejaran de hablar y miraran hacia la entrada. Primero aparecieron tres soldados que avanzaron con paso firme. Entre ellos caminaba el Führer.
+
+Algunos oficiales comenzaron a acomodarse para recibirlo mientras Rudolf también se movía unos pasos hacia adelante con la intención de saludarlo.
+
+Fue entonces cuando se escuchó un grito que rompió completamente el momento.
+
+Martino: ¡A la mierda con el Führer!
+
+Todas las miradas se dirigieron hacia Martino. Él ya tenía el arma levantada, apuntando directamente hacia el Führer. Sin dudarlo disparó. En ese mismo instante la escena se distorsionó.
+
+El sonido del disparo se mezcló con un movimiento brusco cuando Martino golpeó a Amadeus en el rostro. Todo el escenario desapareció de golpe. Los edificios, los soldados y la gala se desarmaron en miles de partículas que regresaron a su estado original.
+
+Los nanobichos volvieron a quedar inmóviles en la sala blanca. Amadeus llevó una mano a su rostro mientras sonreía, como si el golpe no hubiera significado nada.
+
+Amadeus: ¿ahora lo entiendes, Mar?
+Martino: (respiraba agitado).
+
+Un sonido extraño comenzó a escucharse desde la puerta de la sala. Era un ruido tecnológico, una especie de desbloqueo mecánico que no había estado allí antes.
+
+Martino giró la cabeza al escucharlo y caminó hacia la puerta con rapidez. Sacó la tarjeta y la deslizó por el lector. Esta vez el sistema respondió sin problemas y la puerta comenzó a abrirse lentamente. Detrás de él, Amadeus reía a carcajadas y dice entre risas: “Creo que terminamos la sesión”.
+
+## Capítulo 5: Golpe De Estado
+
+El ascensor descendía lentamente por el interior del edificio Excálibur. Martino estaba apoyado contra una de las paredes metálicas, moviendo la pierna sin poder quedarse quieto. El silencio del ascensor solo hacía que su ansiedad creciera más.
+
+Después de unos segundos levantó el puño y golpeó la puerta con fuerza, dejando salir un grito que rebotó dentro del espacio cerrado.
+
+Martino: ¡Puta madre!
+
+El ascensor se detuvo y las puertas se abrieron en el hall principal. Martino salió con paso rápido, todavía alterado, y caminó directo hacia el escritorio de la administradora. Eby apenas tuvo tiempo de levantar la mirada cuando Martino le gritó desde el otro lado del mostrador.
+
+Martino: ¡Jódanse ustedes y sus putas sesiones!
+
+Sin esperar respuesta continuó caminando hacia la salida del edificio. Cuando cruzó las puertas principales se encontró con algo que no esperaba. Afuera había una multitud de personas reunidas frente a la entrada.
+
+En cuanto lo vieron salir comenzaron a gritar con entusiasmo. Varias voces repetían frases cortas de apoyo mientras muchos levantaban sus teléfonos para sacarle fotos o grabar. Martino se quedó quieto unos segundos, completamente confundido por la reacción de la gente.
+
+Miraba a un lado y a otro tratando de entender qué estaba pasando, hasta que finalmente decidió girarse y volver a entrar al edificio.
+
+Subió nuevamente y regresó al pasillo de la sala Ex-34. Dentro, Amadeus estaba sentado frente a una figura humana formada por nanobichos. La silueta parecía una persona real, aunque su cuerpo estaba compuesto por miles de pequeñas partículas que se movían constantemente.
+
+Amadeus: yo... solo quisiera una segunda oportunidad, ¿sabes? Pero... ya no puedo, no tengo nada.
+—...
+Amadeus: sí... sé lo que piensas...
+
+La puerta se abrió de golpe cuando Martino entró y la cerró con fuerza detrás de él.
+
+Martino: ¡¿qué mierda es todo eso?!
+Amadeus: un "gracias" sería mejor.
+Martino: ¿eh?
+Amadeus: (suspira) todo lo que pasó aquí, digamos... no es una sesión privada. En realidad sí lo es, pero... las reglas sirven para romperlas, ¿no?
+Martino: ... ¿mis sesiones fueron públicas?
+Amadeus: así es. Destruiste tu imagen una vez, destruirte prácticamente todo lo lograste... en pocas palabras, ¿cómo no tendrías esas pesadillas de tu padre si destruiste tu identidad?
+Martino: ...
+Amadeus: yo solo hice lo que sé hacer. Bueno, lo que creo que sé hacer.
+Martino: ¡ve al grano!
+Amadeus: ¡TE DI UNA SEGUNDA OPORTUNIDAD! Perdiste a tu público, ahora te los devolví.
+Martino: ... yo no quiero esto.
+Amadeus: ¿entonces qué?
+Martino: ... quiero terminar con todo.
+Amadeus: ... entiendo.
+
+Amadeus levantó la mano y chasqueó los dedos. Los nanobichos comenzaron a expandirse por toda la sala y el entorno cambió otra vez. Martino cerró los ojos por un momento.
+
+**2025**
+
+Cuando volvió a abrirlos estaba de pie en la formación de su colegio. Los estudiantes estaban alineados como en cualquier mañana normal. Frente a todos, una profesora hablaba mientras el grupo escuchaba con atención.
+
+—¡Hoy! Recibimos a un nuevo estudiante, así que por favor, trátenlo como se merece.
+
+Mientras la profesora continuaba hablando, una sombra comenzó a verse entre los estudiantes. Poco a poco la silueta del nuevo alumno se hizo más clara. Caminaba hacia adelante con paso seguro, y cuando su rostro quedó completamente visible no había ninguna duda.
+
+Era Martino, exactamente igual.
+
+Martino lo miró sin saber qué expresión mostrar. Durante un momento todo lo que estaba pasando parecía demasiado extraño incluso para la lógica de la simulación. Finalmente decidió tranquilizarse pensando: "Esto es una simulación".
+
+Martino 2 levantó la voz de repente: "¡¿Dónde estás?!"
+
+Martino salió de su lugar en la formación. Los estudiantes comenzaron a mirarlos mientras murmuraban entre ellos, intentando entender qué estaba pasando.
+
+(Buena suerte para saber quién habla)
+
+Martino: ... ¿qué mierda?
+Martino: ¿cómo estás? ¿Eh? ¿La pasas bien? Destruiste todo, eres un maldito fracasado. Te convertiste en lo que no deberías. (Suspira) Eres igual a cualquiera de este colegio, a cualquier inútil.
+Martino: ...
+Martino: eres igual a Isadox, ¡no piensas! Igual a Moreno, ¡hipócrita! Idéntico a Santillán, ¡imbécil!... igual a Garilda... con una vida mediocre, la vida que no soñaste.
+Martino: (baja la mirada)
+Martino: ¿qué pasó? ¿En qué fallaste? Sabes... nuestro padre sí tenía razón. Bueno, tenía razón en ti.
+Martino: ...
+Martino: eres un puto inútil, olvidable. Olvidaron tu cumpleaños. Te desprecian por el más mínimo error... ¡vulnerable! Querías construir a un personaje y, en cambio, construiste un don nadie.
+Martino: ... Martino...
+Martino: ¿qué?
+Martino: jódete.
+
+Martino 2 se acercó rápidamente y lo golpeó sin aviso. El impacto lo tiró al suelo y durante un segundo perdió el equilibrio. Martino 2 levantó el pie intentando pisarle la cabeza, pero Martino reaccionó moviéndose hacia un lado y levantándose con rapidez. En lugar de quedarse allí, empezó a correr.
+
+La persecución comenzó por los pasillos del colegio. Martino corría mientras tomaba cualquier objeto que encontraba para tirarlo detrás de él. Mesas, sillas, mochilas, cualquier cosa que pudiera frenar al otro. El sonido de pasos y golpes se mezclaba mientras avanzaban por los corredores.
+
+Finalmente regresó al patio donde había estado la formación, pero ahora el lugar estaba completamente vacío. No había estudiantes, ni profesores, ni nadie alrededor.
+
+Sin pensarlo demasiado, corrió hacia el mástil de la bandera. Empezó a trepar con rapidez, subiendo con una facilidad que parecía imposible para alguien que nunca lo había intentado antes. En pocos segundos estaba arriba, mientras Martino 2 llegaba hasta la base del mástil.
+
+Martino: ¡baja de ahí, fracasado!
+Martino: ¡te equivocas en una cosa!
+Martino: ¡¿no eres fracasado?!
+Martino: no... te equivocas en algo peor. Yo no pierdo ante nadie, ni siquiera ante mí.
+
+Martino se dejó caer. Durante un instante todo pareció moverse más lento. Su cuerpo bajó directo hacia el otro Martino, y cuando impactó lo hizo con todo el peso del salto. Ambos cayeron contra el suelo duro. La cabeza de Martino 2 golpeó primero contra el piso.
+
+El silencio llegó después. Martino se levantó con cuidado mientras miraba al otro cuerpo. Martino 2 estaba inmóvil y no reaccionaba. La simulación comenzó a detenerse.
+
+**Diciembre, 2036**
+
+El patio, el mástil y el colegio empezaron a desarmarse en miles de partículas que regresaban a su forma original. Cuando todo terminó, Martino volvió a estar frente a Amadeus dentro de la sala blanca.
+
+Amadeus: ... ¿y? ¿Ya estás contento?
+Martino: ¿enfrentarme a mí? ¿En serio?
+Amadeus: ¿tienes una mejor idea?
+Martino: sí, no quiero pelear contra mí.
+Amadeus: ...
+
+Los nanobichos comenzaron a moverse una última vez. Esta vez reconstruyeron un lugar mucho más simple. Era la habitación de Martino. Todo se veía pequeño, como si perteneciera a otro momento de su vida.
+
+Sobre la cama estaba Martino, pero con ocho años, durmiendo profundamente. El Martino adulto caminó hasta la cama y se sentó a su lado.
+
+Martino: a veces pienso... si mi vida fuese la de mis amigos, acaso... ¿cambiaría algo de mí?
+—...
+Martino: y otras veces pienso lo grande que soy, y que ser como los amigos sería mediocre.
+—...
+Martino: aunque no importa lo que piense, siempre estoy confundido conmigo.
+
+Bajó la cabeza lentamente y una sola lágrima cayó. La escena comenzó a distorsionarse.
+
+Amadeus: ¿contento?
+Martino: ... gracias.
+Amadeus: por favor, no vuelvas.
+(Ambos ríen juntos).
+
+Cuando todo terminó, Martino caminó hacia la salida de la sala y abandonó el edificio. Al cruzar nuevamente la entrada se encontró con la misma multitud que seguía allí esperándolo. Las personas continuaban celebrándolo, gritando y levantando sus teléfonos para grabarlo, pero esta vez Martino ya no entendía nada de lo que estaba pasando.
+
+Sin detenerse demasiado levantó la mano para llamar un taxi. Cuando el vehículo se detuvo subió rápidamente y se alejó del lugar.
+
+Mientras tanto, dentro del edificio, Amadeus volvió a levantar la mano y chasqueó los dedos. Los nanobichos comenzaron a reorganizarse por última vez formando un gran escenario. Poco a poco apareció un teatro completo, con filas de butacas llenas y una orquesta preparada frente al escenario. Amadeus caminó hasta el centro, levantó las manos frente a los músicos y comenzó a dirigirlos con movimientos firmes. Los instrumentos entraron uno a uno siguiendo su ritmo mientras la música crecía dentro del teatro, cerrando la escena con Amadeus guiando cada nota como si controlara todo lo que estaba ocurriendo.
+
+The End.
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Eternamente Vivo 3';
+  var TITLE_SHOW = 'Eternamente\nVivo 3';      // título en pantalla, una palabra por línea          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE_SHOW));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
