@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bigfoot — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+
+<!-- ============ HISTORIA (reemplazar solo esto para otra historia) ============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de personaje
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: ¿Y eso?
+
+Frech: ¿Otra vez? Es broma, ¿no?
+Lucía: Pues no, no es una broma, ¡chau a las cervezas!. No existen, se acabaron. Y no me digas que te sorprende, porque seguramente fuiste tú.
+Frech: ¡¿Yo?! Culpándome, como siempre, ¡puta de mierda! ¡Jodete!
+Lucía: Ve a comprar y no me hagas enojar, por tu bien.
+Frech: Pareces una chimpancé cada vez que me hablás.
+
+Lucía saca una pistola eléctrica del bolsillo.
+
+Frech: Okey, okey, no te enojes. ¿No te gustan los chistes? ¡Jajaja!
+
+Frech sale de casa. Camina tranquilamente por la vereda, observando cómo una multitud de personas en motocicletas sale disparada. Parecen estar escapando de algo. Finalmente, llega hasta la tienda.
+
+Frech: ¡Melanie! ¿Cómo va el negocio? ¿Prosperando?
+
+Melanie lo mira con cara amargada.
+
+Melanie: ¿Y tú qué crees?
+Frech: Y... con toda sinceridad, me importa tanto como la vida de mi hermana.
+Melanie: ¿Nada?
+Frech: Exacto, me importa una mierda.
+Melanie: ¿Buscas cervezas?
+Frech: Dos. No, mejor tres.
+Melanie: Te doy cuatro. Regalá la casa.
+Frech: ¡Por eso te quiero, Melanie! Espero que tu... tiendita mejore.
+
+Frech empieza a sentir que el suelo parece retumbar. Al salir, descubre que las calles están vacías. Solamente hay papeles volando con el viento.
+
+Frech: ¿No sentís eso?
+Melanie: ¿Qué cosa?
+Frech: ...Nada, no importa.
+Melanie: Aquí tienes. Disfrutá, y no te las acabes solo esta noche.
+Frech: No me podés pedir eso. Sabés que no sería capaz.
+Melanie: como digas.
+
+Frech sale de la tienda. Mientras camina por la calle, observa a lo lejos una escena de accidente de autos que ya ha ocurrido. Confundido, decide acercarse.
+
+Frech: ¿Qué sucede?
+Un hombre: Hubo un accidente. El dueño del auto rojo dice que vio algo grande pasando.
+Frech: ¿Drogado?
+Un hombre: Seguramente.
+Frech: ¿Quieres una? (Le ofrece una cerveza).
+
+El hombre mira la cerveza y luego el rostro de Frech.
+
+Un hombre: No, estoy a dieta.
+
+El hombre se va. Frech decide volver a casa. Mientras camina, se da cuenta de que no hay absolutamente nadie en la calle, ni siquiera los perros que siempre ladraban cuando pasaba por delante de sus casas.
+
+Mira hacia atrás varias veces, esperando encontrar a alguien, pero solamente ve los autos chocados y algunos negocios cerrados.
+
+Frech: qué raro, ¿se murió todo el mundo o qué?
+
+Sigue caminando hasta que escucha un ruido bastante fuerte detrás de un contenedor de basura. Se detiene, mira durante unos segundos y finalmente decide acercarse, aunque no demasiado, porque tampoco tenía ganas de morir por una estupidez.
+
+Frech: hola, ¿hay alguien ahí? Si sos un ladrón, te aviso que no tengo ni mierda.
+
+Un gato sale disparado del contenedor y Frech pega un grito que probablemente se escuchó en toda la cuadra.
+
+Frech: ¡LA PUTA MADRE!
+
+El gato se aleja tranquilamente, como si no acabara de arruinarle la poca dignidad que le quedaba. Frech continúa su camino, pero esta vez camina más rápido. Cuando llega a su casa, encuentra a Lucía sentada en el sillón, mirando por la ventana.
+
+Lucía: ¿y las cervezas?
+Frech: hola, yo también estoy contento de verte.
+Lucía: te pregunté por las cervezas, imbécil.
+Frech: acá están, cuatro. La Melanie me regaló una más porque soy un cliente excelente.
+Lucía: sos un cliente que le debe dinero desde hace tres semanas.
+Frech: esos detalles arruinan las buenas historias.
+
+Lucía agarra una cerveza y se sienta nuevamente en el sillón. Frech deja las otras sobre la mesa y se acerca a la ventana para mirar la calle.
+
+Frech: ¿por qué está todo tan vacío?
+Lucía: no sé, hace un rato escuché un ruido horrible y después todos empezaron a irse.
+Frech: ¿qué ruido?
+Lucía: no sé, ¿te pensás que tengo una grabadora en el oído?
+Frech: preguntaba nomás, tampoco hace falta que me quieras matar.
+Lucía: todavía no te maté porque no encontré un lugar donde esconder tu cuerpo.
+Frech: qué tierna sos, hermana.
+
+De repente, las ventanas comienzan a vibrar. Una botella que estaba sobre la mesa cae al suelo y se rompe, mientras las luces de la casa parpadean varias veces antes de apagarse por completo.
+
+Lucía: ¿qué hiciste?
+Frech: ¡¿YO QUÉ HICE?! si estaba ahí.
+Lucía: seguro tocaste algo.
+Frech: sí, toqué tu mal humor, ¿querés que te cuente más cosas que no tienen nada que ver?
+Lucía: te voy a romper la botella en la cabeza.
+Frech: bueno, bueno, tranquila.
+
+Las luces vuelven a encenderse. Ambos se quedan callados durante unos segundos, hasta que escuchan un ruido parecido al de un animal enorme respirando fuera de la casa. Lucía se levanta lentamente y mira por la ventana, pero no consigue ver nada.
+
+Lucía: Frech.
+Frech: ¿qué?
+Lucía: cierra la puerta.
+Frech: está cerrada.
+Lucía: entonces cierra las ventanas.
+Frech: ¿y por qué no las cierras tú?
+Lucía: porque te lo estoy pidiendo a ti.
+
+Frech se acerca a la ventana y corre las cortinas. Justo cuando termina, escucha tres golpes en la puerta principal. Ambos miran hacia el pasillo.
+
+Frech: ¿esperabas a alguien?
+Lucía: sí, a tu papá. Viene a llevarte porque ya no te aguanto.
+Frech: mi papá está muerto.
+Lucía: entonces no sé quién carajo puede ser.
+
+Los golpes vuelven a escucharse, esta vez mucho más fuertes. Frech agarra una botella de cerveza vacía y camina hacia la puerta, mientras Lucía vuelve a sacar su pistola eléctrica del bolsillo.
+
+Frech: si es un vendedor, lo matamos.
+Lucía: ¿y si es un policía?
+Frech: lo matamos con más razón.
+Lucía: (sonríe muy poco)
+
+Frech se queda frente a la puerta, pero no se atreve a abrirla. Después de unos segundos, los golpes desaparecen y ambos escuchan pasos alejándose por el porche. Frech mira por la mirilla, aunque no consigue distinguir nada.
+
+Frech: no hay nadie.
+Lucía: ¿cómo que no hay nadie?
+Frech: ¿quieres que te mienta?
+Lucía: abrí la puerta.
+
+Frech abre la puerta de golpe y sale al porche con la botella en la mano. No hay nadie, pero el suelo está lleno de huellas enormes que parecen pertenecer a un animal. Algunas tienen barro y otras están marcadas sobre el cemento, como si algo muy pesado hubiera pasado por ahí.
+
+Frech: ¿lo estás viendo?
+
+Lucía se acerca a la puerta y observa las huellas. No dice nada durante unos segundos, hasta que finalmente levanta la cabeza y mira hacia la calle.
+
+Lucía: cierra la puerta.
+Frech: sí, ya entendí.
+
+Ambos entran rápidamente y cierran con llave. Frech intenta convencerse de que las huellas pertenecen a algún animal escapado de una granja, aunque ni siquiera él parece creerse esa explicación. Lucía, por su parte, empieza a buscar su teléfono para llamar a la policía.
+
+Lucía: no tengo señal.
+Frech: yo tampoco.
+Lucía: ¿qué mierda sucede?
+Frech: no sé, pero si nos morimos, quiero que sepas que la culpa es tuya por mandarme a comprar cerveza.
+Lucía: te juro que, si salimos vivos de esta, te voy a matar yo misma.
+Frech: eso me tranquiliza bastante.
+
+Un ruido fuerte sacude la casa. Esta vez no parece venir de afuera, sino de algún lugar del barrio. Se escucha un golpe metálico, después un grito y finalmente un silencio que resulta mucho peor que los ruidos anteriores.
+
+Lucía se acerca a la ventana del comedor y aparta apenas la cortina. A lo lejos, una camioneta está volcada en medio de la calle y un hombre corre desesperadamente hacia una casa. Detrás de él, algo se mueve entre los árboles.
+
+Lucía: Frech, ven a ver esto.
+Frech: si es otra rata, te juro que me voy a dormir.
+Lucía: ¡QUE VENGAS, IDIOTA!
+
+Frech se acerca y mira por la ventana. Al principio no consigue distinguir nada, pero después ve cómo una figura enorme pasa por detrás de un auto estacionado. No parece un hombre, aunque camina sobre dos piernas.
+
+Frech: ¿eso es un tipo?
+Lucía: ¿qué tipo mide tres metros, animal?
+Frech: capaz que juega al básquet.
+Lucía: cerrá el pico
+
+La figura desaparece detrás de una casa. Frech retrocede lentamente, mientras Lucía sigue mirando por la ventana, intentando entender qué acaba de ver.
+
+Al final, terminan saliendo de la casa, pero no ven nada. Lucia se da vuelta mirando a Frech y entonces escucha un ruido justo detrás de ella.
+
+Se da vuelta. A menos de dos metros está la criatura.
+
+Es enorme, está cubierta de pelo marrón oscuro y tiene los hombros anchos, los brazos largos y una cara parecida a la de un simio. Su mandíbula sobresale y sus ojos pequeños la observan fijamente. Huele a tierra mojada y su respiración suena como la de un animal cansado.
+
+Lucía no puede moverse. La criatura inclina un poco la cabeza y abre la boca, mostrando unos dientes amarillentos.
+
+Lucía: ...Frech estas viendo...
+Frech: sí... un mono grande, ¡Ja!
+
+Los hermanos observan fijamente a la criatura, y la criatura mira fijamente a los hermanos.
+
+## Capítulo 2: ¡Corre!
+
+Frech y Lucía se quedan mirando a la criatura durante unos segundos. Ninguno de los dos parece capaz de decir algo inteligente, lo cual tampoco es una novedad, pero esta vez tienen una buena excusa.
+
+Frech: ¡CORRE!
+Lucía: ¡NO ME GRITES, CORRE TÚ!
+
+Ambos salen corriendo hasta llegar a la entrada de la casa. Frech cierra la puerta de golpe y Lucía coloca el pestillo, la cerradura y una cadena que apenas consigue mantener la puerta en su sitio.
+
+Frech: ¿Qué haces?
+Lucía: ¡Estoy cerrando la puerta!
+Frech: ¡¿En serio?! ¡Pensaba que estabas decorándola!
+Lucía: ¡Cállate y ayúdame!
+
+Frech coloca una silla contra la puerta y retrocede, satisfecho con su trabajo.
+
+Frech: Listo.
+Lucía: ¿De verdad crees que una silla va a detener a esa cosa?
+Frech: No, pero la silla no tiene la culpa de que seas tan negativa.
+Lucía: ¡MIDE CASI TRES METROS, FRECH!
+Frech: ¡Y TU CEREBRO MIDE TRES CENTÍMETROS! ¡TODOS TENEMOS PROBLEMAS!
+
+Un fuerte golpe sacude la casa. La lámpara del techo se mueve y algunos objetos caen de las estanterías. Ambos se quedan quietos, mirando hacia el techo.
+
+Frech: Creo que está afuera.
+Lucía: Lo acabamos de ver afuera, idiota
+Frech: Fue un dato de color.
+
+Las pisadas comienzan a escucharse alrededor de la casa. Son lentas, pesadas y tan fuertes que el suelo parece temblar con cada paso. Algo golpea una pared exterior y las ventanas vibran violentamente.
+
+Lucía: Tenemos que salir por atrás.
+
+Corren hacia la cocina. Frech intenta abrir la puerta trasera, pero está atascada. Tira del picaporte varias veces hasta que finalmente consigue abrirla.
+
+Lucía sale primero. Frech está a punto de seguirla cuando escucha un estruendo detrás de él. El techo se rompe y una enorme mano cubierta de pelo atraviesa las vigas, arrancando parte del techo y lanzando pedazos de madera por toda la habitación.
+
+Frech cae al suelo y se arrastra hacia la salida. La criatura mete el brazo entre los restos del techo, buscando algo que agarrar. Sus dedos son gruesos y sus uñas están cubiertas de suciedad.
+
+Frech: ¡AYÚDAME!
+
+Lucía se da vuelta y ve que la mano de la criatura está a punto de agarrarlo por la pierna. Sin pensarlo, saca su pistola eléctrica y corre hacia él.
+
+Presiona el botón y descarga la electricidad contra los dedos de la criatura. El monstruo suelta un rugido y retira el brazo violentamente, haciendo caer todavía más pedazos del techo.
+
+Frech consigue levantarse y sale por la puerta trasera. Lucía lo sigue, guardando la pistola eléctrica en el bolsillo mientras ambos corren hacia la calle.
+
+Frech: ... me salvaste.
+Lucía: No te acostumbres.
+
+Detrás de ellos, la criatura termina de destruir parte del techo y sale de la casa. Al verla aparecer, ambos aceleran el paso. Frech mira hacia atrás y casi choca contra un poste.
+
+Frech: ¡¿Por qué es tan rápido?!
+Lucía: ¡Porque no se la pasa bebiendo cervezas!.
+Frech: ¡ESO ES MENTIA!
+Lucía: ¡Pues sigue corriendo y demuestalo!
+
+Doblan por una calle y encuentran varios autos abandonados, algunos con las puertas abiertas. Un hombre está escondido debajo de uno de ellos, temblando mientras observa a la criatura acercarse.
+
+Hombre: ¡AYUDA! ¡POR FAVOR!
+Frech: ¡CORRE HACIA OTRO LADO!
+Hombre: ¡NO PUEDO, ESTOY DEBAJO DE UN AUTO!
+Frech: ¡PUES SAL DE AHÍ!
+
+El hombre estaba atascado en el auto. La criatura se acerca a el y se agacha. Ruge fuertement y, el hombre grita desesperado.
+
+Frech: Se entretuvo con ese hombre
+Lucía: Nuevo juguete
+Frech: ¿Y ahora dónde vamos?
+Lucía: Al único lugar donde habrán más juguetes.
+
+Siguen corriendo hasta llegar a el centro comercial. Las puertas automáticas están abiertas y no parece haber nadie en la entrada. Frech y Lucía corren hacia el interior y se esconden detrás de un mostrador.
+
+Durante unos segundos, ninguno habla. Frech se apoya contra una pared e intenta recuperar el aliento. Lucía mira hacia las puertas, esperando ver aparecer a la criatura.
+
+Frech: Bueno... esto ha sido una tarde bastante desagradable.
+Lucía: Casi te arranca una pierna
+Frech: Pero no lo hizo. Así que, técnicamente, ha sido una tarde normal.
+
+Lucía se acerca a una de las ventanas del centro comercial y observa la calle. No consigue ver a la criatura, pero tampoco hay señales de que se haya marchado. Los coches siguen abandonados y algunos objetos se mueven por el suelo debido al viento.
+
+Frech se levanta y comienza a caminar entre los locales. Hay ropa tirada, cajas abiertas y varios teléfonos abandonados sobre el mostrador de una tienda. En el suelo encuentra una mochila llena de comida.
+
+Frech: ¡Mira esto! Comida gratis
+Lucía: No toques nada
+Frech: ¿Por qué? ¿Crees que el monstruo dejó una bomba dentro de una bolsa de patatas?
+Lucía: Creo que eres capaz de morir por una bolsa de patatas.
+
+Frech abre la mochila y encuentra dos paquetes de galletas.
+
+Frech: No está mal.
+Lucía: ¡ESTAMOS EN MEDIO DE UNA INVASIÓN DE MONSTRUOS Y TÚ ESTÁS COMIENDO!
+Frech: No sé tú, pero yo prefiero morir con el estómago lleno.
+Lucía: ... Bueno, en algo tienes razón, dame uno, son de mis favoritas.
+
+En el momento en que Lucia traga su galleta, escuchan un ruido que viene de una de las tiendas del fondo. No es un golpe ni una pisada. Parece una voz humana, aunque habla tan bajo que resulta imposible entender las palabras.
+
+Lucía: ¿Hay alguien ahí?
+Frech: ¿Por qué preguntas eso? Si hay alguien, nos escuchó. Y si no hay nadie, acabas de hablar sola.
+Lucía: Por una vez en tu vida, cállate.
+
+Se acercan lentamente a la tienda. La voz desaparece cuando llegan a la entrada, pero Lucía descubre una puerta estrecha detrás de unas cajas. Está entreabierta y deja escapar una corriente de aire frío.
+
+Frech: ¿Qué hay ahí?
+Lucía: No lo sé.
+
+Lucía empuja la puerta y descubre una escalera que desciende hacia la oscuridad. En las paredes hay marcas hechas con pintura negra, dibujos muy simples y casi mal hechos. Algunas parecen figuras humanas, mientras que otras tienen brazos demasiado largos y cabezas enormes.
+
+Frech: ¿Quién dibuja estas cosas?
+Lucía: No lo se, pero es mejor que bi se dedique a la pintura.
+Frech: Pues yo creo que necesita un psicólogo.
+Lucía: Tú necesitas tres.
+
+Frech toma una de las cajas que hay junto a la puerta y encuentra una pequeña linterna en su interior. La enciende y apunta hacia las escaleras. Al fondo se distingue un pasillo estrecho.
+
+Lucía: No vamos a bajar ahí.
+Frech: Perfecto.
+
+Ambos se quedan quietos.
+
+Frech: ¿Entonces por qué sigues mirando?
+Lucía: Porque estoy pensando.
+Frech: Eso debe de doler.
+
+Lucía le da un golpe en el brazo y comienza a bajar las escaleras. Frech la sigue, murmurando insultos mientras intenta no tropezar. Cuanto más descienden, más frío se vuelve el aire y más difícil resulta escuchar lo que sucede arriba.
+
+Al llegar al final, encuentran un pasillo casi oscuro. Hay velas colocadas sobre el suelo y pequeños recipientes con una sustancia negra que ninguno de los dos consigue identificar. Las paredes están cubiertas de garabatos parecidos a las figuras que habían visto en la entrada.
+
+Frech apunta la linterna hacia uno de ellos. El dibujo representa una criatura enorme, con brazos largos y una boca abierta. Debajo hay varias líneas que parecen letras, pero están tan mal escritas que resulta imposible leerlas.
+
+Frech: Alguien tiene demasiado tiempo libre.
+Lucía: Mira el suelo.
+
+Hay huellas marcadas sobre el polvo. Son las mismas que habían visto frente a su casa, aunque estas parecen haber sido hechas hace mucho tiempo. Las marcas continúan por el pasillo hasta una abertura cubierta por una tela negra.
+
+Desde el otro lado llegan varias voces. Algunas susurran, otras parecen llorar y una repite las mismas palabras una y otra vez.
+
+Frech: ¿Crees que son personas?
+Lucía: No. Son pingüinos. ¿Qué otra cosa van a ser?
+Frech: No hace falta que seas así.
+
+Lucía aparta la tela y mira hacia el interior. La habitación es más grande de lo que esperaban. Está iluminada por decenas de velas y, en el centro, varias personas permanecen de rodillas, con las cabezas inclinadas hacia el suelo.
+
+Todas miran hacia una pared donde hay un dibujo enorme de la criatura. A diferencia de los garabatos anteriores, este está cuidadosamente trazado. Representa cada detalle de su cuerpo, sus ojos y sus largos brazos. Alrededor hay símbolos, líneas y figuras más pequeñas que parecen estar adorándola.
+
+Las personas repiten unas palabras en voz baja. Ninguna parece haberse dado cuenta de que Frech y Lucía están observándolas desde la entrada.
+
+Frech: ¿Qué mierda es esto?
+
+Lucía no responde. Una de las personas levanta lentamente la cabeza y los mira directamente.
+
+Después, todas las demás hacen lo mismo.
+
+Una mujer se pone de pie. Lleva la ropa sucia y tiene los ojos completamente abiertos, como si llevara días sin dormir.
+
+—Ustedes no deberían estar aquí.
+Frech: Sí, eso nos dicen en todas partes.
+
+Lucía le da un codazo para que se calle.
+
+—Él ya ha despertado.
+Lucía: ¿Quién?
+
+La mujer señala el dibujo de la pared.
+
+—Nuestro dios.
+
+Frech mira el dibujo y después mira a Lucía.
+
+Frech: ¡Jajaja!
+Lucía: ¿De qué te ríes?
+Frech: El monstruo tiene un club de fans.
+
+La mujer no se ríe. Ninguna de las personas se mueve.
+
+Entonces, desde algún lugar situado encima de ellos, se escucha un rugido tan fuerte que las velas tiemblan y varias se apagan al mismo tiempo.
+
+Todos los presentes se arrodillan inmediatamente.
+
+—Ha venido por nosotros.
+
+Lucía retrocede un paso.
+
+Frech: Lucía...
+Lucía: ¿Qué?
+Frech: ¿Recuerdas como salir?
+Lucía: sí
+Frech: Perfecto.
+
+La mujer vuelve a mirar hacia ellos. Esta vez sonríe.
+
+—Ya es demasiado tarde para huir.
+
+## Capítulo 3: Mejor Callar
+
+El rugido sacude toda la habitación. Varias velas caen al suelo y las personas que estaban arrodilladas comienzan a levantarse, algunas intentando escapar y otras quedándose quietas frente al dibujo de la pared. Frech y Lucía retroceden cuando una parte del techo se desprende y cae sobre los bancos.
+
+Frech: Bueno, creo que la reunión terminó.
+Lucía: Deja de hablar y busca una salida.
+
+Frech mira hacia el pasillo, pero una enorme mano atraviesa la pared y destruye parte de la entrada. Los escombros caen sobre varias personas. Detrás del polvo aparece Bigfoot, que comienza a agarrar a los presentes y a devorarlos uno por uno.
+
+—¡Es nuestro dios! ¡Nos ha elegido!
+Frech: Pues tiene una forma bastante rara de demostrar cariño.
+
+Lucía lo agarra del brazo y tira de él hacia el otro extremo de la habitación. Ambos corren entre los escombros mientras la criatura destruye las paredes para alcanzar a los que intentan escapar. Uno de los hombres tropieza cerca de ellos y Bigfoot lo levanta del suelo sin detenerse.
+
+Lucía: No mires atrás.
+Frech: No estaba mirando.
+Lucía: Llevas diez segundos mirando.
+Frech: Es difícil ignorar a un mono gigante que está comiéndose a la gente.
+
+Llegan hasta una abertura entre dos paredes derrumbadas. Lucía pasa primero, pero cuando Frech intenta seguirla, una mano enorme lo agarra por la pierna. Cae al suelo y se aferra a una tubería oxidada mientras Bigfoot comienza a tirar de él.
+
+Frech: Hermanita, tenemos un pequeño problema.
+
+Lucía se da vuelta y ve que la criatura está arrastrando a su hermano hacia la habitación. Sin pensarlo demasiado, recoge una barra metálica y golpea los dedos de Bigfoot. La criatura no lo suelta, así que Lucía vuelve a golpearlo, esta vez con todas sus fuerzas.
+
+Bigfoot abre la mano y Frech consigue liberarse. Se levanta rápidamente, cojeando un poco, y atraviesa la abertura junto a su hermana. La criatura golpea la pared con tanta fuerza que una parte del techo se desploma detrás de ellos.
+
+Frech: Gracias.
+
+Ambos salen del edificio por un agujero en la pared. El centro comercial está lleno de polvo y varios locales han quedado destruidos. Las alarmas de algunos vehículos suenan sin parar, mientras Bigfoot termina de salir del edificio y comienza a perseguirlos.
+
+Frech y Lucía corren entre los autos abandonados. La criatura golpea un vehículo y lo desplaza varios metros, obligándolos a cambiar de dirección. Frech intenta abrir la puerta de una camioneta, pero está cerrada.
+
+Frech: Claro, ahora todos cierran sus autos.
+Lucía: ¡Sigue corriendo!
+
+Llegan hasta una avenida y descubren que el puente principal de la ciudad está a unas pocas calles. Detrás de ellos, Bigfoot sigue avanzando, derribando farolas y destrozando todo lo que encuentra a su paso.
+
+Frech: No podemos seguir así. Nos va a alcanzar.
+Lucía: ¿Y qué propones?
+
+Frech observa el puente. Es una estructura antigua, con varias secciones metálicas y una zona que parece estar en obras. Cerca de la entrada hay una excavadora y algunos materiales de construcción abandonados.
+
+Frech: Podemos hacer que caiga al río.
+Lucía: ¿El puente?
+Frech: No, nosotros. Claro que el puente.
+Lucía: ¿Y cómo piensas hacerlo?
+Frech: Todavía estoy trabajando en esa parte.
+
+Lucía lo dice con tanta tranquilidad que Lucía se queda mirándolo durante unos segundos, intentando decidir si su hermano es un idiota o simplemente ha perdido el miedo a morir.
+
+Lucía: Tu plan tiene un pequeño defecto.
+Frech: ¿Cuál?
+Lucía: No tenemos un plan.
+Frech: Por eso he dicho que estoy trabajando en él.
+
+Los dos corren hasta la zona de obras. Frech se sube a la excavadora e intenta encenderla, pero el motor no responde. Lo intenta otra vez y finalmente consigue ponerla en marcha. Lucía, mientras tanto, observa cómo Bigfoot se acerca al puente.
+
+Lucía: Dime que sabes conducir eso.
+Frech: Túsabes que nuestro padre no era profesor de manejo.
+Lucía: Nos vamos a morir.
+Frech: Ya da igual.
+
+Frech mueve los controles y dirige el brazo mecánico hacia una de las vigas expuestas. El primer golpe apenas consigue doblar el metal. El segundo desprende una placa que cae al río.
+
+Frech: Esto va a funcionar.
+Lucía: Dijiste lo mismo cuando cerramos la puerta de casa.
+Frech: Y funcionó durante varios minutos.
+
+Lucía no tiene una respuesta para eso.
+
+Bigfoot llega a la entrada del puente. Lucía comienza a correr hacia el otro extremo, intentando llamar su atención. La criatura gira la cabeza y la sigue, dejando atrás los vehículos abandonados.
+
+Lucía: ¡Eh! ¡Por aquí!
+
+Bigfoot acelera el paso.
+
+Lucía: Creo que me ha entendido.
+Frech: ¡Sigue corriendo!
+
+Lucía pasa junto a varios autos mientras la criatura la persigue. Cuando llega a la parte central del puente, se aparta hacia un costado y espera a que Bigfoot avance lo suficiente.
+
+Frech: ¡Ahora!
+
+Frech golpea una de las vigas con la excavadora. El metal se dobla y varias piezas se desprenden. El puente comienza a crujir, haciendo que los vehículos abandonados se deslicen lentamente hacia el río.
+
+Bigfoot pierde el equilibrio cuando el suelo cede bajo sus pies. Cae de rodillas y se agarra a los bordes de la estructura, que comienza a romperse bajo su enorme peso.
+
+Lucía corre hacia Frech, pero la criatura extiende el brazo y la golpea. Ella sale despedida contra un automóvil y cae al suelo.
+
+Frech abandona la excavadora y corre hacia su hermana. La encuentra intentando levantarse, con una herida en la frente.
+
+Frech: ¿Puedes caminar?
+Lucía: Sí.
+Frech: Bien. Porque no pienso cargarte.
+Lucía: No podrías hacerlo ni aunque quisieras.
+
+La ayuda a levantarse. Sin embargo, antes de que puedan alejarse, Bigfoot consigue incorporarse. Tiene varias heridas y el pelo cubierto de polvo, pero parece más furioso que antes.
+
+El puente vuelve a crujir. Una sección entera se desprende y cae al río, dejando a los hermanos atrapados en una plataforma inclinada. Bigfoot avanza hacia ellos, arrastrando una de sus piernas.
+
+Frech: Creo que hemos calculado mal algo.
+Lucía: ¿Algo? ¿Qué parte de esto te parece que ha salido bien?
+
+La criatura llega hasta ellos y los agarra con una sola mano. Frech intenta golpearle los dedos con la barra metálica que todavía lleva consigo, pero Bigfoot apenas reacciona. Lucía le da varias patadas en la muñeca, aunque tampoco consigue liberarse.
+
+La criatura los acerca a su rostro y abre la boca. Sus dientes amarillentos están cubiertos de saliva y su respiración resulta insoportable.
+
+Frech: No quiero alarmarte, pero creo que quiere comernos.
+Lucía: Gracias. No me había dado cuenta.
+
+Bigfoot abre todavía más la boca.
+
+Entonces, el ruido de varios motores interrumpe el momento. Unos helicópteros aparecen sobre el río y sus focos iluminan el puente destruido. Desde uno de ellos comienzan a disparar hacia el suelo, obligando a la criatura a girarse. Una voz sale de los altavoces.
+
+Voz: ¡Suelte a los civiles y aléjese del borde!
+Frech: Hazle caso. Parecen bastante serios.
+
+Bigfoot responde con un rugido y mueve violentamente el brazo. Los hermanos caen sobre el puente, que se inclina todavía más. Una segunda aeronave aparece por el otro lado y apunta sus focos directamente hacia la criatura.
+
+Bigfoot intenta avanzar hacia ellos, pero el suelo se rompe bajo sus pies. La estructura cede por completo y la criatura cae al río junto con enormes pedazos de metal y hormigón.
+
+El agua salpica varios metros de altura. Los helicópteros siguen iluminando la superficie, buscando señales de movimiento. Durante unos segundos, ninguno de los hermanos dice nada.
+
+Frech: ¿Está muerto?
+Lucía: No lo sé.
+Frech: Podríamos bajar a comprobarlo.
+Lucía: Puedes bajar tú.
+Frech: Era una sugerencia.
+
+Un equipo de rescate llega hasta ellos y los ayuda a subir a una zona segura. Ambos son trasladados a un vehículo médico, donde una mujer les entrega unas mantas y comienza a revisar sus heridas.
+
+Rescatista: Necesitamos hacerles algunas preguntas sobre lo ocurrido.
+Lucía: ¿Podemos descansar primero?
+Rescatista: Intentaremos que sea rápido.
+Frech: ¿Hay algo de comer?
+
+La mujer lo mira durante unos segundos.
+
+Lucía: Ignórelo. Siempre ha sido así.
+Frech: Estoy herido. Tengo derecho a preguntar.
+Lucía: Tienes derecho a callarte.
+
+Unas horas después, los hermanos regresan a casa. La vivienda está parcialmente destruida, pero alguien ha retirado los escombros más peligrosos y ha cerrado las habitaciones afectadas. Frech entra en la cocina y descubre que todavía quedan dos cervezas en la nevera.
+
+Frech: Lucía, tengo buenas noticias.
+Lucía: Si has encontrado otra cosa que quiera matarnos, no me interesa.
+Frech: Quedan cervezas.
+
+Lucía se queda mirándolo. Después de todo lo ocurrido, no tiene fuerzas para discutir. Se acerca a la cocina, agarra una botella y se sienta en el sillón.
+
+Frech: ¿Ves? Al final todo ha salido bien.
+Lucía: Nuestra casa está destruida.
+Frech: Pero las cervezas siguen aquí.
+Lucía: Eres la persona más estúpida que conozco.
+Frech: Y tú eres la persona más amable que conozco.
+Lucía: Te odio.
+Frech: Lo sé.
+
+Ambos se quedan sentados en silencio durante unos segundos. Después, Lucía mira la botella de su hermano y descubre que está vacía.
+
+Lucía: ¿Ya te la has acabado?
+Frech: Tenía sed.
+Lucía: Te juro que no aprendes nada.
+Frech: ¿Qué quieres que haga? ¿Que deje de beber cerveza?
+Lucía: Quiero que dejes de existir durante cinco minutos.
+
+Frech sonríe y se levanta para buscar otra botella. Lucía vuelve a mirar la televisión, donde las noticias muestran imágenes del puente destruido y de los helicópteros que participaron en el rescate.
+
+Frech regresa a la habitación y se sienta a su lado.
+
+Frech: Oye, ¿crees que nos darán dinero por contar lo que pasó?
+Lucía: No.
+Frech: ¿Y si escribimos un libro?
+Lucía: No sabes escribir
+Frech: Pero tú sí
+Lucía: ¿Si te doy dinero para que compres más cervezas te quedarás callado?
+Frech: tal vez, dependen cuantas me pueda comprar
+Lucía: (suspira).
+
+The End
+</script>
+
+<script>
+(function(){
+  var TITLE = 'Bigfoot';          // título de la obra
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+
+  // ---- dividir párrafos muy largos en partes ----
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+
+  // ---- parseo ----
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+
+  // ---- control ----
+  var i=-1, busy=true, stage_=0, finished=false;
+
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+
+  // ---- botones: capítulos y reinicio ----
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+
+  // ---- retomar o intro ----
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+
+  // ---- intro ----
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
