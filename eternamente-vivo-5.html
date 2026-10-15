@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eternamente Vivo 5 — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA =============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de escena
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+## Capítulo 1: Una Larga Historia
+**Adolescencia De Martino**
+Rubenio lo despertó sin mucho pensarlo y Martino abrió los ojos con ese esfuerzo típico de quien no durmió bien, los párpados se le volvían a cerrar solos cada vez que intentaba mantenerlos abiertos.
+
+Caminó hasta el baño, cerró la puerta con el pasador y se quedó parado frente al espejo un momento, mirándose sin ningún motivo en particular. Suspiró.
+
+**Más Tarde**
+Llegó al colegio con la mochila al hombro y la dejó en su lugar antes de sentarse. Moreno, Garilda y Santillán se dieron vuelta casi al mismo tiempo para mirarlo.
+
+Martino: ¿por qué me ven así?
+Moreno: tus ojos, son bolsas
+Martino: ¿eh?
+Garilda: tus ojeras
+Santillan: alguien no durmió bien me parece
+Martino: ¿en serio? Menos mal lo dijiste en voz alta
+Garilda: ¿qué te pasó?
+Martino: no te importa
+Moreno: ¡oigan! Me contaron que hay una chica que vende onlyfans
+Martino: ¡Jajaja! (Empieza a buscar su cuadernito)
+
+**(Aclaración: me olvidé que tenía que aclarar)**
+Martino: ¡puta madre! ¡Me olvidé el cuaderno!
+Santillan: ¿vienes al colegio sin cuaderno? Jajaja
+Martino: no, es... es otro, el que me regaló Garilda
+Garilda: ¿qué? Yo no te regale nada
+Martino: ¿cómo que no? Me lo diste en mi cumpleaños
+Garilda: nunca me invitaste a tu cumpleaños
+Martino: hablo en serio, ¿alguien lo tiene?
+Santillan: no hiciste cumpleaños
+Martino: te invité a ti y llegaron tarde junto a Isadox
+Santillan: estas mal
+Moreno: el sueño hace esto, ¿vieron? Esta delirando
+Garilda: Isadox si nos invito a todos el cumple, tu también fuiste, y llegaste tarde con Santillan
+Martino: ... ¡no! ¡puta madre! ¡mi cuaderno!
+Garilda: ¿qué hacías en ese "supuesto" cuaderno?
+Martino: ¿y qué otra cosa? ¡Escribir!
+Moreno: ...
+Garilda: ...
+Santillan: ...
+
+Los tres rieron. Martino los veía confundido.
+
+**Mundo Paralelo, Actual**
+Martino se despertó de golpe con transpiración y la respiración cortada. Era un sueño.
+
+Parpadeó varias veces, pero no reconoció nada de lo que lo rodeaba. Se levantó de la cama mugrienta y se golpeó la cabeza contra el techo, que estaba absurdamente bajo.
+
+Salió agachado con cuidado y al enderezarse vio que era una choza pequeña plantada en medio de la nada, con un campo abierto y un monte a lo lejos.
+
+Martino: ...
+Otto: ¿todo bien?
+
+Martino giró hacia donde venía la voz y vio a un hombre agachado escribiendo sobre una lápida.
+
+Martino: ¿qué?
+Otto: ¿está todo bien?
+Martino: ... no, para nada, ¿dónde estoy? ¿Qué es esto?
+Otto: estas... ¿cómo decirlo? Es un paralelismo
+Martino: ... habla sin rodeos, te lo ruego
+Otto: esa es la única forma de describirlo, bueno, mejor dicho, estas muerto y... estas viviendo lo que tu cerebro puede procesar
+Martino: ... mira, no te creería solamente si no hubiera conocido a un mago que hace magia de verdad
+Otto: ¿alguna otra pregunta?
+Martino: ... ¿quién eres?
+Otto: ¿no vas a decir nada sobre que... estas muerto?
+Martino: es un sueño... ¿no es así?
+Otto: ... (sonríe) me llamo Otto, soy un simple hombre humilde que... hace lo que le puede su superior
+Martino: ¿quién es ese superior?
+Otto: ... los antiguos manuscritos le llaman, "Valak"
+Martino: no me sorprende
+Otto: ¿el nombre?
+Martino: no, todo lo que estoy soñando ahora, siempre tengo sueños raros
+Otto: ¿aún piensas que es un sueño?
+
+Otto se puso de pie, lo saludó con un apretón de manos y se fue caminando sin apuro.
+
+Martino se acercó a la lápida y leyó su propio nombre grabado en la piedra. Salió corriendo detrás de Otto y lo alcanzó antes de que lo perdiera de vista.
+
+Martino: ¡¿por qué dice mi nombre?!
+Otto: ¿no escuchas? Estas muerto, bueno, mejor dicho, vas a morir dentro de cinco minutos, aunque claro, aquí el tiempo es diferente
+Martino: a ver... ¿cómo hago para creerte?
+Otto: (sonríe) te haré una pregunta... ¿te sientes feliz?
+Martino: ... todo lo que logre en mi vida, pues... si
+Otto: no, eso no. La otra felicidad, la que te hace humano
+Martino: ... soy feliz, si
+Otto: ¿eres feliz luego de haber vivido con un padre que te lastimaba psicológicamente y luego, haberte forjado una personalidad para no ser lastimado por nadie?
+Martino: ... (sonríe) eres un puto demente, ¿no?
+Otto: yo se que no eres feliz, lo sé. Tranquilo, este... "paralelismo" te será útil, el superior es... aunque raro, es justo, ¿cómo lo llaman en tu mundo?
+Martino: ... ¿Dios?
+Otto: ¡ese! Dios es... nada, a comparación de Valak
+Martino: ... ¿sabías que Valak es el nombre de un demonio?
+Otto: ¡Jajaja! Si, como digas... cuídate, ¡ah! Casi lo olvido.
+
+Otto le dejó una gomera en la mano.
+
+Otto: no olvides alimentarlo
+Martino: ¿de qué hablas?.
+
+Otto se alejó.
+
+**Más Tarde**
+La noche llegó rápido y con ella la lluvia, golpeando el techo de madera de la choza con un ruido constante. Martino se acostó en esa cama pequeña y cerró los ojos, hasta que escuchó algo:
+
+Pasos pequeños, lentos, y la madera del piso crujiendo bajo un peso liviano. Se asomó por una abertura entre los tablones y al principio no vio nada, solo oscuridad y lluvia.
+
+Después lo vio: una cabeza pequeña y delgada saliendo de un cuello medianamente largo, quieta ahí afuera.
+
+Martino siguió mirando sin saber qué era esa cosa, hasta que la cosa abrió la boca y largó un sonido que no parecía de ningún animal conocido, algo gutural y áspero que sonaba más a queja.
+
+Martino se cayó de la cama del susto. Los sonidos siguieron afuera, pero algo en ellos fue cambiando de a poco, volviéndose más lentos, más bajos, casi rítmicos, y los ojos de Martino empezaron a ceder solos hasta que se cerró del todo.
+
+**Adolescencia De Martino**
+Estaba en el patio y dos chicos se le acercaron.
+
+Joel: ¡Martino, Martino! ¿Qué tal? Ten...
+Martino: ... ¿un caramelo?
+Brada: si no lo quieres dámelo a mí
+Martino: ¿y ustedes qué?
+Joel: ¿qué de qué?
+Martino: me parece raro que hablemos, nunca nos hablamos
+Brada: todos los días nos hablamos, idiota
+Martino: ... (suspira).
+
+Martino retomó el paso, se alejó de los chicos sin decir nada. Más adelante vio a Isadox fumando solo contra la pared, pero no con esa energía de alguien sin a quién hablarle, sino con la concentración de alguien que está analizando todo lo que pasa a su alrededor como si estuviera calculando algo. Martino se acercó.
+
+Martino: ¿desde cuándo fumas? (Sonríe)
+Isadox: ¿todo bien?
+Martino: más o menos, este día no entiendo nada, perdí mi cuaderno, los chicos me dicen que no los invité a su cumpleaños...
+Isadox: justamente... a mi tampoco, igual no me enoja, cada quien
+Martino: si te invite, invite a todos... estás igual que ellos, puta madre
+Isadox: quizás el confundido eres tú, yo puedo jugarte por mis historias que no invitaste a nadie
+Martino: ... ¿juras que?
+Isadox: por mis historias, guiño, guiño
+Martino: no entiendo, o sea... ¿ahora usas mi frase?
+Isadox: nunca la usaste, ¡además! A ti no te gusta escribir
+Martino: ¡yo soy el escritor!
+Isadox: ¿sabes que? Mejor vete, ya no tiene sentido esta charla
+Martino: ... espera... ¿tú tienes una página web?
+Isadox: ¡si! Eso ya lo sabes
+Martino: ... ¿qué? ¡espera! ¿Cómo se llama?
+Isadox: ... estamos muy preguntones hoy
+Martino: ¡contesta!
+Isadox: ¡Living!, se llama Living, ¡qué delirante, la puta madre!
+Martino: ... esa no es tu página web, ¡es mía!
+
+De repente, se escucho un grito de "¡Cuidado!" y antes de que Martino pudiera reaccionar una pelota le pegó directo en la cara y cayó al suelo.
+
+**Mundo Paralelo**
+Despertó de nuevo en la choza, de día esta vez, con el ruido de pájaros afuera. Vio la gomera tirada en el suelo, la agarró y salió.
+
+Los pájaros andaban yendo y viniendo entre los pocos árboles que había cerca, armando sus nidos con ramitas. Martino juntó un puñado de piedras del suelo y empezó a tirar.
+
+Los primeros "disparos" no le dieron a nada, pero siguió hasta que uno salió bien y un pájaro cayó.
+
+Lo recogió del pasto y en ese momento llegó un sonido desde el monte, algo que no era viento ni animal conocido. Martino dudó con el pájaro muerto en la mano y después empezó a correr hacia allá.
+
+Cuando llegó al borde decidió no meterse de lleno, pero desde afuera pudo ver a medias a la criatura que había escuchado de noche.
+
+Martino: acércate, ¿ves esto? ¿Tienes hambre?
+
+Esa cosa solo largó sonidos, nada parecido a palabras. Martino le tiró el cadáver del pájaro y la criatura se le fue encima sin pensarlo, lo destripó con los dientes en segundos, arrancándole las plumas junto con la carne, con los jugos y la sangre escurriéndole por las mandíbulas sin que le importara nada.
+
+Después se quedó quieta y empezó a acercarse despacio. Martino la vio completa por primera vez: gris, delgada hasta el hueso, con un rostro que no invitaba a nada bueno, garras afiladas y extremidades largas y finas que se movían con una lentitud rara.
+
+Caminaba en dos patas aunque su cuerpo podía sostenerse erguido sin problema. Era un humanoide pálido.
+
+Martino extendió la mano y lo acarició. Luego, sonrió.
+
+## Capítulo 2: ¡Apreta Y Gana!
+Martino seguía acariciando a la criatura con una sonrisa tranquila hasta que algo la asustó de golpe y salió disparada hacia el monte sin aviso.
+
+Martino giró para ver qué había pasado y lo que vio fue una masa enorme de pájaros moviéndose todos juntos en el aire, apretados como un solo cuerpo oscuro. Antes de que pudiera pensar, se le vinieron encima.
+
+El primer golpe fue un pico contra la frente, la piel se abrió limpio, un corte fino del que empezó a salir sangre de inmediato, caliente y espesa bajándole por la ceja.
+
+Martino intentó cubrirse la cara con los brazos pero los pájaros seguían llegando desde todos lados, picoteándole los antebrazos, el cuello, la parte de atrás de las orejas. Un pájaro le enganchó el pico en el lóbulo y tiró, arrancándole un pedazo de carne con cartílago incluido.
+
+Martino se tiró al suelo haciéndose bolita, con las manos en la nuca, sintiendo los golpes en la espalda, en los hombros, en los dedos, picos pequeños pero constantes y sin parar. La tela de la ropa no era suficiente y en algunos puntos la piel cedió, quedando en carne viva con bichitos de sangre brotando en fila.
+
+De golpe, el silencio volvió de un segundo al otro.
+
+Martino abrió los ojos despacio. Había luces brillantes apuntándole directo a la cara y una voz conocida que gritó: "¡Es hora de comenzar!".
+
+Su visión tardó unos segundos en aclararse del todo y cuando lo hizo vio a Garilda, Toshiba, Santillán e Isadox, cada uno parado frente a un altar pequeño con un botón encima, y en el centro del escenario estaba Murray Franklin con el micrófono en la mano y esa sonrisa suya que no se le borraba nunca.
+
+Martino: ¿Murray?
+Murray: bienvenidos todos a... ¡Apreta y gana! Aquí, se disputará quien es el verdadero Martino
+Martino: ¡¿de qué mierda hablas?!
+Murray: recuerden... ¡todos pueden ser Martino!
+Santillan: ¿con toda y su adicción a fumar?
+Murray: ¡con todo y cigarro!
+Isadox: yo ya me adelanté
+Murray: una jugada, audaz
+Martino: dice en voz baja: otra mierda más
+Murray: presentamos a Toshiba, desde chico ha dicho ser fanático de escribir.
+
+Sin aplausos.
+
+Murray: Denle un aplauso a Isadox, un fuerte candidato que ha ganado más de una vez.
+
+El estudio no se contuvo.
+
+Murray: Por supuesto, la elegante Garilda, con unos pendientes con el logo de la página web de Martino
+Martino: ¡alto! ¡¿me explican qué es esto?!
+Santillan: ¿justo en el momento en que van a presentarme interrumpes?
+Murray: muy bien dicho Santillan, es algo que diría Martino, con su mismo tono
+Santillan: ¿en serio? Sonríe
+Murray: a ver... expliquemos.
+
+"Apreta y Gana se hace una pregunta: ¿quién es Martino?, para saberlo, los concursantes deben responder o actuar de forma característica a Martino Lipschitz"
+
+Murray: mejor dicho, imposible
+Martino: mi nombre es Martino, mi puto apellido es Lipschitz
+Murray: ¡qué grandes concursantes tenemos! Incluso alguien que se llama igual
+Martino: suspira, dice en voz muy baja: desde cuando eres tan idiota Murray
+Murray: ¡atentos! Música de suspenso... bien. Primera pregunta.
+
+"¿Cuándo se estrenó la página web Living?"
+
+Murray: ¡producción! ¿No había algo más fácil?
+
+Isadox tocó el botón.
+
+Isadox: 31 de mayo
+Murray: sonríe: ¡correcto!
+
+Confeti bajó del techo justo encima de donde estaba Isadox y en la pantalla de su altar apareció el número 30 sumado a su puntaje.
+
+Murray: ahora... una música romántica... suena la música de eso hablaba. Siguiente pregunta.
+
+"¿Quién fue el primer amor de Martino?"
+
+Martino: dice en voz baja otra vez: eso no lo sé ni yo
+Santillan: presiona el botón: .... ¿escribir?
+Murray: ¡correcto!
+
+Santillán ganó 30 puntos.
+
+Martino: sonríe: creo que ni el programa me conoce
+Murray: shh... la pregunta más difícil...
+
+"¿Cómo se titula la primera narrativa escrita por Martino?"
+
+Martino apretó el botón. Pero, Isadox también. Fue al mismo tiempo.
+
+Martino: ¡Sin Filo!
+Isadox: ¡Sin Filo!
+Murray: ¿los dos? ¡Jajaja! ¡Qué programon! Correcto los dos.
+
+Martino gana sus primeros 30 puntos. Mientras que Isadox suma 60 puntos.
+
+Murray: bien, bien... todo bastante bien, pero... es momento de la pregunta más importante, no solo deben saber actuar, no solo deben saber de él... ¡deben ser como él!.
+Martino: ve un cable enchufado.
+
+"¿Qué haría Martino si su sueño fracasa?"
+
+Toshiba presiona el botón rápido. Pero, se queda pensando.
+
+Mientras Toshiba se quedó pensando sin responder, Martino aprovechó el silencio para agacharse despacio y empezar a moverse con cuidado por el piso del escenario, pegado al suelo, hasta llegar al enchufe que alimentaba todo el sistema de luces.
+
+Lo arrancó de la pared de un tirón y el estudio quedó en negro total, las cámaras de los camarógrafos se apagaron solas y el ruido del programa se cortó de golpe.
+
+En la oscuridad Martino se levantó, caminó directo hacia donde había visto a Isadox y le sacó el cigarro de la mano. Lo puso entre sus labios, aspiró, y sonrió mientras el humo le llenaba la garganta.
+
+Todo empezó a distorsionarse alrededor suyo, los bordes de las cosas se movían como si no estuvieran fijos en ningún lugar, y después negro.
+
+Martino abrió los ojos en la choza. Salió y vio a alguien de espaldas, parado afuera sin moverse.
+
+Martino: ¿y tú?
+
+La persona se dio vuelta y era él. Era Martino.
+
+## Capítulo 3: La Pastilla Mágica
+Martino: ¿y ahora qué mierda?
+Valak: tranquilo, este no es mi cuerpo
+Martino: eso quedó clarísimo
+Valak: solamente es para no mostrarme tal cual me veo, pero... si quieren verme, deberán ver la portada de esta historia
+Martino: ¿de qué mierda hablas?
+Valak: sonríe: nada... llámame Valak
+Martino: supongo que ya sabe mi nombre
+Valak: ¿crees que me pondría en los zapatos de cualquier persona?
+Martino: bien, supongo que está para aclarar mis dudas
+Valak: intentaré lo mejor que pueda.
+
+Los dos empezaron a caminar despacio, uno al lado del otro, sin apuro, como si ninguno tuviera un destino claro pero tampoco les molestara eso.
+
+Valak: ¿recuerdas cómo llegaste aquí?
+Martino: ... no, solamente tengo sueños en los que soy otra persona, y... que toman mi identidad
+Valak: si... confuso ¿No?
+Martino: ...
+Valak: ahora viene mi pregunta. ¿Realmente es esa tu identidad?
+Martino: no me jodas con eso ahora
+Valak: demostraste ser más... sociópata que buena persona
+Martino: ... pues no me arrepiento, al parecer eso hizo que cumpliera mis sueños
+Valak: si, es verdad, y también logró que llegaras hasta aquí
+Martino: creo que ya puedo responder tu primera pregunta
+Valak: ... sonríe: ¿recuerdas cómo llegaste aquí?
+
+**Recuerdo Repentino**
+Martino escuchó la voz de Dante gritándole que despertara y abrió los ojos de golpe, pero no estaba bien.
+
+Estaba fuera de control, golpeándose la cabeza contra lo que encontraba en el teatro: la sien contra el borde de un respaldo de madera, la frente contra una columna, sin detenerse.
+
+Salió disparado hacia Dante con los brazos ya levantados y la cara de alguien que no está pensando en nada. Pero Dante usó su capa y eso frenó todo...
+
+Martino: Dante me mató con su capa
+Valak: si, te volviste loco por la pastilla que te dio Kevin
+Martino: ¿qué es eso?
+Valak: nada, simplemente droga, bueno, algo parecido al menos, las consecuencias son diferentes en cada persona
+Martino: ... ¿y qué es esa criatura?
+Valak: pensé que ya lo sabrías, mírala con atención, es eso que todos tenemos, todos
+Martino: ... ¿esa cosa soy yo?
+Valak: aplaude
+
+Los dos se dieron vuelta al mismo tiempo y vieron a la criatura. Estaba quieta con esa forma delgada y gris que Martino ya conocía, pero la cara que le ponía a Valak era hostil, con los ojos fijos en él como si ya hubiera decidido que no le gustaba nada lo que veía.
+
+Martino: ¿por qué tengo esos sueños?
+Valak: tu forma de comunicarte es incomodar, pensé que me entenderías mejor si... usaba tu lenguaje
+Martino: ...
+
+Valak le puso en la mano una daga y tres cigarros, sin ceremonia, como quien deja algo sobre una mesa y ya.
+
+Valak: la mejor parte de todo es que... suspira: no todo puede terminar como empezó, y siempre existen formas de cambiar, aunque... eso no signifique poder ver el resultado de aquel cambio
+Martino: ¿por qué la daga?
+Valak: aún tienes un asunto pendiente con la criatura, digamos que... la daga puede resolverlo.
+
+Valak se deshizo en cenizas desde los pies hacia arriba hasta que no quedó nada. Martino se sentó en el césped con los ojos hacia arriba y llegaron los recuerdos.
+
+**Recuerdo Repentino**
+La carta rota de Yolanda pegada con cinta torcida, dejada sobre su cama con el celular grabando escondido en el escritorio.
+
+Esperó pegado a la pared. El llanto llegó primero bajo, después más fuerte, más real. Entró, tomó el celular y le dio play.
+
+Vio la cara de Yolanda destruirse, las manos temblarle, el intento de contenerse que no llegó a ningún lado. Eso era lo que quería.
+
+**Otro Recuerdo Repentino**
+Rubenio parado en la entrada con los ojos húmedos mientras el auto ya estaba encendido.
+
+Rubenio: hey, ¿qué hacés?
+Martino: tengo que irme
+Rubenio: pero... pedí una pizza, ¿qué voy a hacer con una pizza solo para mí?
+Martino: ...
+Rubenio: bueno, no pasa nada... vete con cuidado
+
+No miró atrás cuando arrancaron. Sonrió.
+
+**Un Último Recuerdo Repentino**
+Garilda sentada frente a él en el colegio, los dos en plena pelea.
+
+Martino: ¡no me jodas! ¡Isadox y Leiva cogieron! ¡Tener sexo con cualquier persona no es amor, es vulgar!
+Garilda: si hay cosas malas, pero el amor verdadero existe
+Martino: ¿segura? ¿Cómo vas con tu pareja? Te respondo yo: vas para la puta mierda, estás cansada de él y él jamás te importó, le dabas vergüenza, hasta permitió que su amigo te llamara de formas inapropiadas
+Garilda: vete a la mierda
+Martino: ¿por qué te molesta? Si seguro te gusta que digan esas cosas de ti
+Garilda: ...
+
+Ella se levantó y se fue sin decir más. Él no se movió.
+
+Martino parpadeó rápido, se levantó del césped, giró hacia la criatura y la miró con la cara fría, sin rastro de nada adentro.
+
+## Capítulo 4: A Campo Abierto
+La criatura y Martino se quedaron mirándose directo a los ojos, ninguno de los dos parpadeaba ni se movía, como si estuvieran midiendo algo.
+
+Martino: ¡Sacas lo peor de mí! ¡hijo de puta!
+
+La criatura solamente rugía con tonos extraños.
+
+Los dos arrancaron a correr al mismo tiempo, uno hacia el otro, la criatura con sus extremidades largas comiendo terreno rápido y Martino con la daga en la mano apuntando directo.
+
+Cuando estuvieron lo suficientemente cerca la criatura saltó y se abalanzó contra él. El impacto fue seco, todo el peso huesudo de la criatura cayendo encima, el aire saliéndole a Martino de golpe cuando dio contra el suelo.
+
+La daga salió volando y cayó no muy lejos. La criatura levantó una de sus manos con las garras afiladas lista para hacerle daño, pero se quedó quieta unos segundos y después salió huyendo. Martino se levantó, recogió la daga del suelo y fue detrás de ella.
+
+Corrieron a campo abierto hasta que el monte los fue tragando de a poco, y adentro ya no había canto de pájaros ni luz que llegara bien, solo sombra y el ruido de sus propios pasos sobre la tierra.
+
+Martino aminoró el paso, caminando despacio entre los árboles, escuchando ramas partiéndose en algún lado que no podía ver. Después escuchó el sonido de garras raspando madera, rasguños contra un tronco, y se dio vuelta rápido.
+
+Martino: respira agitado: ¡SAL!
+
+Antes de que pudiera reaccionar la criatura apareció por detrás y lo empujó con fuerza, Martino cayó hacia adelante y cuando se dio vuelta ya la vio alejarse más rápido que antes. Se levantó de inmediato y volvió a correr detrás de ella.
+
+La criatura llegó a una torre de caza y empezó a trepar por la estructura con las manos largas agarrando cada travesaño y subiéndose con una velocidad que no tenía ningún esfuerzo visible.
+
+Martino llegó abajo, levantó la vista y empezó a subir por las escaleras. Cuando la criatura llegó a la cima agarró una radio vieja y la lanzó hacia abajo.
+
+Martino intentó apurarse pero pisó mal y se agarró peor, y desde la altura que llevaba el cuerpo se soltó solo.
+
+La daga se fue de su mano mientras caía, pero la criatura saltó desde arriba y lo atrapó antes de que llegara al suelo, absorbiendo el golpe con su propio cuerpo.
+
+Martino, todavía agitado, recogió la daga del suelo. La criatura estaba agotada, con la cabeza agachada, aceptando lo que viniera.
+
+Martino: es hora de que todo termine... no siempre voy a querer ser un hijo de puta, no quiero morir siendo uno...
+
+Martino levantó la mano con la daga en posición, listo, y llegaron los recuerdos.
+
+**Recuerdo Repentino**
+Yolanda durmiéndose casi todo el día mientras la casa quedaba sin comida ni dinero, Maldonado apareciendo cada vez más seguido golpeando ventanas y paredes, cortando la luz, quitando la cocina, arrancando puertas, y Martino sin saber qué iba a encontrar diferente al día siguiente, durmiendo en una casa que se deshacía sola alrededor de él sin que nadie hiciera nada.
+
+**Otro Recuerdo Repentino**
+Isadox mirándolo con una calma que dolía más que cualquier grito.
+
+Isadox: somos como Alvin y las ardillas, solo tres
+Santillán: cuatro no funciona
+Isadox: tú ya no formas parte de nosotros, solo somos Santillán, Leiva y yo
+Martino: ... claro
+
+Martino se levantó y se fue solo.
+
+**Un Último Recuerdo Repentino**
+Martino cena en silencio con su padre. Rubenio lo mira de reojo, una, dos veces más.
+
+Rubenio: ¿todo bien en el cumpleaños?
+Martino: ... si
+Rubenio: ... ¿eres estúpido?
+Martino: ... ¿eh?
+Rubenio: ¿por qué no me dijiste nada? El miércoles, te hablé de una forma... bueno, ya sabes, y no dijiste nada, te fuiste... Dorbes me dijo que estabas llorando en el baño
+Martino: no estaba llorando
+Rubenio: ¿y qué hacías?
+Martino: ... si, si estaba llorando
+Rubenio: ... ¿siempre me mientes?
+Martino: ...
+Rubenio: yo nunca te mentí, siempre te dije la verdad, si, quizás no te guste la verdad... pero ya sabes, sinceramente, no creo en ti hijo... ¿te llevas cuántas materias? ¿Tres? No... te llevas más de cinco
+Martino: ...
+Rubenio: hijo... eres un desastre, sabes... si piensas que no tengo corazón haces mal, ya te hubiera echado de esta casa
+Martino: esta casa es de mi madre
+Rubenio: ... ¿Marisa? ¿Te hablas con ella?
+Martino: si, claro que si
+Rubenio: ¿y a ella si le cuentas la verdad?
+Martino: ...
+Rubenio: no sé por qué piensas que no soy un buen padre, te di techo, estuve días sin comer para que tu puto estómago estuviese lleno... siempre soy el malo ¿no?
+Martino: ...
+Rubenio: algún día de estos voy a llamar a Dorbes, bueno no, mejor a Maxinium, Dorbes es bastante estúpido... y le voy a decir que me lleve hasta Tostado, voy a patear la puerta, voy a entrar a esa casa de mierda que tiene tu hermana, hablando de tu hermana, no me quiso pagar para la puta operación de este ojo de mierda... voy a volver a asfixiar a Marisa
+Martino: ... su mirada se desvió automáticamente hacia Rubenio
+Rubenio: ... levanta los platos.
+
+El silencio vuelve a acomodarse entre ambos. Martino termina primero, junta los platos y va hacia la cocina.
+
+Rubenio: siéntate
+Martino: ...
+Rubenio: antes de la separación, hablé con Marisa y... esta casa, todo, quedará para ti si en algún momento, ya sabes, si ella muere, y si yo muero... esto será tuyo, eso fue lo que decidí, no fue idea de ella, solo mía
+Martino: ...
+Rubenio: bueno... eres tan inútil que... no creo que puedas tener tu propio hogar, así que... quedarte con esto y ya, ni lo intentes, no sirves
+Martino: ...
+
+Martino veía la botella de vino, fijamente sin ver otra cosa. Su vista se volvía nublada. Una pequeña lágrima comenzó a caer, de su mejilla hasta caer en la mesa.
+
+Martino cerró los ojos y apretó la daga con más fuerza, pero la lanzó lejos. Soltó el aire despacio. La criatura lo miró.
+
+Martino: solo tratabas de protegerme todo el tiempo... quiera o no, te necesito.
+
+Martino extendió la mano y la acarició, pero sin la sonrisa de antes, con la cara todavía fría.
+
+Volvieron caminando despacio hacia la choza. Martino cazó otro pájaro con la gomera y se lo tiró a la criatura, que lo devoró en el suelo sin ceremonia.
+
+Entonces un enjambre de insectos apareció de la nada, moviéndose junto como un solo cuerpo hasta formar una especie de pequeño tornado que fue tomando forma hasta que Valak apareció, otra vez con la cara de Martino.
+
+Martino: no puedo hacerlo, y estoy harto de fingir que no me gusta ser un hijo de puta, eso me hace sentir bien, pero... el costo fue... bueno, es esto, todo esto
+Valak: sabes Martino, la verdad es que... yo nunca doy segundas oportunidades, la verdad, no existen
+Martino: entiendo
+Valak: pero, al menos... puedo hacer que vivas eso
+Martino: ¿de qué hablas?
+Valak: no ignores quién eres y en lo que te convertiste, pero tampoco lastimes para no tratar de ignorarte
+Martino: ... pero...
+Valak: si, seguramente lo entiendes, buena suerte con tu segunda oportunidad.
+
+Todo se puso oscuro.
+
+## Capítulo 5: Ser O No Ser Yo
+Martino estaba sentado en el suelo, en un círculo con otras personas sentadas alrededor.
+
+Hubi: démosle la bienvenida a un nuevo integrante, Martino Lipschitz.
+
+Aplauden y saludan.
+
+Hubi: Valak dijo que tuviste, mejor dicho, viviste una segunda oportunidad. ¿Deseas hablarlo?
+Kloac: espero que tenga algo interesante que decir.
+Ryan: mejor de lo que tú cuentas.
+Martino: pues... ayer desperté en mi patio y... me vi a mí mismo.
+Ryan: ¡Sí, Kloac! Esto será mejor.
+
+Martino se levantó y estaba en el patio de su casa de la infancia. Ahí estaba él, un Martino de ocho años corriendo solo por el patio, interpretando a un monstruo, después al protagonista, después al acompañante del protagonista, cambiando de voz y de postura cada vez sin que nadie se lo pidiera.
+
+Martino lo miró un momento y el chico frenó, se puso serio y empezó a hablar sobre cómo no había podido salvar a su amigo, con las manos juntas formando un arma, apuntándosela en la cabeza y haciendo el ruido del disparo con la boca sin pestañear.
+
+Al voltear hacia el costado, lo vio metido en una escena de guerra, tirándose al suelo, haciendo sonidos de disparos y explosiones, rodando entre los yuyos del patio con una concentración total.
+
+Después se sentó en la tierra mojada de lluvia con una rama en la mano y dibujó despacio una cara triste simple en el barro, la miró un segundo y empezó a agregarle dientes, un rostro enojado, una lengua y cuernos, hasta que la cara triste dejó de existir.
+
+Kloac: ¿se puede saber qué es a lo que jugabas? No me quedó claro.
+Hubi: nunca tenés nada claro.
+Martino: dejémoslo en... "el que entendió, entendió".
+Ryan: todo muy melancólico, pero queremos escuchar algo mejor.
+Martino: solamente si me prometen que ustedes tendrán algo que contar.
+
+Todos levantaron los pulgares.
+
+Martino: bien.
+
+Martino estaba en el colegio, apartado de todos, fumando en silencio contra la pared mientras el resto del patio hacía ruido a su alrededor sin que él formara parte de nada de eso.
+
+Sonó el famoso timbre y todos empezaron a moverse hacia los salones. Martino se sentó solo, sin prestarle atención a nada, siguiendo con el cigarro y los pies en el pupitre.
+
+Ryan: ¿no te decían nada por fumar?
+Martino: era un problema, al cual... todos los profesores ya no se molestaban.
+
+Martino caminaba por el pasillo cuando escuchó su nombre saliendo de la sala de profesores. Se apoyó despacio contra la puerta entornada y se quedó quieto, escuchando.
+
+Voz: ¡Estoy harto de él! Verlo así, sin hacer nada, ¡fumando! Que es lo peor, es como... no sé, un insulto sin insultarme.
+Voz: suspira: no podemos hacer nada, da igual, es un chico al que le da igual todo.
+
+Martino se fue sin hacer ruido.
+
+Hubi: ¿por qué fumabas tanto?
+Martino: ... levantó la cabeza: el humo cubre la soledad.
+Kloac: ¡uff! Qué poeta.
+Ryan: Kloac también fumaba, lo superó, quizás podría ayudarte.
+Kloac: sí, es verdad.
+Martino: hablaremos de eso luego.
+Ryan: tengo una duda... ¿tenías amigos?
+Martino: ...
+
+Estaba en su cumpleaños de quince años, en medio de todo pero sin ser parte de nada, sin preocuparse por hablar ni por hacer que el ambiente fuera mejor o peor. Simplemente estaba ahí. Garilda se acercó y le entregó su obsequio. Martino lo miró.
+
+Martino: no lo quiero.
+Garilda: ¿qué? ¿Por qué no? Es algo... bueno, en tu caso es algo que te gusta.
+Martino: ¡oigan todos! Ya es tarde, es hora de que se vayan.
+
+Todos se fueron. Tenían ganas de irse.
+
+Kloac: bueno, digamos que no es tan amigable.
+Ryan: una parte mía se soluciona gracias a mis amigos, ¿por qué te distanciabas?
+Martino: ... no lo entenderías.
+Hubi: lo mejor que podrías hacer es no evadirlos.
+Martino: en mi situación, no es tan fácil.
+
+Estaba fumando tranquilo en el recreo cuando Isadox se acercó.
+
+Isadox: te quiero ver cuando llegues a los 50, no vas a tener fuerzas para seguir con tu marca de Living.
+Martino: sonríe: sí... quizás tengas razón.
+Isadox: esta noche hay cumpleaños en el salón "Cabibajo", están invitados todos, creo que es gratis.
+Martino: no voy a ir.
+Isadox: tampoco quería que vayas, ¿me prestás ropa?
+Martino: sonríe un poco más: hijo de puta.
+Isadox: ... hablando en serio, deberías.
+Martino: es difícil.
+Isadox: bueno, ¿qué tan complicado es bailar?
+Martino: mucho, más difícil que yo triunfar con mi marca.
+Isadox: sí, eso seguro, sonríe.
+Martino: ríe poco.
+Isadox: vamos a estar todos, no faltes.
+Martino: lo voy a pensar.
+Isadox: bueno, creo que con eso ya es suficiente, nos vemos luego.
+Martino: ¡Isa!
+Isadox: ¿sí?
+Martino: tú, Santillán y Leiv son... digamos, ¿como Alvin y las Ardillas?
+Isadox: bueno... ¿y dónde está la cuarta ardilla?
+Martino: fuma: quizás sí vaya.
+Isadox: bien, te espero entonces.
+
+Isadox se fue y Martino volvió a pitar el cigarro sin cambiar la postura.
+
+Hubi: ¿Alvin y las Ardillas?
+Martino: no lo entenderías.
+Kloac: contigo nada se entiende.
+Ryan: ¿fuiste a la fiesta?
+Martino: ...
+
+Martino estaba frente al espejo terminando de ponerse el traje, acomodándose la solapa, cuando su madre y su padre lo interceptaron antes de que pudiera salir.
+
+Marisa: ¿a dónde vas?
+Martino: no te importa.
+Rubenio: ¡Hey! Si salís, dormís afuera.
+Martino: entonces... pónganse la almohada antes de que llegue.
+
+Martino tomó una taza y la dejó caer. El sonido del golpe contra el suelo llenó el silencio y asustó a Rubenio.
+
+Se fue. Al llegar al salón de fiestas, se quedó parado un momento en la entrada, mirando las mesas llenas y las caras conocidas hasta que encontró a sus amigos todos juntos en una sola mesa, jugando a las cartas.
+
+Pitó el cigarro una vez más y caminó hacia ellos. Se sentó sin decir una sola palabra, los miró y todos lo miraron, dejó el cigarro en el borde de la mesa y Santillán le pasó tres cartas sin decir nada.
+
+Las tomó, las abrió en abanico, las miró, tomó una más de la pila y dijo: "paso".
+
+Martino: ... miró hacia abajo: si tuvieran la posibilidad de tener una segunda oportunidad, ¿se verían capaces de mejorar sus vidas?
+Hubi: sí.
+Kloac: nunca.
+Ryan: lo dudo.
+Martino: bueno, yo decidí hacer algo distinto.
+Hubi: ¿y qué tan distinto es de lo que ya viviste antes?
+Martino: ... el alejamiento, era mejor alejarme de mis amigos y dejar de lastimarlos.
+Ryan: ¿y qué hay de Rubenio? Esa historia me la conozco de memoria, nunca le reclamaste, nunca le levantaste la voz como sí lo hizo él contigo.
+Martino: ... bueno, no quería ser como él, así que mi gesto fue... muy to-
+Kloac: bueno, supongo que nadie lo va a decir, pero yo sí. Dejaste en claro una cosa muy obvia, Martino.
+Martino: ¿qué?
+Kloac: antes eras frío y narcisista, ahora... ¿qué eres?
+Martino: ¿contesto yo o lo contestás tú?
+Kloac: lo que demostraste ser ahora es...
+
+Todo se congeló. Las caras paradas a mitad de expresión, nadie respiraba ni parpadeaba.
+
+Martino se levantó despacio y se acercó a Hubi, mirándolo de cerca, pasándole la mano delante de los ojos, empujándole el hombro.
+
+Pero nada, probó con otro, mismo resultado. Todos paralizados, como figuras de cera con ropa conocida.
+
+Entonces sintió la punzada en el pecho, seca y profunda, cayó de rodillas en el suelo del salón mientras todo alrededor empezaba a oscurecerse de a poco, desde los bordes hacia el centro, lento pero sin pausa.
+
+Los pasos de Valak se escucharon antes de que apareciera, uno después del otro, el único sonido que quedaba en ese lugar que se estaba apagando.
+
+Martino: ¿qué me sucede?
+Valak: ...
+Martino: contesta... puta madre, ¡RESPONDE!
+Valak: ...
+
+Martino ya no tenía aire, la boca abierta sin que entrara nada, los pulmones apretados sin respuesta.
+
+Valak lo miró con la cara fría, sin detenerse, y siguió caminando tranquilo hasta perderse en la oscuridad.
+
+Martino cayó hacia adelante y quedó inmóvil en el suelo, con los ojos abiertos, mirando sin ver nada.
+
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'Eternamente Vivo 5';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+       else if((m = l.match(/^\*\*(.+?)\*\*$/))) items.push({t:'sc',txt:m[1]});
+    else if((m = l.match(/^([^:]+):\s*(.+)$/))) items.push({t:'dlr',who:m[1],txt:m[2]});
+    else if(l === 'The End') items.push({t:'end'});
+    else splitLong(l).forEach(function(p){ items.push({t:'p',txt:p}); });
+  });
+
+  var chapters = [], curr = -1;
+  items.forEach(function(it,i){
+    if(it.t === 'ch'){ chapters.push({i:i,n:it.n,s:it.s}); }
+  });
+
+  var view = 0, pending = null, typing = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+
+  function htmlEsc(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderIntro(){
+    box.innerHTML =
+      '<p class="intro" style="opacity:.8; letter-spacing:.2em; margin-bottom:1.4em">'+INTRO+'</p>'+
+      '<h1 class="big title">'+htmlEsc(TITLE)+'</h1>';
+    stage.classList.add('on');
+    pending = {i:0,t:'ch'};
+  }
+
+  function renderChapter(ch){
+    box.innerHTML =
+      '<p class="big chnum">'+htmlEsc(ch.n)+'</p>'+
+      '<h2 class="big chname">'+htmlEsc(ch.s)+'</h2>';
+    pending = items[ch.i+1] ? {i:ch.i+1} : null;
+  }
+
+  function renderScene(txt){
+    box.innerHTML = '<p class="tag">'+htmlEsc(txt)+'</p>';
+  }
+
+  function renderPara(txt){
+    box.innerHTML = '<p class="p">'+htmlEsc(txt)+'</p>';
+  }
+
+  function renderDialogue(who,txt){
+    box.innerHTML =
+      '<p class="p" style="margin-bottom:.25em"><span class="who">'+htmlEsc(who)+'</span>:</p>'+
+      '<p class="p">'+htmlEsc(txt)+'</p>';
+  }
+
+  function renderEnd(){
+    box.innerHTML =
+      '<p class="tag" style="margin-top:4rem">The End</p>'+
+      '<p class="p" style="text-align:center;opacity:.5;margin-top:1.5rem">Gracias por leer.</p>';
+    pending = null;
+    clear();
+  }
+
+  function showUI(){
+    btnCh.classList.add('show');
+    btnReset.classList.add('show');
+  }
+
+  function buildChapterList(){
+    list.innerHTML = '';
+    chapters.forEach(function(ch,idx){
+      var btn = document.createElement('button');
+      btn.className = 'chi';
+      btn.innerHTML = '<b>'+htmlEsc(ch.n)+'</b><span>'+htmlEsc(ch.s)+'</span>';
+      btn.onclick = function(){
+        closePanel();
+        curr = idx;
+        view = ch.i;
+        save(view);
+        renderChapter(ch);
+      };
+      list.appendChild(btn);
+    });
+  }
+
+  function openPanel(){
+    buildChapterList();
+    panel.classList.add('open');
+  }
+
+  function closePanel(){
+    panel.classList.remove('open');
+  }
+
+  function advance(){
+    if(pending){
+      var p = pending; pending = null;
+      if(p.t === 'ch'){
+        curr = 0;
+        view = chapters[0].i;
+        save(view);
+        renderChapter(chapters[0]);
+        return;
+      }
+      view = p.i;
+      save(view);
+      curr = -1;
+      for(var c=0;c<chapters.length;c++){
+        if(chapters[c].i === view){ curr = c; break; }
+      }
+      showUI();
+    } else {
+      view++;
+      save(view);
+    }
+    if(view >= items.length){ renderEnd(); return; }
+    var it = items[view];
+    switch(it.t){
+      case 'ch':
+        var chIdx = chapters.findIndex(function(x){return x.i === view;});
+        if(chIdx >= 0){ curr = chIdx; renderChapter(chapters[chIdx]); }
+        break;
+      case 'sc': renderScene(it.txt); break;
+      case 'p': renderPara(it.txt); break;
+      case 'dlr': renderDialogue(it.who, it.txt); break;
+      case 'end': renderEnd(); break;
+    }
+  }
+
+  btnCh.onclick = function(e){ e.stopPropagation(); openPanel(); };
+  panel.onclick = function(){ closePanel(); };
+  btnReset.onclick = function(){
+    if(confirm('¿Reiniciar la historia desde el principio?')){
+      clear();
+      location.reload();
+    }
+  };
+  stage.onclick = function(){ if(!panel.classList.contains('open')) advance(); };
+
+  var saved = load();
+  if(saved >= 0 && saved < items.length){
+    view = saved;
+    pending = {i:saved};
+  }
+
+  renderIntro();
+  setTimeout(function(){ stage.classList.add('on'); }, 50);
+  setTimeout(function(){ if(pending) advance(); }, INTRO_MS);
+})();
+</script>
+</body>
+</html>
