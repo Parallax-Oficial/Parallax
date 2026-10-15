@@ -703,7 +703,7 @@ The End
     var l = raw.trim(); if(!l) return;
     var m;
     if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
-       else if((m = l.match(/^\*\*(.+?)\*\*$/))) items.push({t:'sc',txt:m[1]});
+    else if((m = l.match(/^\*\*(.+?)\*\*$/))) items.push({t:'sc',txt:m[1]});
     else if((m = l.match(/^([^:]+):\s*(.+)$/))) items.push({t:'dlr',who:m[1],txt:m[2]});
     else if(l === 'The End') items.push({t:'end'});
     else splitLong(l).forEach(function(p){ items.push({t:'p',txt:p}); });
