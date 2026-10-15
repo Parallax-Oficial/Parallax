@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eternamente Vivo 4 — Parallax</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--fade:450ms}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:'Inter',system-ui,sans-serif;cursor:pointer}
+#stage{position:fixed;inset:0;display:flex;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:calc(env(safe-area-inset-top,0px) + 32px) 28px calc(env(safe-area-inset-bottom,0px) + 32px);
+  text-align:center;opacity:0;transition:opacity var(--fade) ease}
+#stage.on{opacity:1}
+#box{max-width:34rem;width:100%;margin:auto}
+#stage::-webkit-scrollbar{display:none}
+.intro{font-size:1.1rem;letter-spacing:.08em;font-weight:400}
+.big{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1.05;letter-spacing:.02em}
+.title{font-size:clamp(3rem,16vw,6rem)}
+.chnum{font-size:clamp(1.6rem,8vw,2.6rem);margin-bottom:.6rem}
+.chname{font-size:clamp(2.4rem,13vw,4.6rem)}
+.p{font-size:1.15rem;line-height:1.7;text-align:left;font-weight:400}
+.tag{font-family:'Anton',Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1.5rem;text-align:center;line-height:1.3}
+.who{font-weight:600}
+.ui{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:0;color:#fff;
+  opacity:0;pointer-events:none;transition:opacity var(--fade) ease}
+.ui.show{opacity:.35;pointer-events:auto}
+.ui.show:active,.ui.armed{opacity:1}
+#btnCh{left:10px}#btnReset{right:10px}
+#panel{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.96);display:flex;overflow-y:auto;
+  overscroll-behavior:contain;scrollbar-width:none;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+#panel::-webkit-scrollbar{display:none}
+#panel.open{opacity:1;pointer-events:auto}
+#list{display:flex;flex-direction:column;gap:1.6rem;text-align:center;margin:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 24px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.chi{background:none;border:0;color:#fff;font-family:'Inter',sans-serif;cursor:pointer;opacity:.75}
+.chi:active{opacity:1}
+.chi b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.9rem;text-transform:uppercase;letter-spacing:.03em}
+.chi span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+</style>
+</head>
+<body>
+<div id="stage"><div id="box"></div></div>
+<button class="ui" id="btnCh" aria-label="Capítulos"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button class="ui" id="btnReset" aria-label="Reiniciar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+<div id="panel"><div id="list"></div></div>
+<!-- ============ HISTORIA =============
+Formato: cada línea no vacía = un toque.
+"## Capítulo N: Título" = tarjeta de capítulo | "**Texto**" = encabezado de escena
+"Nombre: texto" = diálogo | "The End" = cierre -->
+<script type="text/plain" id="story">
+**Lo que estás a punto de ver es propiedad exclusiva de la Asociación Internacional de Magos Anónimos.**
+## Capítulo 1: Todo Comenzó Cuando...
+**(-Grabando...-) — Comisaría local de Beverly Hills — 2037**
+Build: Perdón por hacerte esperar, esa silla no es muy cómoda.
+Jolly: No pasa nada.
+Build: (se sienta, apoyando sus codos en la mesa) Ok, te escucho.
+Jolly: Bueno... ¿por dónde empiezo?
+Build: ... ¿cuándo empezó todo?
+Jolly: (suspira) Dante era... bueno, al menos, siempre fue gracioso, (sonríe) siempre me hacía reír. Pero tenía ese lado...
+Build: ¿Malo?
+Jolly: Mejor dicho... vulnerable.
+**(-Cámara familiar-) — Residencia de la familia Montgomery**
+Dante tenía las cartas en la mano y cara de concentración, como si lo que estaba a punto de hacer fuera algo serio —mejor dicho, algo mágico. Sus amigos lo rodeaban, mirando, esperando.
+Le pidió a uno que eligiera una carta, la mirara y la volviera a meter en el mazo. Dante barajó, golpeó el mazo contra su palma, lo abrió en abanico y señaló una carta con seguridad. Era la equivocada.
+Sus amigos se rieron directo en su cara, sin filtro, sin disimular. ¿Para qué amigos si tienes enemigos, no?... creo que así no era el refrán.
+Thou: ¡¿Dime que lo grabaste?! (dijo aún con la risa)
+Clayton: Sí, sí, ¡jajaja!
+Dante los miró un segundo, después miró las cartas en el suelo, y las lanzó con toda la furia. Desde lejos, Jolly lo observaba sin decir nada.
+Dante: ¡Apaga la puta cámara!
+**(-Cámara de seguridad-) — Comisaría local de Beverly Hills — 2037**
+Build: Entiendo, era un desastre en la magia.
+Jolly: Sí, sinceramente sí.
+Build: Supongo que fue practicando, ¿no es así? Digo, él ahora maneja espectáculos increíbles.
+Jolly: En realidad, jamás practicó. Se podría decir que... "recurrió a un truco sucio".
+**(-Cámara celular-) — Ruta 034**
+La única luz que había era la del auto de Dante, que iluminaba justo lo suficiente para ver a la persona parada frente a él.
+No había nada más alrededor, solo la ruta a lo lejos y tierra. El desconocido no dijo mucho. Tenía un baúl pequeño apoyado cerca de su pie derecho, lo levantó, lo abrió y lo puso entre los dos.
+— Esto es lo que buscas, ¿no es así?
+Dante: ¿Realmente funciona?
+— Por supuesto. Eso sí... el costo es alimentarlo.
+Dante: ... Ok, sin problema.
+Dante metió la mano y sacó una capa. La dio vuelta, miró el interior, pasó los dedos por la tela, la extendió un poco para ver el largo.
+Después se la puso. Sacó el fajo de billetes del bolsillo y se lo entregó al desconocido sin mucha ceremonia. Luego, volvió al auto y cerró la puerta.
+Clayton: ¿Cuánto dinero le diste? Eso parecía mucho.
+Dante: ... ¡No puedes grabar esto!
+**(-Cámara de seguridad-) — Comisaría local de Beverly Hills — 2037**
+Build: ¿Una capa? ¿Es en serio?
+Jolly: No era cualquier capa.
+**(-Cámara familiar-) — Residencia de la familia Montgomery**
+Dante tenía la cámara apoyada contra la pared, la capa puesta, y empezó. Levantó una manzana de la mesa sin tocarla, la mantuvo en el aire y la hizo explotar.
+Apagó la luz del cuarto con un gesto de la mano y la volvió a encender.
+Tiró un vaso al piso y, antes de que tocara el suelo, se detuvo solo, subió de vuelta a la mesa y se acomodó donde estaba.
+Metió la mano en la pared como si fuera agua y la sacó del otro lado.
+Dante: ¡Por fin, puta madre, por fin!
+Pero antes de que pudiera hacer algo más, la capa se desprendió sola de sus hombros y cayó al suelo. Dante la miró. La expresión de felicidad que tenía se fue.
+**(-Cámara de seguridad-) — Comisaría local de Beverly Hills — 2037**
+Build: Exactamente... ¿qué era esa capa?
+Jolly: Dante decía que era de Houdini.
+Build: ... A ver si entiendo, la capa le dio... ¿los trucos?
+Jolly: No, le dio la magia que él tanto buscaba, pero había un precio. La capa no hacía milagros. Debía ser alimentada.
+**(-Cámara familiar-) — Residencia de la familia Bangha**
+Dante entró a la casa, moviéndose despacio por el living; no se lograba ver bien. Estaba oscuro, igual de oscuro que esa noche. De repente, una luz se encendió y él se agachó de golpe, deslizándose detrás del sofá y quedándose quieto.
+Una chica caminó desde el pasillo hasta la cocina, abrió un armario, tomó un vaso. Dante no se movió, pero algo hizo un ruido mínimo, algo rozó algo, y la chica paró en seco. Se quedó inmóvil con el vaso en la mano, mirando hacia donde había venido el sonido.
+— ¿Kevin?
+Nadie respondió. Ella esperó un par de segundos más, después giró, se sirvió el agua, tomó y se fue por el pasillo. Las luces se apagaron.
+Dante se levantó despacio y caminó hacia la habitación, sin apurar el paso, sin encender nada. Abrió la puerta con cuidado, centímetro a centímetro, hasta que tuvo el espacio suficiente.
+La chica estaba acostada en la cama. Él se sacó la capa y la arrojó hacia ella. La capa la cubrió entera y empezó a comérsela viva —la tela se pegó a su piel como si tuviera dientes, hundiéndose, desapareciendo dentro de ella junto con todo lo demás.
+Dante: (miró a la cámara) Chau, chau... eras tan linda... lástima que Kevin no está, ¡jajaja! Y recuerden, chicos... no a la infidelidad.
+**(-Cámara de seguridad-) — Comisaría local de Beverly Hills — 2037**
+Build: ¿La capa estaba viva?
+Jolly: ... Él le dio la vida.
+**(-Cámara de seguridad-) — Glitches#%#%#**
+Jolly fue absorbida por la silla del interrogatorio y desapareció. El oficial Build se quedó parado frente al espacio vacío donde ella había estado un segundo antes, sin saber qué hacer con lo que acababa de ver.
+Build: ¿Jolly? (suspira) Tenías razón, mamá, abogacía era mejor...
+**Finaliza el contenido filtrado por la Asociación Internacional de Magos Anónimos.**
+## Capítulo 2: Abracadabra
+**2037**
+Jolly abrió los ojos despacio, con la visión borrosa al principio, después más nítida.
+Estaba amarrada a una silla, las muñecas atadas por detrás, los pies fijos al suelo. El lugar era casi oscuro, con apenas suficiente luz para ver el telón rojizo gigante que tenía enfrente. Dante estaba detrás de ella, sin moverse.
+Dante: (empieza a masajearla) Jolly, Jolly, Jolly... ¿no sabes cerrar tu puta boca?
+Jolly: Jodete.
+Dante: ¿Te di todas las oportunidades y me lo agradeces de esa forma? Eres una maldita puta.
+Jolly: Suéltame. ¡La policía ya te está investigando!
+Dante: (se inclina y le habla a su oído despacio) La policía no puede hacer nada, ¿okey?
+Jolly: ... ¿Qué te pasó, Dante? Tú no eres así.
+Dante: ¡Dante! ¡El Grande! Acostúmbrate, nena. La gente recuerda mi nombre, recuerda lo que soy, piensan en mí... digamos que soy parte de sus vidas.
+Jolly: Intenta recordar quién eres. Esa capa, esa capa te está consu...
+Dante: ¡Sí, sí, sí! Lo que tú digas... ¿sabes? Pensé que los dos podríamos tener... ya sabes, algo lindo juntos. Ya veo que no. (se inclinó y le dio un beso en la mejilla)
+Jolly: ¿Y ahora qué? ¿Seré un alimento para tu capa?
+Dante: No... me vas a servir para lo que siempre me serviste antes de hablar... mi sirvienta, mi ayudante, mi acompañante... dile hola al teatro.
+El corazón de Jolly latía fuertemente. El telón se abría lentamente y...
+**Diez Horas Antes**
+El teatro estaba lleno. Dante salió al escenario con la capa puesta y el público se quedó en silencio. Empezó pidiendo que alguien subiera, una mujer del público, y la hizo sentar en una silla en el centro del escenario.
+Le ató los ojos con un pañuelo, después tomó un reloj que alguien del público le prestó y lo hizo desaparecer entre sus manos frente a todos. Lo buscaron, lo revisaron, nada. Diez segundos después, la mujer lo sacó del bolsillo de su campera sin saber cómo había llegado ahí. El público explotó.
+Dante no se detuvo: llamó a otro voluntario, un hombre, lo hizo pararse en el centro del escenario y lo levantó en el aire sin tocarlo, lo giró lentamente a tres metros del suelo mientras la gente abajo sacaba fotos con el teléfono. Después lo bajó. El tipo miró sus propias manos sin entender nada.
+Para el cierre, Dante tomó una baraja entera, la tiró al aire. Las cartas quedaron suspendidas formando una figura en el espacio, una especie de espiral que rotaba sola, y de adentro de esa figura cayó una paloma blanca que aterrizó en su hombro. El teatro se vino abajo.
+El telón se cerró y la gente seguía aplaudiendo. Afuera, su cara ya estaba en publicidades, marcas lo llamaban, programas lo invitaban, y el nombre que todo el mundo usaba para nombrarlo era: "El Grande".
+Mientras tanto, Dante estaba en su casa comiendo frente al televisor con Clayton, las noticias de fondo.
+Clayton: ¿Qué harás en tu próximo show?
+Dante: Todo está planeado, pero... quizás sí necesite a una asistente.
+Clayton: ¿Quieres que le hable a Jolly? Ustedes tienen una relación muy cercana.
+Dante: ... Sí, puede ser.
+Clayton: Bien... eso sí, hazme un truco primero.
+Dante: (sonríe).
+Dante dejó el tenedor, tomó una baraja que tenía sobre la mesa y empezó a barajar. Le pidió a Clayton que eligiera una carta, la mirara y la volviera a meter. Barajó, golpeó el mazo contra la mesa, lo abrió en abanico y señaló una. Era la correcta.
+Clayton la levantó y Dante solo volvió a acomodar las cartas.
+Clayton: Nunca fallas, ¿eh?
+Dante: Jamás falló... nunca fallé.
+En eso, alguien tocó la puerta. Dante fue a abrir, miró afuera, no había nadie. Miró a la derecha, a la izquierda, nada, hasta que desde algún lado alguien gritó: "¡Jodete!".
+Un ladrillo volaba hacia él y le pegó directo en la cabeza —el impacto abrió la piel sobre la ceja, la sangre bajó rápido por el costado de la cara— y Dante cayó al suelo.
+**Media Hora Después**
+Abrió los ojos despacio. Clayton estaba arrodillado al lado suyo.
+Dante: ¿Quién fue el hijo de puta? (dijo con una voz gastada)
+Clayton: Pues... logré verlo, era Kevin.
+Dante: ¿Kevin?
+Clayton: Sí, el novio de tu ex, bueno, de tu difunta ex.
+Dante: ... (sintió escalofríos).
+Dante se levantó de golpe y fue hacia la puerta, pero algo en las noticias lo frenó. Una voz que reconoció. Giró hacia el televisor y se quedó parado mirando la pantalla: era Toshiba, parado junto a Kevin, hablando frente a una cámara. Dante buscó la fecha en la pantalla. Era una nota de ayer.
+Siguió mirando:
+Toshiba: Acusamos fuertemente a Dante Montgomery por el asesinato de Julia Haissel.
+— ¿Tienen alguna prueba que lo acuse directamente?
+Toshiba: Sí... tenemos...
+Kevin: (empujó a Toshiba) En realidad, no. Las únicas pruebas que tenemos, que dice mi amigo, es que... ellos eran exnovios.
+— Eso ni siquiera es una prueba.
+Kevin: Lo sabemos. Solo son producto de mis celos. (volteó a ver a Toshiba)
+Toshiba: (miraba a Kevin con cara de confundido, como si eso no fuera parte del plan)
+Kevin: Lamentamos hacerle perder el tiempo a su canal de noticias y a los televidentes... pero aun así me veo obligado a decir que... Dante, si fuiste tú, te voy a encontrar. No voy a tener piedad.
+Dante los miraba con la cara sin expresión. Clayton apareció desde atrás y le puso un papel en la mano. Dante lo leyó. Decía: "Sé lo que hiciste".
+Dante: ¿Qué es esto?
+Clayton: Venía con el ladrillo... ¿qué hiciste?
+Dante: ... Nada. Un pequeño error. Nada grave.
+Dante dejó el papel sobre la mesa, agarró las llaves y salió. Se subió al auto y manejó hasta el edificio Excálibur.
+Cuando llegó, había una multitud en la entrada, gente arremolinada mirando hacia la puerta. Dante se puso la capucha y se bajó a ver qué pasaba. Entonces vio a Martino salir del edificio y la gente empezó a gritar: "¡Ahí está, salió otra vez!".
+Dante se acercó.
+Dante: ¿Martino Lipschitz?
+Martino: ¿Quién eres?
+Dante: Acompáñame.
+Martino: ... ¿Qué? No entiendo.
+Dante: Solo quiero que me sigas. Ven, no te voy a hacer perder tiempo, en absoluto.
+Los dos se separaron de la multitud y Martino se subió al auto de Dante. Manejaron hasta salirse de todo, hasta que no había edificios ni gente, solo una ruta y el auto estacionado al costado. Los dos se bajaron.
+Martino: ¿Y bien? ¿Quién eres?
+Dante: ... ¿En serio no me conoces?
+Martino: ... Ya te reconocí. Dante, El Grande, ¿no? Eres el mago. Odio tu puto programa.
+Dante: En fin, no vine a discutir eso.
+Martino: Y yo no estoy para más problemas.
+Dante: Lo sé, y en eso compartimos algo en común.
+Martino: ... ¿Qué?
+Dante: Hay falsas acusaciones de que yo maté a una persona. Todo es falso... falsísimo. Así que... quise encontrarte porque vi esa entrevista que tuviste con Falagar, luego con Murray y... ¿conoces a Toshiba?
+Martino: Pues... no.
+Dante: Bueno, supuse que no lo conocías. Es un puto don nadie. Pero... quizás sí conoces a su mano derecha.
+Dante sacó el celular y se lo puso enfrente. En la pantalla había fotos de un set de podcast, un estudio armado, dos sillas, micrófonos, y en las fotos se veía a Toshiba y a Garilda. Un proyecto en el que trabajaban juntos.
+Dante: ¿A ella sí?
+Martino: ¿Qué quieres?
+Dante: Encontrar a Garilda. Luego, a Toshiba. Y con Toshiba encontraré a Kevin.
+Martino: ... (suspira) No me hablo con Garilda hace más de...
+Dante: Quizás no te hables, pero no significa que no sepas nada de ella.
+Martino: Bueno... quizás sí sé dónde encontrarla.
+Dante: Bien. Eso quería oír.
+Martino: ¿Solamente será una charla?
+Dante: Claro que sí.
+Martino: ... Okey. Supongo que puedo guiarte.
+## Capítulo 3: ¿Esta es tu carta?
+Dante conducía con una mano sobre el volante, sin apuro, como si supiera exactamente adónde iban aunque el camino no lo indicara. Martino miraba por la ventana.
+Martino: ¿Cómo sabías que me encontraba en el edificio ese?
+Dante: ¿No viste el live?
+Martino: ...
+Dante: Bueno, un stream sobre tu... no sé, "estadía" en ese edificio. Por cierto, Amadeus es... esa cosa que hace con los nanos es increíble.
+Martino: Sí... como sea.
+El impacto llegó sin aviso. Un auto los golpeó de costado con suficiente fuerza como para que el mundo girara, y el auto de Dante perdiera el control, cruzara el asfalto y saliera disparado hacia el campo abierto, donde las ruedas se enterraron en tierra blanda y la carrocería quedó torcida contra el pasto.
+Dante y Martino intentaron abrir las puertas al mismo tiempo, empujando contra el metal doblado mientras el polvo todavía no había terminado de asentarse.
+Del auto que los había chocado bajaron dos hombres armados, sin prisa, como si el trabajo ya estuviera hecho.
+Pero antes de que pudieran acercarse, llegaron más autos, varios, todos iguales, y de ellos bajó un equipo SWAT en formación ordenada, armas en posición, avanzando sin apuro y sin detenerse.
+Después llegó el auto elegante. No hacía falta que hiciera ruido para que se notara que no era uno más. De él bajaron Toshiba, Kevin y Corhil.
+Corhil: Más le valga que Dante sea fácil de atrapar.
+Kevin: Es un puto asustadizo, no te preocupes por eso.
+Toshiba: ... ¿Van a matarlo?
+Kevin: ...
+Corhil: (suspira) Da igual si muere o no. Él no es el objetivo. La capa sí.
+Toshiba: ¿Y qué mierda harán con la capa?
+Corhil: Lo que tú no harías por estúpido. Usarla para el beneficio.
+Toshiba: ¡Tu beneficio!
+Corhil: Me vuelves a gritar y te disparo aquí mismo... ¿oíste? ¡Ah, y otra cosa!... esto va solo para ti, Toshiba... intentas abrir la boca como casi haces en el noticiero y voy a enviar un equipo entero para descuartizarte... ¿quedó claro?
+Toshiba: ... Sí.
+Corhil: Me alegra eso.
+Dante y Martino se echaron a correr. No hubo acuerdo verbal, simplemente los dos cuerpos decidieron lo mismo al mismo tiempo y salieron hacia el campo abierto, sin dirección clara, solo distancia. Atrás, el equipo entero empezó a moverse. Eran muchos, y corrían bien.
+Dante se arrancó la capa mientras corría y la lanzó hacia atrás sin mirar. La tela voló, abierta en el aire como si tuviera intención propia, y lo que pasó después no fue simple.
+El primer hombre que la rozó intentó apartarla con el brazo, pero la capa se enroscó en su muñeca y tiró, y el giro fue tan brusco que el hueso salió del lugar con un sonido seco —el codo doblado hacia adentro, el tendón asomando por la piel abierta como una cuerda de guitarra a punto de quebrarse— y el tipo cayó de rodillas antes de que pudiera gritar.
+El segundo ni la vio venir. La capa le pasó por la cara a la altura de los ojos y cuando él se la quiso sacar ya era tarde, porque la tela apretó y las órbitas cedieron hacia adentro —no de golpe, sino despacio, como si el material tuviera paciencia, hasta que los ojos cedieron completamente hacia el cráneo y la cara quedó hundida en el centro—.
+El tercero era el más grande del grupo y reaccionó rápido, sacó un cuchillo e intentó cortar la capa cuando se le acercó, pero el filo no sirvió de nada porque la tela se enredó en la hoja y usó la tensión del propio hombre para girarle el cuchillo hacia adentro —la hoja entró por debajo de la mandíbula, empujada por la inercia del mismo brazo que la sostenía, y el tipo quedó de pie unos segundos con los ojos abiertos antes de doblar las rodillas—.
+El cuarto intentó correr en otra dirección, pero la capa lo encontró igual, le pasó entre las piernas en movimiento y lo hizo tropezar a toda velocidad —la cara contra el suelo, los dientes dispersados en el pasto húmedo como monedas que se caen de un bolsillo—.
+El último que quedaba parado se quedó quieto, mirando la capa flotar en el aire frente a él, y no hizo nada. Eso tampoco lo salvó.
+Cuando llegó la noche, Dante y Martino estaban sentados en el pasto, apoyados contra un árbol. El aire era frío pero ninguno de los dos lo mencionó. A lo lejos no había luces, no había ruidos, no había nada que indicara que alguien los seguía buscando, aunque eso no significara que fuera verdad.
+Martino: ... ¿Qué tantas cosas hace la capa?
+Dante: Ni siquiera yo lo sé.
+Martino: Y... la magia, ¿siempre te gustó?
+Dante: Siempre. De niño atrapaba pájaros para usarlos en mis trucos, el típico de hacer aparecer pájaros, pero digamos que... bueno, no se mantenían bien.
+Martino: ¿Los cuidabas?
+Dante: No, practicaba con ellos, pero... no pensé que haría falta. Suena estúpido, pero... me daban igual. Eran... instrumentos nada más.
+Martino: Pues... no soy nadie para juzgar.
+Dante: Escuché tu historia. Toda la entrevista con Falagar fue... interesante, supongo.
+Martino: Ya no pienso en eso. Es como si me hubiera curado de esos pensamientos que estaban ahí, y se iban.
+Dante: Entiendo. ¿Y cuándo los dejaste... volar?
+Martino: Pues, justamente hoy. Con esa persecución es como... "wow". ¿Para qué pensar en el pasado si el presente es...?
+Dante: ¿Mágico?
+Martino: Sí, de hecho sí.
+Dante: Mi pasado no se compara al tuyo, fue bastante normal. ¿Pero te digo una cosa?
+Martino: ¿Qué?
+Dante: Agradécele a la vida que pasaste por todo eso. Ya que... al final y al cabo eso te hace diferente, único... si lo hubieras pensado antes, no hacía falta que estuvieras con Amadeus. Mucho menos tendrías que haber ido al programa de Murray.
+Martino: Sabes... creo que tienes razón.
+Dante: En fin. Tenemos que irnos. Ya pedí un taxi, por cierto.
+Martino: Por cierto, ¿qué querían esos?
+Dante: No importa. Mejor pensar en mi show de esta noche. Sea lo que sea, seguramente involucra algo más grande. Esos tipos estaban muy bien armados. Lástima que no tienen la "chispa".
+## Capítulo 4: Baila, Si Es Que Puedes
+Toshiba tenía los documentos extendidos sobre la mesa, algunos encima de otros, algunos doblados en las esquinas de tanto revisarlos. Todo era sobre Dante: movimientos, fechas, nombres, rutas.
+Llevaba un rato mirándolos cuando Kevin entró sin llamar, como siempre, y se sentó a su lado sin decir nada primero.
+Toshiba: Esta persona es tan... normal. Parece estúpido que sea peligroso.
+Kevin: ...
+Toshiba: Lo único anormal son las cosas que la capa hizo, obviamente. Él tiene algo de culpa pero... no es nadie sin la capa.
+Kevin: ¿Y crees que eso importe?
+Toshiba: ... Dime la verdad. Tú no te ves preocupado por la muerte de tu novia.
+Kevin: Estoy devastado. Solamente intento no demostrarlo.
+Toshiba: Pues no parece.
+Kevin: ...
+Toshiba: Dime la verdad. No te importa tu novia, ¿no?
+Kevin: ...
+Kevin se levantó despacio y sacó el arma. No lo hizo con apuro, no lo hizo con drama, simplemente se puso de pie y apuntó directo al pecho de Toshiba desde una distancia donde no tenía sentido errar.
+Toshiba: ... (se levantó rápidamente) ¡¿Qué mierda haces?!
+Kevin: Tienes mucha razón, Tosh... no me importa mi puta y difunta novia.
+El disparo fue seco y Toshiba cayó al suelo con los papeles cayendo encima de él y alrededor como si también estuvieran tratando de acomodarse. Empezó a moverse, despacio, arrastrando un brazo por el piso sin llegar a ningún lado. Mientras que Kevin ya tenía el teléfono en la mano.
+Kevin: ¡¿Cómo está, señor Corhil?! ¡¿Qué gran noche no es así?!
+Corhil: ¿Estás drogado o algo parecido?
+Kevin: Digamos que sí... Mire, después de la desastrosa misión en la ruta, ¿por qué no hace un último ataque en... ¡el teatro más grande de Beverly Hills!?
+Corhil: ¿De qué putas hablas?
+Kevin: ¡De Dante! Simplemente envíe a su equipo a ese lugar, ¿okey? ¡Cambio y fuera!
+Volvió a disparar luego de colgar. El cuerpo de Toshiba recibió el segundo tiro —la bala entró por el costado y el impacto lo giró levemente, la mejilla contra el parquet, los dedos que habían estado moviéndose quedaron quietos de golpe— y ya no se movió más.
+Kevin juntó todos los documentos de la mesa, los que habían caído al suelo, los que seguían doblados, todos, los apiló sin ordenarlos y salió al patio.
+El barril rojo estaba encendido. Kevin metió los papeles adentro de a puñados y los vio arder, y cuando el último trozo desapareció entre las llamas se quedó mirando un momento con una sonrisa que no era de alivio ni de satisfacción, era de otra cosa, algo más difícil de nombrar, y después empezó a reírse solo en el patio vacío.
+Volvió a entrar, subió las escaleras, entró a la habitación y se arrodilló en el centro del cuarto. Empezó a golpear el suelo de madera con el puño, una vez, otra, con una fuerza que no parecía razonable para un cuerpo humano, hasta que la madera empezó a ceder y los tablones se astillaron y se abrieron, desgarrados desde adentro hacia afuera.
+Debajo había frascos. Varios, acomodados en el hueco como si alguien los hubiera puesto ahí con cuidado hace mucho tiempo. Kevin los sacó y abrió el primero, el segundo, el tercero, y fue tomando pastillas sin contar, metiéndoselas en la boca y tragando sin agua, sin pausa.
+Lo que vino después no tenía forma clara. El cuarto se dobló sobre sí mismo, los colores se corrieron hacia lugares donde no correspondían, las paredes respiraron, el techo bajó y subió y el suelo perdió consistencia bajo sus rodillas.
+Todo se volvió una cosa fantasiosa y sin bordes, sin lógica, sin arriba ni abajo, durante un tiempo que no se podía medir. Y después, sin aviso, Kevin cayó. El cuarto volvió a ser un cuarto, el suelo volvió a ser madera rota, y él quedó tendido en el medio de todo, quieto.
+## Capítulo 5: Y Para El Acto Final...
+**Presente**
+El telón rojo se abrió despacio, y Dante apareció en el escenario del teatro con la misma calma con la que haría cualquier cosa, como si el público no existiera o existiera demasiado, cualquiera de las dos le daba igual. Las luces lo iluminaban desde arriba y él no hizo nada por evitarlo.
+Jolly estaba amarrada dentro de la caja, con el cuerpo dividido en dos secciones separadas por el cajón del truco, la mitad superior visible, la mitad inferior escondida.
+Dante tomó la sierra con una mano y empezó a hacer el número con precisión, girando alrededor de la caja, mostrándosela al público, construyendo la ilusión con movimientos que conocía de memoria.
+Pero cuando la hoja empezó a cortar de verdad —no el fondo falso, no el mecanismo escondido, sino la carne y el hueso de verdad, con el sonido que tiene eso y el olor que tiene eso—, la sangre empezó a salir por los bordes de la caja y Jolly gritó de una forma que no tiene nada que ver con el teatro.
+El público tardó unos segundos en entender lo que estaba viendo, y cuando lo entendió, el silencio duró exactamente un segundo antes de que todo se rompiera.
+En el medio del público, Martino miraba sin moverse.
+El equipo SWAT entró por todas las puertas al mismo tiempo, con las armas en alto, y eso terminó de desatar el caos.
+La gente empezó a correr hacia las salidas empujándose, cayendo, gritando, vaciando el teatro en cuestión de minutos. Martino se agachó entre las butacas y empezó a moverse hacia adelante, despacio, usando las filas como cobertura, sin que nadie lo viera porque nadie estaba mirando hacia él.
+El equipo SWAT rodeó el escenario con formación cerrada y armas apuntando a Dante, que los miró a todos, sonrió, giró la capa sobre sí mismo y desapareció en una nube de humo espeso.
+El equipo no se movió, esperando, con los dedos cerca del gatillo pero sin apretar. La capa salió del humo antes que Dante y se lanzó contra el primero que encontró, envolviéndole el brazo derecho y girando hasta arrancarle el hombro del socket —el brazo colgando de un hilo de tendón antes de separarse del todo, el tipo cayendo de costado sin entender qué había pasado—.
+Dante apareció detrás de otro y lo golpeó en la nuca con una precisión que lo tiró al suelo sin movimiento.
+El equipo empezó a disparar, varios a la vez, pero las balas llegaron a Dante convertidas en cereales que rebotaron contra su pecho y cayeron al suelo del escenario con un sonido ridículo.
+Dante levantó una mano hacia uno de los hombres del equipo y este empezó a levitar, despacio primero, luego más arriba, hasta que Dante chasqueó los dedos y el tipo explotó —no de golpe, sino en una secuencia, primero el torso, luego las extremidades, los pedazos cayendo sobre el escenario y las butacas del frente como lluvia roja y pesada—.
+Y así siguió, uno por uno, usando la capa, usando los poderes, sin apuro, como si estuviera terminando una lista. Cuando el último cuerpo cayó y el teatro quedó en silencio, Dante bajó la mano y miró alrededor.
+Pero uno del equipo seguía vivo, tirado entre dos butacas del frente, con la pistola levantada y apuntando directo a la cabeza de Dante, que tenía la espalda parcialmente girada y no lo vio. El tipo tenía la mano temblando, pero el dedo ya estaba en el gatillo cuando Martino saltó desde el costado y le pegó una patada en la cabeza que lo tiró contra el suelo y la pistola salió volando. Dante se giró.
+El hombre del equipo intentó moverse una vez más y no pudo, y dejó de intentarlo. Entonces, Martino se acercó a Dante.
+Dante: ... Gracias, de verdad.
+Martino: Quiero que me pagues ahora.
+Dante: ¿Es en serio?
+Martino: Tranquilo, no es con dinero. Es con algo mejor... Mata a Murray y Amadeus.
+Dante: ¿Lo dices en serio o es una especie de broma?
+Martino: Es broma... pero... si algún día no tienes nada que hacer, pues...
+En ese momento Kevin apareció desde atrás sin hacer ruido. Dante gritó: "¡Cuidado!", pero ya era tarde, en el sentido de que Kevin ya tenía a Martino agarrado y le metió la pastilla en la boca a la fuerza, empujándola hacia adentro hasta que Martino no tuvo otra opción que tragarla.
+La pastilla llegó al estómago y se disolvió rápido, y Martino cayó al suelo con el cuerpo sin respuesta, sin golpe previo, sin aviso, simplemente abajo.
+Dante: ¿Qué hiciste, Kevin?
+Kevin: ... (sonríe)
+Dante: ... ¿Estás drogado? ¿O es algo peor... digo... mejor?
+Kevin: ...
+Kevin siguió sonriendo y empezó a caminar hacia Dante despacio, sin arma, como si no la necesitara. Dante no esperó más, chasqueó los dedos y la capa se lanzó contra Kevin con fuerza, sin vuelta.
+Después se arrodilló al lado de Martino y lo llamó, le movió el hombro, lo abofeteó, intentó cualquier cosa, pero el cuerpo no respondía y no había nada que hacer con las manos ahí, en el suelo de ese teatro vacío.
+The End
+</script>
+<script>
+(function(){
+  var TITLE = 'Eternamente Vivo 4';
+  var INTRO = 'Parallax presenta...';
+  var FADE = 450, INTRO_MS = 3000;
+  var KEY = 'parallax-progreso:' + TITLE;
+  function save(n){ try{ localStorage.setItem(KEY, String(n)); }catch(e){} }
+  function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var v = parseInt(localStorage.getItem(KEY),10); return isNaN(v)?-1:v; }catch(e){ return -1; } }
+  var stage = document.getElementById('stage'),
+      box = document.getElementById('box');
+  var MAXLEN = 600;
+  function splitLong(s){
+    if(s.length <= MAXLEN) return [s];
+    var mid = s.length/2, best = -1, bestD = 1e9, re = /[.!?…”"»)]\s+/g, m;
+    while((m = re.exec(s))){
+      var cut = m.index + m[0].length;
+      var d = Math.abs(cut - mid);
+      if(cut > 80 && s.length - cut > 80 && d < bestD){ bestD = d; best = cut; }
+    }
+    if(best < 0){
+      var sp = s.indexOf(' ', Math.floor(mid));
+      best = sp < 0 ? s.lastIndexOf(' ', Math.floor(mid)) + 1 : sp + 1;
+    }
+    if(best <= 0 || best >= s.length) return [s];
+    return splitLong(s.slice(0,best).trim()).concat(splitLong(s.slice(best).trim()));
+  }
+  var items = [];
+  document.getElementById('story').textContent.split('\n').forEach(function(raw){
+    var l = raw.trim(); if(!l) return;
+    var m;
+    if((m = l.match(/^##\s*(Cap[ií]tulo\s*\d+)\s*:\s*(.+)$/i))) items.push({t:'ch',n:m[1],s:m[2]});
+    else if(/^The End\.?$/i.test(l)) items.push({t:'end',s:l});
+    else if((m = l.match(/^\*\*(.+)\*\*$/))) items.push({t:'tag',s:m[1]});
+    else if((m = l.match(/^([A-ZÁÉÍÓÚÑ][^\s:]{0,24}):\s+(.*)$/))){ var dp = splitLong(m[2]); items.push({t:'dlg',n:m[1],s:dp[0]}); for(var k=1;k<dp.length;k++) items.push({t:'p',s:dp[k]}); }
+    else splitLong(l).forEach(function(part){ items.push({t:'p',s:part}); });
+  });
+  function el(cls,txt,tag){var e=document.createElement(tag||'div');e.className=cls;e.textContent=txt;return e}
+  function render(it){
+    box.innerHTML='';
+    if(it.t==='ch'){
+      box.appendChild(el('big chnum',it.n));
+      box.appendChild(el('big chname',it.s));
+    }else if(it.t==='end'){
+      box.appendChild(el('big title',it.s));
+    }else if(it.t==='tag'){
+      box.appendChild(el('tag',it.s));
+    }else if(it.t==='dlg'){
+      var d=el('p','');
+      d.appendChild(el('who',it.n+': ','span'));
+      d.appendChild(document.createTextNode(it.s));
+      box.appendChild(d);
+    }else box.appendChild(el('p',it.s));
+  }
+  var i=-1, busy=true, stage_=0, finished=false;
+  function show(fn){
+    busy=true; stage.classList.remove('on');
+    setTimeout(function(){ fn(); stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },FADE);
+  }
+  function prev(){
+    if(busy||panelOpen||stage_!==2||i<=0) return;
+    finished=false; i--; save(i);
+    var it=items[i];
+    show(function(){render(it)});
+  }
+  function next(e){
+    if(e && e.type==='click' && e.clientX < window.innerWidth/2){ prev(); return; }
+    if(busy||finished||panelOpen) return;
+    if(stage_===1){ stage_=2; save(0); show(function(){i=0;render(items[0]);}); return; }
+    if(stage_===2){
+      if(i+1>=items.length) return;
+      i++;
+      var it=items[i];
+      if(it.t==='end'){ finished=true; clear(); } else save(i);
+      show(function(){render(it)});
+    }
+  }
+  var panelOpen = false;
+  var btnCh = document.getElementById('btnCh'),
+      btnReset = document.getElementById('btnReset'),
+      panel = document.getElementById('panel'),
+      list = document.getElementById('list');
+  function showUI(){ btnCh.classList.add('show'); btnReset.classList.add('show'); }
+  function setPanel(o){ panelOpen = o; panel.classList.toggle('open', o); }
+  items.forEach(function(it, idx){
+    if(it.t !== 'ch') return;
+    var b = document.createElement('button');
+    b.className = 'chi';
+    var t = document.createElement('b'); t.textContent = it.s;
+    var s = document.createElement('span'); s.textContent = it.n;
+    b.appendChild(s); b.appendChild(t);
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      setPanel(false);
+      if(busy) return;
+      i = idx; stage_ = 2; finished = false; save(idx);
+      show(function(){ render(items[idx]); });
+    });
+    list.appendChild(b);
+  });
+  btnCh.addEventListener('click', function(e){ e.stopPropagation(); if(!busy) setPanel(true); });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); setPanel(false); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  });
+  var armTimer = null;
+  btnReset.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!btnReset.classList.contains('armed')){
+      btnReset.classList.add('armed');
+      armTimer = setTimeout(function(){ btnReset.classList.remove('armed'); }, 2500);
+      return;
+    }
+    clearTimeout(armTimer); clear(); location.reload();
+  });
+  var saved = load();
+  if(saved >= 0 && saved < items.length && items[saved].t !== 'end'){
+    showUI();
+    i = saved; stage_ = 2;
+    render(items[i]);
+    setTimeout(function(){ stage.classList.add('on'); setTimeout(function(){busy=false},FADE); },200);
+    document.addEventListener('click',next);
+    document.addEventListener('keydown',function(e){
+      if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+    });
+    return;
+  }
+  setTimeout(function(){
+    box.appendChild(el('intro',INTRO));
+    stage.classList.add('on');
+    setTimeout(function(){
+      stage.classList.remove('on');
+      setTimeout(function(){
+        box.innerHTML=''; box.appendChild(el('big title',TITLE));
+        stage.classList.add('on');
+        setTimeout(function(){busy=false;stage_=1;showUI();},FADE);
+      },FADE);
+    },INTRO_MS);
+  },200);
+  document.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();next();}
+  });
+})();
+</script>
+</body>
+</html>
