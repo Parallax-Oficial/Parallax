@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscando...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #000;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  p {
+    color: #fff;
+    font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+  .dot {
+    animation: espera 1.4s infinite;
+    opacity: 0;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes espera {
+    0%, 20%  { opacity: 0; }
+    40%, 80% { opacity: 1; }
+    100%     { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<p>Buscando el contenido ideal para ti<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+
+<script>
+  const enlaces = [
+    "https://parallax-oficial.github.io/Parallax/ratman.html",
+    "https://parallax-oficial.github.io/Parallax/georgeus-vortex.html",
+    "https://parallax-oficial.github.io/Parallax/bigfoot.html",
+    "https://parallax-oficial.github.io/Parallax/nada.html",
+    "https://parallax-oficial.github.io/Parallax/muevete-al-minuto.html",
+    "https://parallax-oficial.github.io/Parallax/strike.html",
+    "https://parallax-oficial.github.io/Parallax/mama-dogs.html",
+    "https://parallax-oficial.github.io/Parallax/obedece.html",
+    "https://parallax-oficial.github.io/Parallax/menem.html",
+    "https://parallax-oficial.github.io/Parallax/el-telefono.html",
+    "https://parallax-oficial.github.io/Parallax/eternamente-vivo.html",
+    "https://parallax-oficial.github.io/Parallax/eternamente-vivo-2.html",
+    "https://parallax-oficial.github.io/Parallax/eternamente-vivo-3.html",
+    "https://parallax-oficial.github.io/Parallax/eternamente-vivo-4.html",
+    "https://parallax-oficial.github.io/Parallax/eternamente-vivo-5.html",
+    "https://parallax-oficial.github.io/Parallax/las-entrevistas.html",
+    "https://parallax-oficial.github.io/Parallax/la-familia-rani.html",
+    "https://parallax-oficial.github.io/Parallax/retorcidos.html",
+    "https://parallax-oficial.github.io/Parallax/without-warning.html",
+    "https://parallax-oficial.github.io/Parallax/ultimate.html",
+    "https://parallax-oficial.github.io/Parallax/valentine.html",
+    "https://parallax-oficial.github.io/Parallax/los-hermanos-menendez.html",
+    "https://parallax-oficial.github.io/Parallax/no-te-olvides-de-mi.html",
+    "https://parallax-oficial.github.io/Parallax/triangle-room.html",
+    "https://parallax-oficial.github.io/Parallax/divina-comedia.html",
+    "https://parallax-oficial.github.io/Parallax/metalosis-maligna.html"
+  ];
+
+  setTimeout(function () {
+    // Cada enlace tiene exactamente la misma probabilidad (1/n)
+    const indice = Math.floor(Math.random() * enlaces.length);
+    window.location.href = enlaces[indice];
+  }, 5000);
+</script>
+</body>
+</html>
